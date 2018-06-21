@@ -1,3 +1,5 @@
+set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+
 if (NOT DEFINED linker_script)
     message(FATAL_ERROR "linker_script variable must be defined!")
 endif ()
