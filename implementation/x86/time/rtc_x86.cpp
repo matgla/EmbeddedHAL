@@ -42,19 +42,16 @@ Rtc::Rtc()
     : timerCallback_(nullptr),
       secondsHandler_(nullptr),
       alarmTime_(0),
-      alarmEnabled_(0),
-      logger_("Rtc")
+      alarmEnabled_(0)
 {
     if (hal::core::BackupRegisters::get().isFirstStartup())
     {
         init();
-        logger_.info() << "Performed full initialization";
     }
     else
     {
         initSecondsInterrupt();
         initNvic();
-        logger_.info() << "Performed normal initialization";
     }
 }
 
@@ -80,8 +77,6 @@ void Rtc::initNvic()
 void Rtc::initSecondsInterrupt()
 {
     rtcSecondsInterruptThread.reset(new std::thread([this]() {
-        logger_.info() << "Initialized seconds interrupt";
-
         while (!kill)
         {
             std::this_thread::sleep_for(std::chrono::seconds(1));

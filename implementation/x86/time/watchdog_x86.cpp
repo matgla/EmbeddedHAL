@@ -1,6 +1,6 @@
 #include "hal/time/watchdog.hpp"
 
-#include "utils.hpp"
+#include "details/utils.hpp"
 
 namespace hal
 {

@@ -1,3 +1,11 @@
+
+cmake_minimum_required(VERSION 3.9)
+
+if (DEFINED STANDALONE)
+    project(EmbeddedHal CXX C ASM)
+    include(cmake/ConfigureProject.cmake)
+endif ()
+
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
 if (NOT DEFINED linker_script)
@@ -5,14 +13,35 @@ if (NOT DEFINED linker_script)
 endif ()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+
+set(includes_dir "${CMAKE_CURRENT_SOURCE_DIR}/include/hal")
+
+set(includes 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/details/utils.hpp
+    ${includes_dir}/core/backupRegisters.hpp
+    ${includes_dir}/core/core.hpp
+    ${includes_dir}/core/criticalSection.hpp
+    ${includes_dir}/core/mutex.hpp
+    ${includes_dir}/gpio/pin.hpp
+    ${includes_dir}/memory/eeprom.hpp
+    ${includes_dir}/time/rtc.hpp
+    ${includes_dir}/time/sleep.hpp
+    ${includes_dir}/time/time.hpp
+    ${includes_dir}/time/watchdog.hpp
+    ${includes_dir}/utils/assert.hpp
+)
 
 if (${mcu_family} STREQUAL "STM32F10x")
     add_subdirectory(./implementation/arm/common)
     add_subdirectory(./implementation/arm/stm32/common)
     add_subdirectory(./implementation/arm/stm32/stm32f10x)
+
+    add_library(hal ${includes} ${sources})
+    target_link_libraries(hal stm32)
 elseif (${MCU_FAMILY} STREQUAL "X86")
     add_subdirectory(./implementation/x86)
 else ()
     message(FATAL_ERROR "Not supported MCU family: ${MCU_FAMILY}")
 endif ()
+
+target_link_libraries(hal gsl)

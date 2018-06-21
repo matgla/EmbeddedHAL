@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils/types.hpp"
+#include <cstdint>
 
 namespace hal
 {
@@ -10,13 +10,13 @@ namespace time
 class Time
 {
 public:
-    static u64 getTicks();
+    static uint64_t getTicks();
     static void incrementTicks();
-    static void setTicks(u64 ticks);
-    static u64 milliseconds();
+    static void setTicks(uint64_t ticks);
+    static uint64_t milliseconds();
 
 private:
-    static volatile u64 ticks_;
+    static volatile uint64_t ticks_;
 };
 
 } // namespace time

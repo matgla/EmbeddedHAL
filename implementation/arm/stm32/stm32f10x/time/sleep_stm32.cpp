@@ -9,25 +9,25 @@ namespace hal
 namespace time
 {
 
-volatile u64 ticks;
+volatile uint64_t ticks;
 
-void sleep(u32 seconds)
+void sleep(uint32_t seconds)
 {
     msleep(1000 * seconds);
 }
 
-void msleep(u64 milliseconds)
+void msleep(uint64_t milliseconds)
 {
-    u64 prev = Time::getTicks();
+    uint64_t prev = Time::getTicks();
     while (Time::getTicks() < prev + milliseconds)
     {
     }
 }
 
-volatile bool initialized          = false;
-volatile u32 cyclesFor1MicroSecond = 0;
+volatile bool initialized               = false;
+volatile uint32_t cyclesFor1MicroSecond = 0;
 
-void __attribute__((optimize("O0"))) usleep(u32 microseconds)
+void __attribute__((optimize("O0"))) usleep(uint32_t microseconds)
 {
     if (!initialized)
     {

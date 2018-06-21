@@ -30,19 +30,16 @@ Rtc::Rtc()
     : timerCallback_(nullptr),
       secondsHandler_(nullptr),
       alarmTime_(0),
-      alarmEnabled_(0),
-      logger_("Rtc")
+      alarmEnabled_(0)
 {
     if (hal::core::BackupRegisters::get().isFirstStartup())
     {
         init();
-        logger_.info() << "Performed full initialization";
     }
     else
     {
         initSecondsInterrupt();
         initNvic();
-        logger_.info() << "Performed normal initialization";
     }
 }
 
@@ -89,10 +86,10 @@ void Rtc::initNvic()
 {
     NVIC_InitTypeDef nvic;
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_1);
-    nvic.NVIC_IRQChannel = RTC_IRQn;
+    nvic.NVIC_IRQChannel                   = RTC_IRQn;
     nvic.NVIC_IRQChannelPreemptionPriority = 1;
-    nvic.NVIC_IRQChannelSubPriority = 0;
-    nvic.NVIC_IRQChannelCmd = ENABLE;
+    nvic.NVIC_IRQChannelSubPriority        = 0;
+    nvic.NVIC_IRQChannelCmd                = ENABLE;
     NVIC_Init(&nvic);
 }
 
@@ -103,14 +100,14 @@ void Rtc::initSecondsInterrupt()
     RTC_ITConfig(RTC_IT_SEC, ENABLE);
 }
 
-void Rtc::setTime(u32 hours, u32 minutes, u32 seconds)
+void Rtc::setTime(uint32_t hours, uint32_t minutes, uint32_t seconds)
 {
     std::time_t currentTime = std::time(nullptr);
-    std::tm* t = localtime(&currentTime);
-    t->tm_hour = hours;
-    t->tm_min = minutes;
-    t->tm_sec = seconds;
-    time_t timeSinceEpoch = mktime(t);
+    std::tm* t              = localtime(&currentTime);
+    t->tm_hour              = hours;
+    t->tm_min               = minutes;
+    t->tm_sec               = seconds;
+    time_t timeSinceEpoch   = mktime(t);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
     PWR_BackupAccessCmd(ENABLE);
     RTC_WaitForLastTask();
@@ -119,14 +116,14 @@ void Rtc::setTime(u32 hours, u32 minutes, u32 seconds)
     RTC_WaitForLastTask();
 }
 
-void Rtc::setDate(u32 day, u32 month, u32 year)
+void Rtc::setDate(uint32_t day, uint32_t month, uint32_t year)
 {
     std::time_t currentTime = std::time(nullptr);
-    std::tm* t = localtime(&currentTime);
-    t->tm_year = year - 1900;
-    t->tm_mon = month - 1;
-    t->tm_mday = day;
-    time_t timeSinceEpoch = mktime(t);
+    std::tm* t              = localtime(&currentTime);
+    t->tm_year              = year - 1900;
+    t->tm_mon               = month - 1;
+    t->tm_mday              = day;
+    time_t timeSinceEpoch   = mktime(t);
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
     PWR_BackupAccessCmd(ENABLE);
     RTC_WaitForLastTask();
@@ -136,13 +133,13 @@ void Rtc::setDate(u32 day, u32 month, u32 year)
 }
 
 
-void Rtc::setAlarm(u32 time)
+void Rtc::setAlarm(uint32_t time)
 {
     alarmEnabled_ = true;
-    alarmTime_ = time;
+    alarmTime_    = time;
 }
 
-u32 Rtc::alarmTime()
+uint32_t Rtc::alarmTime()
 {
     return alarmTime_;
 }
@@ -160,7 +157,7 @@ void Rtc::fire()
     }
 }
 
-u32 Rtc::getTime()
+uint32_t Rtc::getTime()
 {
     return RTC_GetCounter();
 }
@@ -170,8 +167,9 @@ std::function<void()>& Rtc::getSecondsHandler()
     return secondsHandler_;
 }
 
-extern "C" {
-void RTC_IRQHandler();
+extern "C"
+{
+    void RTC_IRQHandler();
 }
 
 void RTC_IRQHandler(void)

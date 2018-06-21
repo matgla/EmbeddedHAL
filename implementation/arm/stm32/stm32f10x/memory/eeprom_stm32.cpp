@@ -17,8 +17,7 @@ namespace memory
 {
 
 Eeprom::Eeprom()
-    : currentAddress_(0),
-      logger_("EEPROM")
+    : currentAddress_(0)
 {
 }
 
@@ -73,7 +72,6 @@ void Eeprom::write(std::size_t address, const gsl::span<const uint32_t>& data)
 
     if (checkCorrectness(LAST_BANK_START_ADDRESS, gsl::span<const uint32_t>{buffer, FLASH_PAGE_SIZE - sizeof(uint32_t)}))
     {
-        logger_.info() << "No data changes";
         return;
     }
 
@@ -85,10 +83,8 @@ void Eeprom::write(std::size_t address, const gsl::span<const uint32_t>& data)
 
     if (!checkCorrectness(LAST_BANK_START_ADDRESS, gsl::span<const uint32_t>{buffer, FLASH_PAGE_SIZE - sizeof(uint32_t)}))
     {
-        logger_.error() << "Write to flash failed";
         return;
     }
-    logger_.info() << "Write successful!";
 }
 
 const gsl::span<const uint32_t> Eeprom::read(const uint32_t address, const uint32_t size) const

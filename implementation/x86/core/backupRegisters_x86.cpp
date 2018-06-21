@@ -1,6 +1,6 @@
 #include "hal/core/backupRegisters.hpp"
 
-#include "utils.hpp"
+#include "details/utils.hpp"
 
 #define STARTUP_REGISTER 1
 #define STARTUP_MAGIC_COOKIE 0xBEEF
@@ -42,5 +42,5 @@ BackupRegisters::BackupRegisters()
 }
 
 
-} // namespace hal
 } // namespace core
+} // namespace hal

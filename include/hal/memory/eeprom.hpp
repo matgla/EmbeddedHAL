@@ -4,8 +4,7 @@
 
 #include <gsl/span>
 
-#include "logger/logger.hpp"
-#include "utils.hpp"
+#include "details/utils.hpp"
 
 namespace hal
 {
@@ -37,7 +36,6 @@ public:
 
 private:
     uint32_t currentAddress_;
-    logger::Logger logger_;
 };
 
 } // namespace memory

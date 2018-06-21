@@ -5,14 +5,14 @@ namespace hal
 namespace time
 {
 
-volatile u64 Time::ticks_(0);
+volatile uint64_t Time::ticks_(0);
 
-u64 Time::getTicks()
+uint64_t Time::getTicks()
 {
     return ticks_;
 }
 
-u64 Time::milliseconds()
+uint64_t Time::milliseconds()
 {
     return ticks_;
 }
@@ -22,7 +22,7 @@ void Time::incrementTicks()
     ++ticks_;
 }
 
-void Time::setTicks(u64 ticks)
+void Time::setTicks(uint64_t ticks)
 {
     ticks_ = ticks;
 }
@@ -31,8 +31,9 @@ void Time::setTicks(u64 ticks)
 } // namespace hal
 
 
-extern "C" {
-void SysTick_Handler();
+extern "C"
+{
+    void SysTick_Handler();
 }
 
 void SysTick_Handler()

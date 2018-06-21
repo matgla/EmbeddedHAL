@@ -2,8 +2,8 @@
 
 #include <cstring>
 
+#include "details/utils.hpp"
 #include "hal/utils/assert.hpp"
-#include "utils.hpp"
 
 namespace hal
 {
@@ -13,8 +13,7 @@ namespace memory
 u8 flash[1024];
 
 Eeprom::Eeprom()
-    : currentAddress_(0),
-      logger_("EEPROM")
+    : currentAddress_(0)
 {
 }
 void Eeprom::write(std::size_t address, const gsl::span<const uint32_t>& data)

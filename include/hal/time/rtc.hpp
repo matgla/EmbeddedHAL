@@ -1,9 +1,12 @@
 #pragma once
 
+#include <cstdint>
+
+// TODO: change to function from eul library
 #include <functional>
 
-#include "logger/logger.hpp"
-#include "utils.hpp"
+
+#include "details/utils.hpp"
 
 namespace hal
 {
@@ -16,11 +19,11 @@ public:
     static Rtc& get();
     static bool wasInitialized();
 
-    void setTime(u32 hours, u32 minutes, u32 seconds);
-    void setDate(u32 day, u32 month, u32 year);
-    u32 getTime();
-    u32 alarmTime();
-    void setAlarm(u32 time);
+    void setTime(uint32_t hours, uint32_t minutes, uint32_t seconds);
+    void setDate(uint32_t day, uint32_t month, uint32_t year);
+    uint32_t getTime();
+    uint32_t alarmTime();
+    void setAlarm(uint32_t time);
     void fire();
     void setHandler(std::function<void()> handler);
     void setSecondsHandler(std::function<void()> handler);
@@ -35,9 +38,8 @@ private:
     void initSecondsInterrupt();
     std::function<void()> timerCallback_;
     std::function<void()> secondsHandler_;
-    u32 alarmTime_;
+    uint32_t alarmTime_;
     bool alarmEnabled_;
-    logger::Logger logger_;
 };
 
 } // namespace time
