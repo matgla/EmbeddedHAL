@@ -12,8 +12,6 @@ if (NOT DEFINED linker_script)
     message(FATAL_ERROR "linker_script variable must be defined!")
 endif ()
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-
 set(includes_dir "${CMAKE_CURRENT_SOURCE_DIR}/include/hal")
 
 set(includes 
@@ -22,7 +20,7 @@ set(includes
     ${includes_dir}/core/core.hpp
     ${includes_dir}/core/criticalSection.hpp
     ${includes_dir}/core/mutex.hpp
-    ${includes_dir}/gpio/pin.hpp
+    ${includes_dir}/gpio/digitalOut.hpp
     ${includes_dir}/memory/eeprom.hpp
     ${includes_dir}/time/rtc.hpp
     ${includes_dir}/time/sleep.hpp
@@ -44,4 +42,19 @@ else ()
     message(FATAL_ERROR "Not supported MCU family: ${MCU_FAMILY}")
 endif ()
 
+target_include_directories(hal PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+
 target_link_libraries(hal gsl)
+
+target_compile_options(hal PUBLIC
+    -fno-builtin
+    -fdata-sections
+    -fdata-sections 
+    -ffunction-sections
+    $<$<COMPILE_LANGUAGE:C>:-std=gnu99 -Wno-implicit-function-declaration>
+    $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z -fno-rtti -fno-use-cxa-atexit -fno-exceptions -fno-threadsafe-statics>
+    $<$<CONFIG:DEBUG>:-Og -g>
+    $<$<CONFIG:RELEASE>:-Os>
+)

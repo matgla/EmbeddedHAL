@@ -4,6 +4,7 @@ set(sources
     ${sources_dir}/core/backupRegisters_stm32.cpp
     ${sources_dir}/core/core_stm32.cpp
     ${sources_dir}/core/criticalSection_stm32.cpp
+    ${sources_dir}/gpio/stm32f10x_gpio.cpp
     ${sources_dir}/memory/eeprom_stm32.cpp
     ${sources_dir}/time/rtc_stm32.cpp
     ${sources_dir}/time/sleep_stm32.cpp
