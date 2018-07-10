@@ -45,16 +45,16 @@ class GpioGenerator:
         f.write(newline())
         for port_name in self.config:
             f.write(indent() + struct(port_name))
-            f.write("  {\n")
-            f.write("    enum\n")
-            f.write("    {\n")
+            f.write(indent() + "{\n")
+            f.write(indent() * 2 + "enum\n")
+            f.write(indent() * 2 + "{\n")
             for pin in self.config[port_name][:-1]:
-                f.write("      " + "P" + str(pin) + " = " +
+                f.write(indent() * 3 + "P" + str(pin) + " = " +
                         pin_to_gpio_pin(pin) + ",\n")
-            f.write("      " + "P" + str(self.config[port_name][-1]) + " = " +
+            f.write(indent() * 3 + "P" + str(self.config[port_name][-1]) + " = " +
                     pin_to_gpio_pin(self.config[port_name][-1]) + "\n")
-            f.write("    } \n")
-            f.write("  };\n")
+            f.write(indent() * 2 + "} \n")
+            f.write(indent() + "};\n")
             f.write("\n")
 
         f.write("};\n")

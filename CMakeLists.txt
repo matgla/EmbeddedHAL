@@ -12,7 +12,7 @@ if (NOT DEFINED linker_script)
     message(FATAL_ERROR "linker_script variable must be defined!")
 endif ()
 
-set(includes_dir "${CMAKE_CURRENT_SOURCE_DIR}/include/hal")
+set(includes_dir "${CMAKE_CURRENT_SOURCE_DIR}/src/interface/hal")
 
 set(includes 
     ${CMAKE_CURRENT_SOURCE_DIR}/include/details/utils.hpp
