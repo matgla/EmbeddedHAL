@@ -30,6 +30,10 @@ set(includes
 )
 
 if (${mcu_family} STREQUAL "STM32F10x")
+    if (${board} STREQUAL "Stm32_Black_Pill")
+        #set(path_to_specific_gpio_config "${CURRENT_CMAKE_DIR}/src/boards/stm32_black_pill/gpio
+        #configure_file(./config/
+    endif()
     add_subdirectory(./implementation/arm/common)
     add_subdirectory(./implementation/arm/stm32/common)
     add_subdirectory(./implementation/arm/stm32/stm32f10x)
