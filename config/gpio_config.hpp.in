@@ -1,3 +1,3 @@
 #pragma once 
 
-#include "${path_to_specific_gpio_config}"
+#include "@path_to_specific_gpio_config@"

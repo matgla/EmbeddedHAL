@@ -10,7 +10,7 @@ def system_include(name):
     return "#include <" + name + ">\n"
 
 
-def project_include(name):
+def user_include(name):
     return "#include \"" + name + "\"\n"
 
 

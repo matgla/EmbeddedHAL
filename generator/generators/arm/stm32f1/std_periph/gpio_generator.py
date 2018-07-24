@@ -23,39 +23,23 @@ class GpioGenerator:
 
         with open(self.output, "w") as f:
             self.generate_header(f)
+            f.write("namespace hal\n{\n")
+            f.write("namespace gpio\n{\n")
+
             self.generate_port(f)
+
+            f.write("} // namespace gpio\n")
+            f.write("} // namespace hal\n")
 
     def generate_header(self, f):
         f.write(generated_header())
-        f.write(system_include("stm32f10x.h"))
+        f.write(user_include("hal/gpio/gpio.hpp"))
+        f.write(user_include("arm/stm32/stm32f10x/gpio/stm32f10x_gpio.hpp"))
         f.write(newline())
 
     def generate_port(self, f):
-        f.write(struct("Port"))
-        f.write("{\n")
-        f.write(indent() + enum(""))
-        f.write(indent() + "{\n")
-        port_names = list(self.config.keys())
-        for port in port_names[:-1]:
-            f.write(indent() * 2 + port + " = " +
-                    port_to_gpio(port) + ",\n")
-        f.write(indent() * 2 + port_names[-1] + " = " +
-                port_to_gpio(port_names[-1]) + "\n")
-        f.write(indent() + "};\n")
-        f.write(newline())
         for port_name in self.config:
-            f.write(indent() + struct(port_name))
-            f.write(indent() + "{\n")
-            f.write(indent() * 2 + "enum\n")
-            f.write(indent() * 2 + "{\n")
-            for pin in self.config[port_name][:-1]:
-                f.write(indent() * 3 + "P" + str(pin) + " = " +
-                        pin_to_gpio_pin(pin) + ",\n")
-            f.write(indent() * 3 + "P" + str(self.config[port_name][-1]) + " = " +
-                    pin_to_gpio_pin(self.config[port_name][-1]) + "\n")
-            f.write(indent() * 2 + "} \n")
-            f.write(indent() + "};\n")
-            f.write("\n")
-
-        f.write("};\n")
-        f.write("\n")
+            for pin in self.config[port_name]:
+                f.write("    using P" + port_name + str(pin) + " = Gpio<hal::stm32f10x::gpio::StmGpio<GPIO" +
+                        port_name + "_BASE, GPIO_Pin_" + str(pin) + ">>;")
+                f.write(newline())
