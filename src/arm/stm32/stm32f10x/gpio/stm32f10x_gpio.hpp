@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstdint>
 #include <cstdio>
 
 #include <stm32f10x.h>
@@ -15,7 +16,7 @@ namespace stm32f10x
 namespace gpio
 {
 
-constexpr uint32_t getSpeed(hal::gpio::GpioSpeed speed)
+constexpr GPIOSpeed_TypeDef getSpeed(hal::gpio::GpioSpeed speed)
 {
     switch (speed)
     {
@@ -28,7 +29,7 @@ constexpr uint32_t getSpeed(hal::gpio::GpioSpeed speed)
     }
 }
 
-constexpr uint32_t getMode(hal::gpio::GpioMode mode)
+constexpr GPIOMode_TypeDef getMode(hal::gpio::GpioMode mode)
 {
     switch (mode)
     {
@@ -47,17 +48,43 @@ constexpr uint32_t getMode(hal::gpio::GpioMode mode)
     }
 }
 
+template <typename T>
+class memory_pointer
+{
+public:
+    constexpr memory_pointer(std::intptr_t address)
+        : address_(address)
+    {
+    }
+
+    operator T*() const
+    {
+        return reinterpret_cast<T*>(address_);
+    }
+
+    T* operator->() const
+    {
+        return operator T*();
+    }
+
+private:
+    std::intptr_t address_;
+};
+
+constexpr static memory_pointer<GPIO_TypeDef> portToRegister(std::uint32_t port)
+{
+    return memory_pointer<GPIO_TypeDef>(port);
+}
+
+
 template <std::uint32_t port, std::uint32_t pin>
 class StmGpio
 {
 public:
-    constexpr static void init(hal::gpio::GpioSpeed speed, hal::gpio::GpioMode mode)
+    static void init(const hal::gpio::GpioSpeed speed, const hal::gpio::GpioMode mode)
     {
         initClocks();
-        GPIO_InitTypeDef config;
-        config.GPIO_Pin   = pin;
-        config.GPIO_Speed = getSpeed(speed);
-        config.GPIO_Mode  = getMode(mode);
+        GPIO_InitTypeDef config{pin, getSpeed(speed), getMode(mode)};
         GPIO_Init(gpio_, &config);
     }
 
@@ -74,31 +101,31 @@ public:
 private:
     constexpr static void initClocks()
     {
-        if constexpr (gpio_ == GPIOA)
+        if constexpr (port == GPIOA_BASE)
         {
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOA, ENABLE);
         }
-        else if (gpio_ == GPIOB)
+        else if (port == GPIOB_BASE)
         {
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB, ENABLE);
         }
-        else if (gpio_ == GPIOC)
+        else if (port == GPIOC_BASE)
         {
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOC, ENABLE);
         }
-        else if (gpio_ == GPIOD)
+        else if (port == GPIOD_BASE)
         {
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOD, ENABLE);
         }
-        else if (gpio_ == GPIOE)
+        else if (port == GPIOE_BASE)
         {
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOE, ENABLE);
         }
-        else if (gpio_ == GPIOF)
+        else if (port == GPIOF_BASE)
         {
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOF, ENABLE);
         }
-        else if (gpio_ == GPIOG)
+        else if (port == GPIOF_BASE)
         {
             RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOG, ENABLE);
         }
@@ -109,12 +136,8 @@ private:
         }
     }
 
-    constexpr static GPIO_TypeDef* getRegister()
-    {
-        return reinterpret_cast<GPIO_TypeDef*>(port);
-    }
 
-    constexpr static bool GPIO_TypeDef* gpio_ = getRegister();
+    constexpr static memory_pointer<GPIO_TypeDef> gpio_ = portToRegister(port);
 };
 
 } // namespace gpio

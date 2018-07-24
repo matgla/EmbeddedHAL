@@ -29,3 +29,6 @@ target_compile_options(hal PRIVATE
     $<$<CONFIG:DEBUG>:-Og -g>
     $<$<CONFIG:RELEASE>:-Os>
 )
+
+include(../../cmake/AddTargetCompileOptions.cmake)
+add_target_compile_options(hal)

@@ -33,13 +33,7 @@ set(hal_interface
 )
 
 if (${mcu_family} STREQUAL "STM32F10x")
-    if (${BOARD} STREQUAL "Stm32_Black_Pill")
-        set(path_to_specific_gpio_config "boards/stm32_black_pill/gpio_config.hpp")
-        configure_file(./config/gpio_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/gpio.hpp @ONLY)
-    endif()
-
-    add_library(hal ${includes} ${sources})
-    target_link_libraries(hal stm32)
+    add_subdirectory(./src/arm/stm32/stm32f10x)
 elseif (${mcu_family} STREQUAL "X86")
     add_subdirectory(./src/x86)
 else ()
