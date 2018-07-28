@@ -28,7 +28,12 @@ constexpr const char* to_string(const GpioSpeed& speed)
     {
         case GpioSpeed::High:
             return "High";
+        case GpioSpeed::Medium:
+            return "Medium";
+        case GpioSpeed::Low:
+            return "Low";
     }
+    return "Unknown";
 }
 
 constexpr const char* to_string(const GpioMode& mode)
@@ -37,7 +42,19 @@ constexpr const char* to_string(const GpioMode& mode)
     {
         case GpioMode::Analog:
             return "Analog";
+        case GpioMode::InputFloating:
+            return "InputFloating";
+        case GpioMode::InputPullDown:
+            return "InputPullDown";
+        case GpioMode::InputPullUp:
+            return "InputPullUp";
+        case GpioMode::OutputOpenDrain:
+            return "OutputOpenDrain";
+        case GpioMode::OutputPushPull:
+            return "OutputPushPull";
     }
+    
+    return "Unknown";
 }
 
 } // namespace gpio
