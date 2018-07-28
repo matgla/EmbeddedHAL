@@ -25,7 +25,7 @@ target_link_libraries(hal PRIVATE gsl)
 
 target_compile_options(hal PRIVATE
     $<$<COMPILE_LANGUAGE:C>:-std=gnu99>
-    $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z -fconcepts>
+    $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z -fconcepts -Wswitch -Werror>
     $<$<CONFIG:DEBUG>:-Og -g>
     $<$<CONFIG:RELEASE>:-Os>
 )
