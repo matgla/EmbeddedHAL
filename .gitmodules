@@ -10,6 +10,3 @@
 [submodule "lib/modm/modm/modm-devices"]
 	path = lib/modm/modm/modm-devices
 	url = https://github.com/modm-io/modm-devices
-[submodule "lib/cmsis/cmsis"]
-	path = lib/cmsis/cmsis
-	url = https://github.com/ARM-software/CMSIS_5
