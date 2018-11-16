@@ -53,7 +53,7 @@ constexpr const char* to_string(const GpioMode& mode)
         case GpioMode::OutputPushPull:
             return "OutputPushPull";
     }
-    
+
     return "Unknown";
 }
 

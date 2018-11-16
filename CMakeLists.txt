@@ -8,15 +8,9 @@ endif ()
 
 set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
 
-if (${vendor} STREQUAL "STM32")
-    if (NOT DEFINED linker_script)
-        message(FATAL_ERROR "linker_script variable must be defined!")
-    endif ()
-endif ()
-
 set(includes_dir "${CMAKE_CURRENT_SOURCE_DIR}/interface/hal")
 
-set(hal_interface 
+set(hal_interface
     ${CMAKE_CURRENT_SOURCE_DIR}/src/details/utils.hpp
     ${includes_dir}/core/backupRegisters.hpp
     ${includes_dir}/core/core.hpp
@@ -28,7 +22,7 @@ set(hal_interface
     ${includes_dir}/time/time.hpp
     ${includes_dir}/time/watchdog.hpp
     ${includes_dir}/utils/assert.hpp
-    
+
     CACHE STRING "Hal interface sources"
 )
 
