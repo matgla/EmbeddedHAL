@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-#include <stm32f10x.h>
+#include <stm32f1xx.h>
 
 #include "hal/time/time.hpp"
 
@@ -13,17 +13,17 @@ namespace time
 
 volatile uint64_t ticks;
 
-void sleep(std::chrono::seconds seconds)
+void msleep(std::chrono::milliseconds milliseconds)
 {
-    // msleep(1000 * seconds);
+    // uint64_t prev = Time::getTicks();
+    // while (Time::getTicks() < prev + milliseconds)
+    // {
+    // }
 }
 
-void msleep(uint64_t milliseconds)
+void sleep(std::chrono::seconds seconds)
 {
-    uint64_t prev = Time::getTicks();
-    while (Time::getTicks() < prev + milliseconds)
-    {
-    }
+    msleep(std::chrono::duration_cast<std::chrono::milliseconds>(seconds));
 }
 
 volatile bool initialized               = false;

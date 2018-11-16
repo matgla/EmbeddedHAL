@@ -9,9 +9,10 @@ namespace gpio
 
 // clang-format off
 template <typename T>
-concept bool GpioImpl = requires(T a) 
+concept bool GpioImpl = requires(T a)
 {
-    { a.init(GpioSpeed{}, GpioMode{}) } -> void;
+    { a.init(Speed{}, Output{}) } -> void;
+    { a.init(Input{}) } -> void;
     { a.setHigh() } -> void;
     { a.setLow() } -> void;
 };
@@ -21,9 +22,14 @@ template <GpioImpl GpioImplType>
 class Gpio
 {
 public:
-    constexpr static void init(GpioSpeed speed, GpioMode mode)
+    constexpr static void init(Speed speed, Output mode)
     {
         GpioImplType::init(speed, mode);
+    }
+
+    constexpr static void init(Input mode)
+    {
+        GpioImplType::init(mode);
     }
 
     constexpr static void setHigh()
