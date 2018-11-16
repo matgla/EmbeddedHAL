@@ -16,35 +16,8 @@ namespace stm32f10x
 namespace gpio
 {
 
-// TODO: extend this (some Cortex-M3 devices has also F and G port, common code move to common)
-enum class Port
-{
-    A,
-    B,
-    C,
-    D,
-    E
-};
-
 namespace detail
 {
-
-constexpr uint32_t get_port(const Port port)
-{
-    switch (port)
-    {
-        case Port::A:
-            return GPIOA_BASE;
-        case Port::B:
-            return GPIOB_BASE;
-        case Port::C:
-            return GPIOC_BASE;
-        case Port::D:
-            return GPIOD_BASE;
-        case Port::E:
-            return GPIOE_BASE;
-    }
-}
 
 constexpr uint8_t get_pin_mask(uint8_t o, uint8_t s)
 {
@@ -99,26 +72,9 @@ constexpr uint8_t get_speed_mask(hal::gpio::Speed s)
     }
 }
 
-constexpr uint32_t get_rcc_mask(const Port port)
-{
-    switch (port)
-    {
-        case Port::A:
-            return RCC_APB2ENR_IOPAEN;
-        case Port::B:
-            return RCC_APB2ENR_IOPBEN;
-        case Port::C:
-            return RCC_APB2ENR_IOPCEN;
-        case Port::D:
-            return RCC_APB2ENR_IOPDEN;
-        case Port::E:
-            return RCC_APB2ENR_IOPEEN;
-    }
-}
-
 } // namespace detail
 
-template <Port port, std::uint32_t pin>
+template <uint32_t port, uint32_t pin, uint32_t rcc_mask>
 class StmGpio
 {
 public:
@@ -161,11 +117,10 @@ private:
 
     constexpr static void initClocks()
     {
-        RCC->APB2ENR |= detail::get_rcc_mask(port);
+        RCC->APB2ENR |= rcc_mask;
     }
 
-
-    constexpr static eul::memory_ptr<GPIO_TypeDef> port_ = detail::get_port(port);
+    constexpr static eul::memory_ptr<GPIO_TypeDef> port_ = eul::memory_ptr<GPIO_TypeDef>(port);
 };
 
 } // namespace gpio
