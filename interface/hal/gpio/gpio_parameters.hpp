@@ -5,52 +5,63 @@ namespace hal
 namespace gpio
 {
 
-enum class GpioSpeed
+enum class Speed
 {
     High,
     Medium,
     Low
 };
 
-enum class GpioMode
+enum class Input
 {
     Analog,
     InputFloating,
-    InputPullDown,
-    InputPullUp,
+    InputPullUpDown
+};
+
+
+enum class Output
+{
     OutputOpenDrain,
     OutputPushPull
 };
 
-constexpr const char* to_string(const GpioSpeed& speed)
+constexpr const char* to_string(const Speed& speed)
 {
     switch (speed)
     {
-        case GpioSpeed::High:
+        case Speed::High:
             return "High";
-        case GpioSpeed::Medium:
+        case Speed::Medium:
             return "Medium";
-        case GpioSpeed::Low:
+        case Speed::Low:
             return "Low";
     }
     return "Unknown";
 }
 
-constexpr const char* to_string(const GpioMode& mode)
+constexpr const char* to_string(const Input& mode)
 {
     switch (mode)
     {
-        case GpioMode::Analog:
+        case Input::Analog:
             return "Analog";
-        case GpioMode::InputFloating:
+        case Input::InputFloating:
             return "InputFloating";
-        case GpioMode::InputPullDown:
-            return "InputPullDown";
-        case GpioMode::InputPullUp:
-            return "InputPullUp";
-        case GpioMode::OutputOpenDrain:
+        case Input::InputPullUpDown:
+            return "InputPullUpDown";
+    }
+
+    return "Unknown";
+}
+
+constexpr const char* to_string(const Output& mode)
+{
+    switch (mode)
+    {
+        case Output::OutputOpenDrain:
             return "OutputOpenDrain";
-        case GpioMode::OutputPushPull:
+        case Output::OutputPushPull:
             return "OutputPushPull";
     }
 
