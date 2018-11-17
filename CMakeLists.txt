@@ -27,6 +27,7 @@ set(hal_interface
 )
 
 if (${mcu_family} STREQUAL "STM32F10x")
+    add_subdirectory(./src/arm/stm32/common)
     add_subdirectory(./src/arm/stm32/stm32f10x)
 elseif (${mcu_family} STREQUAL "X86")
     add_subdirectory(./src/x86)

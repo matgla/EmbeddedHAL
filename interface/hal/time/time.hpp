@@ -14,6 +14,7 @@ public:
     static void incrementTicks();
     static void setTicks(uint64_t ticks);
     static uint64_t milliseconds();
+    static void init();
 
 private:
     static volatile uint64_t ticks_;
