@@ -34,13 +34,3 @@ target_include_directories(hal
 )
 
 target_link_libraries(hal PRIVATE gsl ${Boost_LIBRARIES} pthread)
-
-target_compile_options(hal PRIVATE
-    $<$<COMPILE_LANGUAGE:C>:-std=gnu99>
-    $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z -fconcepts -Wswitch -Werror>
-    $<$<CONFIG:DEBUG>:-Og -g>
-    $<$<CONFIG:RELEASE>:-Os>
-)
-
-include(../../cmake/AddTargetCompileOptions.cmake)
-add_target_compile_options(hal)
