@@ -3,6 +3,8 @@
 #include <cstdint>
 #include <string_view>
 
+#include <gsl/span>
+
 #include <stm32f1xx.h>
 
 #include "hal/gpio.hpp"

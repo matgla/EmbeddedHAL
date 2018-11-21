@@ -6,18 +6,16 @@ set(sources
     ${sources_path}/stm32_time.cpp
 )
 
-add_library(stm32_hal_common ${sources})
+add_library(hal_stm32_common ${sources})
 
-target_include_directories(stm32_hal_common
+target_include_directories(hal_stm32_common
     PUBLIC
-        ${PROJECT_SOURCE_DIR}
-        ${PROJECT_SOURCE_DIR}/../../..
-        ${PROJECT_SOURCE_DIR}/../../../../interface
+        ${PROJECT_SOURCE_DIR}/interface
         ${PROJECT_SOURCE_DIR}/include
 )
 
-target_compile_options(stm32 PUBLIC
+target_compile_options(hal_stm32_common PUBLIC
     $<$<COMPILE_LANGUAGE:CXX>:-fconcepts>
 )
 
-target_link_libraries(stm32_hal_common PUBLIC hal_interface stm32)
+target_link_libraries(hal_stm32_common PUBLIC stm32)
