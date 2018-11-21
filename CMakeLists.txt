@@ -1,17 +1,16 @@
 
 cmake_minimum_required(VERSION 3.9)
 
-if (DEFINED STANDALONE)
-    project(EmbeddedHal CXX C ASM)
-    include(cmake/ConfigureProject.cmake)
-endif ()
+set(boards_path "${CMAKE_CURRENT_SOURCE_DIR}/boards")
 
-set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
 
-set(includes_dir "${CMAKE_CURRENT_SOURCE_DIR}/interface/hal")
+project(EmbeddedHal CXX C ASM)
 
-set(hal_interface
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/details/utils.hpp
+set(includes_dir "${PROJECT_SOURCE_DIR}/interface/hal")
+
+add_library(hal_interface INTERFACE)
+target_sources(hal_interface INTERFACE
     ${includes_dir}/core/backupRegisters.hpp
     ${includes_dir}/core/core.hpp
     ${includes_dir}/core/criticalSection.hpp
@@ -22,11 +21,13 @@ set(hal_interface
     ${includes_dir}/time/time.hpp
     ${includes_dir}/time/watchdog.hpp
     ${includes_dir}/utils/assert.hpp
-
-    CACHE STRING "Hal interface sources"
 )
 
-if (${mcu_family} STREQUAL "STM32F10x")
+target_include_directories(hal_interface INTERFACE 
+    ${PROJECT_SOURCE_DIR}/interface
+)
+
+if (${mcu_family} STREQUAL "STM32F1xx")
     add_subdirectory(./src/arm/stm32/common)
     add_subdirectory(./src/arm/stm32/stm32f10x)
 elseif (${mcu_family} STREQUAL "X86")

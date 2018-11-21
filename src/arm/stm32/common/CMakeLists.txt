@@ -1,5 +1,4 @@
-
-set (sources_path ${CMAKE_CURRENT_SOURCE_DIR})
+set (sources_path ${PROJECT_SOURCE_DIR}/src/arm/stm32/common)
 
 set(sources
     ${sources_path}/stm32_assert.c
@@ -11,21 +10,14 @@ add_library(stm32_hal_common ${sources})
 
 target_include_directories(stm32_hal_common
     PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../..
-        ${CMAKE_CURRENT_SOURCE_DIR}/../../../../interface
-        ${CMAKE_BINARY_DIR}/include
+        ${PROJECT_SOURCE_DIR}
+        ${PROJECT_SOURCE_DIR}/../../..
+        ${PROJECT_SOURCE_DIR}/../../../../interface
+        ${PROJECT_SOURCE_DIR}/include
 )
 
-target_compile_options(stm32_hal_common PUBLIC
-    -fno-builtin
-    -fdata-sections
-    -fdata-sections
-    -ffunction-sections
-    $<$<CONFIG:DEBUG>: -g>
-    $<$<CONFIG:RELEASE>:-Os>
-    $<$<COMPILE_LANGUAGE:C>:-std=gnu99 -Wno-implicit-function-declaration>
-    $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z -fno-rtti -fno-use-cxa-atexit -fno-exceptions -fno-threadsafe-statics>
+target_compile_options(stm32 PUBLIC
+    $<$<COMPILE_LANGUAGE:CXX>:-fconcepts>
 )
 
-target_link_libraries(stm32_hal_common PUBLIC stm32)
+target_link_libraries(stm32_hal_common PUBLIC hal_interface stm32)

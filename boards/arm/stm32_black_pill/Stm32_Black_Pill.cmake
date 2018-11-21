@@ -1,0 +1,7 @@
+function(get_device_info mcu mcu_family arch vendor)
+    message(STATUS "Configuration of board: Stm32_Black_Pill")
+    set(${mcu} "STM32F103C8T6" PARENT_SCOPE)
+    set(${mcu_family} "STM32F1xx" PARENT_SCOPE)
+    set(${arch} "ARM" PARENT_SCOPE)
+    set(${vendor} "STM32" PARENT_SCOPE)
+endfunction()
