@@ -4,13 +4,13 @@ if (${BOARD} STREQUAL "Simulator")
 
     set(sources_path ${CMAKE_CURRENT_SOURCE_DIR}/../../src/x86/simulator)
 
-    set(sources 
-        ###              HPP               ##      
+    set(sources
+        ###              HPP               ##
         ${sources_path}/detail/tcp_server.hpp
         ${sources_path}/gpio/x86_gpio.hpp
         ${sources_path}/usart/x86_usart.hpp
 
-        ###              CPP               ##        
+        ###              CPP               ##
         ${sources_path}/time/x86_sleep.cpp
     )
 
@@ -24,7 +24,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../config/usart_config.hpp.in ${PR
 
 add_library(hal ${hal_interface} ${sources})
 
-target_include_directories(hal 
+target_include_directories(hal
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_CURRENT_SOURCE_DIR}/..
@@ -38,7 +38,7 @@ target_link_libraries(hal PRIVATE gsl ${Boost_LIBRARIES} pthread)
 target_compile_options(hal PRIVATE
     $<$<COMPILE_LANGUAGE:C>:-std=gnu99>
     $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z -fconcepts -Wswitch -Werror>
-    $<$<CONFIG:DEBUG>:-Og -g>
+    $<$<CONFIG:DEBUG>: -g>
     $<$<CONFIG:RELEASE>:-Os>
 )
 

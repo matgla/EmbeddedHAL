@@ -11,7 +11,7 @@ namespace gpio
 template <typename T>
 concept bool GpioImpl = requires(T a)
 {
-    { a.init(Speed{}, Output{}) } -> void;
+    { a.init(Output{}, Speed{}) } -> void;
     { a.init(Input{}) } -> void;
     { a.setHigh() } -> void;
     { a.setLow() } -> void;
@@ -22,9 +22,9 @@ template <GpioImpl GpioImplType>
 class Gpio
 {
 public:
-    constexpr static void init(Speed speed, Output mode)
+    constexpr static void init(Output mode, Speed speed)
     {
-        GpioImplType::init(speed, mode);
+        GpioImplType::init(mode, speed);
     }
 
     constexpr static void init(Input mode)
@@ -41,6 +41,8 @@ public:
     {
         GpioImplType::setLow();
     }
+
+    using Implementation = GpioImplType;
 };
 
 } // namespace gpio

@@ -1,5 +1,6 @@
 if (${BOARD} STREQUAL "Stm32_Black_Pill")
     set(path_to_specific_gpio_config "boards/stm32/stm32_black_pill/gpio_config.hpp")
+    set(path_to_specific_usart_config "boards/stm32/stm32_black_pill/usart_config.hpp")
     set(sources_path ${CMAKE_CURRENT_SOURCE_DIR}/../../../arm/stm32/stm32f10x)
 
     set(sources
@@ -9,6 +10,8 @@ endif()
 
 message("-- Generate config file: ${path_to_specific_gpio_config}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../../config/gpio_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/gpio.hpp @ONLY)
+message("-- Generate config file: ${path_to_specific_usart_config}")
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../../../config/usart_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/usart.hpp @ONLY)
 
 add_library(hal STATIC ${hal_interface} ${sources})
 
@@ -20,7 +23,7 @@ target_include_directories(hal
         ${CMAKE_BINARY_DIR}/include
 )
 
-target_link_libraries(hal PUBLIC stm32_hal_common stm32)
+target_link_libraries(hal PUBLIC stm32_hal_common stm32 gsl)
 
 target_compile_options(hal PRIVATE
 -fno-builtin
@@ -29,7 +32,7 @@ target_compile_options(hal PRIVATE
 -ffunction-sections
 $<$<COMPILE_LANGUAGE:C>:-std=gnu99 -Wno-implicit-function-declaration>
 $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z -fno-rtti -fno-use-cxa-atexit -fno-exceptions -fconcepts -fno-threadsafe-statics>
-$<$<CONFIG:DEBUG>:-Og -g>
+$<$<CONFIG:DEBUG>: -g>
 $<$<CONFIG:RELEASE>:-Os>
 )
 

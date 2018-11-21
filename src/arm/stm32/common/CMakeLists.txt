@@ -22,7 +22,7 @@ target_compile_options(stm32_hal_common PUBLIC
     -fdata-sections
     -fdata-sections
     -ffunction-sections
-    $<$<CONFIG:DEBUG>:-Og -g>
+    $<$<CONFIG:DEBUG>: -g>
     $<$<CONFIG:RELEASE>:-Os>
     $<$<COMPILE_LANGUAGE:C>:-std=gnu99 -Wno-implicit-function-declaration>
     $<$<COMPILE_LANGUAGE:CXX>:-std=c++1z -fno-rtti -fno-use-cxa-atexit -fno-exceptions -fno-threadsafe-statics>

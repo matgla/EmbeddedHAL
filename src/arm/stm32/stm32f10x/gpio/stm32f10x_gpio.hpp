@@ -59,6 +59,17 @@ constexpr uint8_t get_mode_mask(hal::gpio::Output m)
     }
 }
 
+constexpr uint8_t get_alternate_mode_mask(hal::gpio::Output m)
+{
+    switch (m)
+    {
+        case hal::gpio::Output::OutputPushPull:
+            return 0x2;
+        case hal::gpio::Output::OutputOpenDrain:
+            return 0x3;
+    }
+}
+
 constexpr uint8_t get_speed_mask(hal::gpio::Speed s)
 {
     switch (s)
@@ -74,15 +85,34 @@ constexpr uint8_t get_speed_mask(hal::gpio::Speed s)
 
 } // namespace detail
 
+enum class Function
+{
+    Standard,
+    Alternate
+};
+
 template <uint32_t port, uint32_t pin, uint32_t rcc_mask>
 class StmGpio
 {
 public:
-    constexpr static void init(const hal::gpio::Speed speed, const hal::gpio::Output mode)
+    constexpr static void init(const hal::gpio::Output mode, const hal::gpio::Speed speed)
     {
         initClocks();
 
         configurePort(detail::get_mode_mask(mode), detail::get_speed_mask(speed));
+    }
+
+    constexpr static void init(const hal::gpio::Output mode, const hal::gpio::Speed speed, Function function)
+    {
+        if (function == Function::Standard)
+        {
+            init(mode, speed);
+        }
+        else if (function == Function::Alternate)
+        {
+            initClocks();
+            configurePort(detail::get_alternate_mode_mask(mode), detail::get_speed_mask(speed));
+        }
     }
 
     constexpr static void init(const hal::gpio::Input mode)
@@ -111,7 +141,7 @@ private:
         }
         else
         {
-            port_->CRH = detail::get_port_state(port_->CRH, 8 - pin, mode, speed);
+            port_->CRH = detail::get_port_state(port_->CRH, pin - 8, mode, speed);
         }
     }
 
@@ -121,6 +151,7 @@ private:
     }
 
     constexpr static eul::memory_ptr<GPIO_TypeDef> port_ = eul::memory_ptr<GPIO_TypeDef>(port);
+    uint32_t pin_                                        = pin;
 };
 
 } // namespace gpio
