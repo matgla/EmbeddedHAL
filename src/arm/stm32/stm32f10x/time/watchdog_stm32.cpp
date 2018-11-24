@@ -2,7 +2,7 @@
 
 #include <cstdint>
 
-#include <stm32f10x_iwdg.h>
+#include <stm32f1xx_iwdg.h>
 
 constexpr uint16_t LSI_FREQ = 40000;
 

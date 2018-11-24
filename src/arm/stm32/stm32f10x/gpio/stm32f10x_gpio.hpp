@@ -11,7 +11,7 @@
 
 namespace hal
 {
-namespace stm32f10x
+namespace stm32f1xx
 {
 namespace gpio
 {
@@ -155,5 +155,5 @@ private:
 };
 
 } // namespace gpio
-} // namespace stm32f10x
+} // namespace stm32f1xx
 } // namespace hal

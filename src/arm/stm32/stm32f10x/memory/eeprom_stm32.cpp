@@ -2,7 +2,7 @@
 
 #include <cstring>
 
-#include <stm32f10x_flash.h>
+#include <stm32f1xx_flash.h>
 
 #include "hal/utils/assert.hpp"
 

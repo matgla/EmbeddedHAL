@@ -4,6 +4,7 @@ set(sources
     ${sources_path}/stm32_assert.c
     ${sources_path}/stm32_sleep.cpp
     ${sources_path}/stm32_time.cpp
+    ${sources_path}/syscalls.cpp
 )
 
 add_library(hal_stm32_common ${sources})

@@ -7,11 +7,14 @@
 
 #include <stm32f1xx.h>
 
+#include <eul/function.hpp>
+#include <eul/memory_ptr.hpp>
+
 #include "hal/gpio.hpp"
 
 namespace hal
 {
-namespace stm32f10x
+namespace stm32f1xx
 {
 namespace interfaces
 {
@@ -65,53 +68,46 @@ constexpr auto get_pinout()
     }
 }
 
-template <Usart1Mapping usartMapping>
-class Usart1
+static eul::function<void(const uint8_t), 0> usart1_rx = [](const uint8_t data) {};
+
+
+template <std::size_t usart_address>
+class UsartCommon
 {
 public:
-    using RxPin = typename decltype(get_pinout<usartMapping>())::RxPin;
-    using TxPin = typename decltype(get_pinout<usartMapping>())::TxPin;
-
-    /*
-1.     Enable the USART by writing the UE bit in USART_CR1 register to 1.
-2.     Program the M bit in USART_CR1 to define the word length.
-3.     Program the number of stop bits in USART_CR2.
-4.     Select DMA enable (DMAT) in USART_CR3 if Multi buffer Communication is to take place. Configure the DMA register as explained in multibuffer communication.
-5.     Select the desired baud rate using the USART_BRR register.
-6.     Set the TE bit in USART_CR1 to send an idle frame as first transmission.
-7.     Write the data to send in the USART_DR register (this clears the TXE bit). Repeat this for each data to be transmitted in case of single buffer.
-8.     After writing the last data into the USART_DR register, wait until TC=1. This indicates that the transmission of the last frame is
-       complete. This is required for instance when the USART is disabled or enters the Halt mode to avoid corrupting the last transmission
-*/
-    static void init(uint32_t baudrate)
+    template <typename RxPin, typename TxPin>
+    constexpr static void init(uint32_t bus_frequency, uint32_t baudrate)
     {
-        /* enable clock */
-        RCC->APB2ENR |= RCC_APB2ENR_USART1EN | RCC_APB2ENR_AFIOEN;
-
-        /* configure gpio */
         TxPin::Implementation::init(hal::gpio::Output::OutputPushPull,
                                     hal::gpio::Speed::Medium,
-                                    hal::stm32f10x::gpio::Function::Alternate);
+                                    hal::stm32f1xx::gpio::Function::Alternate);
         RxPin::init(hal::gpio::Input::InputFloating);
 
-        /* configure usart */
-        USART1->BRR = SystemCoreClock / baudrate;
-
+        setBaudrate(bus_frequency, baudrate);
         /* enable tx */
-        USART1->CR1 |= USART_CR1_TE;
+        usart_->CR1 |= USART_CR1_TE;
         /* enable rx */
-        USART1->CR1 |= USART_CR1_RE;
+        usart_->CR1 |= USART_CR1_RE;
 
         /* enable USART */
-        USART1->CR1 |= USART_CR1_UE;
+        usart_->CR1 |= USART_CR1_UE;
+
+        /* enable Rx intterupt */
+        usart_->CR1 |= USART_CR1_RXNEIE;
+        NVIC_EnableIRQ(USART1_IRQn);
+    }
+
+
+    constexpr static void setBaudrate(uint32_t bus_frequency, uint32_t baudrate)
+    {
+        usart_->BRR = bus_frequency / baudrate;
     }
 
     static void write(const char byte)
     {
-        while (!(USART1->SR & USART_SR_TXE))
-            ;
+        waitTx();
 
-        USART1->DR = byte;
+        usart_->DR = byte;
     }
 
     static void write(const gsl::span<const uint8_t>& data)
@@ -131,13 +127,43 @@ public:
     }
 
     template <typename CallbackType>
-    static void onData(const CallbackType& onDataCallback)
+    static void onData(CallbackType&& onDataCallback)
     {
-        // UsartImplType::onData(onDataCallba)
+        usart1_rx = onDataCallback;
+    }
+
+protected:
+    constexpr static void waitTx()
+    {
+        while (!(usart_->SR & USART_SR_TXE))
+        {
+        }
+    }
+
+
+    constexpr static eul::memory_ptr<USART_TypeDef> usart_ = eul::memory_ptr<USART_TypeDef>(usart_address);
+};
+
+template <Usart1Mapping usartMapping>
+class Usart1 : public UsartCommon<USART1_BASE>
+{
+public:
+    using TxPin = typename decltype(get_pinout<usartMapping>())::TxPin;
+    using RxPin = typename decltype(get_pinout<usartMapping>())::RxPin;
+    constexpr static void init(uint32_t baudrate)
+    {
+        RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
+
+        UsartCommon<USART1_BASE>::init<RxPin, TxPin>(SystemCoreClock, baudrate);
+    }
+
+    constexpr static void setBaudrate(uint32_t baudrate)
+    {
+        UsartCommon<USART1_BASE>::setBaudrate(SystemCoreClock, baudrate);
     }
 };
 
 
 } // namespace interfaces
-} // namespace stm32f10x
+} // namespace stm32f1xx
 } // namespace hal

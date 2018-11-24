@@ -47,7 +47,7 @@ public:
     }
 
     template <typename CallbackType>
-    static void onData(const CallbackType& onDataCallback)
+    static void onData(CallbackType&& onDataCallback)
     {
         UsartImplType::onData(onDataCallback);
     }

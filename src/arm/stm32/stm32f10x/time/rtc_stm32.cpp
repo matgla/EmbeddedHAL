@@ -4,7 +4,7 @@
 // #include <ctime>
 // #include <functional>
 
-// #include "stm32f10x_conf.h"
+// #include "stm32f1xx_conf.h"
 
 // #include "hal/core/backupRegisters.hpp"
 

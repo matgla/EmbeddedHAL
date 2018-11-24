@@ -34,12 +34,12 @@ class GpioGenerator:
     def generate_header(self, f):
         f.write(generated_header())
         f.write(user_include("hal/gpio/gpio.hpp"))
-        f.write(user_include("arm/stm32/stm32f10x/gpio/stm32f10x_gpio.hpp"))
+        f.write(user_include("arm/stm32/stm32f1xx/gpio/stm32f1xx_gpio.hpp"))
         f.write(newline())
 
     def generate_port(self, f):
         for port_name in self.config:
             for pin in self.config[port_name]:
-                f.write("    using P" + port_name + str(pin) + " = Gpio<hal::stm32f10x::gpio::StmGpio<GPIO" +
+                f.write("    using P" + port_name + str(pin) + " = Gpio<hal::stm32f1xx::gpio::StmGpio<GPIO" +
                         port_name + "_BASE, GPIO_Pin_" + str(pin) + ">>;")
                 f.write(newline())

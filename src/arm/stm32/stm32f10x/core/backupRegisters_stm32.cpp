@@ -1,6 +1,6 @@
 #include "hal/core/backupRegisters.hpp"
 
-#include <stm32f10x.h>
+#include <stm32f1xx.h>
 
 #define STARTUP_REGISTER BKP_DR1
 #define STARTUP_MAGIC_COOKIE 0xBEEF
