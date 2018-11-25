@@ -5,24 +5,23 @@
 
 namespace hal
 {
-namespace time
+namespace clock
 {
 
 template <typename ClockImplementation, typename... CoreClockChangeSubscribers>
-class Clock
+class ClockBase
 {
 public:
-    Clock(CoreClockChangeSubscribers... subscribers)
+    using SelfType = ClockBase<ClockImplementation, CoreClockChangeSubscribers...>;
+    ClockBase(CoreClockChangeSubscribers... subscribers)
         : subscribers_(std::forward<CoreClockChangeSubscribers>(subscribers)...)
     {
+        ClockImplementation::set_clock_change_callback([this]() { on_clock_change(); });
     }
 
     void set_core_clock(const uint32_t clock)
     {
         ClockImplementation::set_core_clock(clock);
-        eul::mpl::tuples::for_each(subscribers_, [this](auto& subscriber) {
-            subscriber(ClockImplementation::get_core_clock());
-        });
     }
 
     uint32_t get_core_clock() const
@@ -31,11 +30,17 @@ public:
     }
 
 private:
+    void on_clock_change()
+    {
+        eul::mpl::tuples::for_each(subscribers_, [this](auto& subscriber) {
+            subscriber(ClockImplementation::get_core_clock());
+        });
+    }
     const std::tuple<CoreClockChangeSubscribers...> subscribers_;
 };
 
 template <typename... CoreClockChangeSubscribers>
-Clock(CoreClockChangeSubscribers...)->Clock<CoreClockChangeSubscribers...>;
+ClockBase(CoreClockChangeSubscribers...)->ClockBase<CoreClockChangeSubscribers...>;
 
-} // namespace time
+} // namespace clock
 } // namespace hal

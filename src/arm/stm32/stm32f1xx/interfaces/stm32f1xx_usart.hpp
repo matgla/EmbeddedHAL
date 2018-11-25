@@ -10,6 +10,7 @@
 #include <eul/function.hpp>
 #include <eul/memory_ptr.hpp>
 
+#include "hal/clock.hpp"
 #include "hal/gpio.hpp"
 
 namespace hal
@@ -83,7 +84,7 @@ public:
                                     hal::stm32f1xx::gpio::Function::Alternate);
         RxPin::init(hal::gpio::Input::InputFloating);
 
-        setBaudrate(bus_frequency, baudrate);
+        set_baudrate(bus_frequency, baudrate);
         /* enable tx */
         usart_->CR1 |= USART_CR1_TE;
         /* enable rx */
@@ -98,14 +99,14 @@ public:
     }
 
 
-    constexpr static void setBaudrate(uint32_t bus_frequency, uint32_t baudrate)
+    constexpr static void set_baudrate(uint32_t bus_frequency, uint32_t baudrate)
     {
         usart_->BRR = bus_frequency / baudrate;
     }
 
     static void write(const char byte)
     {
-        waitTx();
+        wait_for_tx();
 
         usart_->DR = byte;
     }
@@ -133,7 +134,7 @@ public:
     }
 
 protected:
-    constexpr static void waitTx()
+    constexpr static void wait_for_tx()
     {
         while (!(usart_->SR & USART_SR_TXE))
         {
@@ -144,22 +145,22 @@ protected:
     constexpr static eul::memory_ptr<USART_TypeDef> usart_ = eul::memory_ptr<USART_TypeDef>(usart_address);
 };
 
-template <Usart1Mapping usartMapping>
+template <Usart1Mapping usart_mapping>
 class Usart1 : public UsartCommon<USART1_BASE>
 {
 public:
-    using TxPin = typename decltype(get_pinout<usartMapping>())::TxPin;
-    using RxPin = typename decltype(get_pinout<usartMapping>())::RxPin;
+    using TxPin = typename decltype(get_pinout<usart_mapping>())::TxPin;
+    using RxPin = typename decltype(get_pinout<usart_mapping>())::RxPin;
     constexpr static void init(uint32_t baudrate)
     {
         RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
 
-        UsartCommon<USART1_BASE>::init<RxPin, TxPin>(SystemCoreClock, baudrate);
+        UsartCommon<USART1_BASE>::init<RxPin, TxPin>(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
     }
 
-    constexpr static void setBaudrate(uint32_t baudrate)
+    constexpr static void set_baudrate(uint32_t baudrate)
     {
-        UsartCommon<USART1_BASE>::setBaudrate(SystemCoreClock, baudrate);
+        UsartCommon<USART1_BASE>::set_baudrate(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
     }
 };
 

@@ -11,17 +11,22 @@ function(add_device_hal_library hal_device_library)
     set(hal_device_library ${hal_device_library} PARENT_SCOPE)
     set(path_to_specific_gpio_config "${PROJECT_SOURCE_DIR}/boards/arm/stm32_black_pill/gpio_config.hpp")
     set(path_to_specific_usart_config "${PROJECT_SOURCE_DIR}/boards/arm/stm32_black_pill/usart_config.hpp")
+    set(path_to_specific_clock_config "${PROJECT_SOURCE_DIR}/boards/arm/stm32_black_pill/clock_config.hpp")
 
     message(STATUS "Generate config file: ${path_to_specific_gpio_config}")
     message(STATUS "Generate config file: ${path_to_specific_usart_config}")
+    message(STATUS "Generate config file: ${path_to_specific_clock_config}")
     configure_file(${PROJECT_SOURCE_DIR}/config/gpio_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/gpio.hpp @ONLY)
     configure_file(${PROJECT_SOURCE_DIR}/config/usart_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/usart.hpp @ONLY)
+    configure_file(${PROJECT_SOURCE_DIR}/config/clock_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/clock.hpp @ONLY)
 
     add_library(${hal_device_library})
 
     set(source_path "${PROJECT_SOURCE_DIR}/boards/arm/stm32_black_pill")
     target_sources(${hal_device_library} PUBLIC
         ${path_to_specific_gpio_config}
+        ${path_to_specific_usart_config}
+        ${path_to_specific_clock_config}
     )
     target_sources(${hal_device_library} PRIVATE
         ${source_path}/board.cpp
