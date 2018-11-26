@@ -31,6 +31,11 @@ public:
         UsartImplType::init(baudrate);
     }
 
+    static void set_baudrate(uint32_t baudrate)
+    {
+        UsartImplType::set_baudrate(baudrate);
+    }
+
     static void write(const char byte)
     {
         UsartImplType::write(byte);

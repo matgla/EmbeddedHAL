@@ -9,7 +9,13 @@ namespace clock
 {
 
 template <typename... Subscribers>
-using Clock = hal::clock::ClockBase<hal::stm32f1xx::clock::Clock, Subscribers...>;
+struct Clock : public hal::clock::ClockBase<hal::stm32f1xx::clock::Clock, Subscribers...>
+{
+};
+
+template <typename... Subscribers>
+Clock(Subscribers...)->Clock<Subscribers...>;
+
 
 } // namespace clock
 } // namespace hal

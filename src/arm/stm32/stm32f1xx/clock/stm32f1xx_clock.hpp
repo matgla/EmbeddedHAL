@@ -19,7 +19,7 @@ public:
 
     static void set_core_clock(const uint32_t clock);
 
-    static void set_core_change_callback(const OnCoreClockChangeCallback& callback);
+    static void set_core_clock_change_callback(const OnCoreClockChangeCallback& callback);
 };
 
 } // namespace clock

@@ -16,7 +16,7 @@ public:
     ClockBase(CoreClockChangeSubscribers... subscribers)
         : subscribers_(std::forward<CoreClockChangeSubscribers>(subscribers)...)
     {
-        ClockImplementation::set_clock_change_callback([this]() { on_clock_change(); });
+        ClockImplementation::set_core_clock_change_callback([this]() { on_clock_change(); });
     }
 
     void set_core_clock(const uint32_t clock)
@@ -39,8 +39,8 @@ private:
     const std::tuple<CoreClockChangeSubscribers...> subscribers_;
 };
 
-template <typename... CoreClockChangeSubscribers>
-ClockBase(CoreClockChangeSubscribers...)->ClockBase<CoreClockChangeSubscribers...>;
+template <typename Impl, typename... CoreClockChangeSubscribers>
+ClockBase(CoreClockChangeSubscribers...)->ClockBase<Impl, CoreClockChangeSubscribers...>;
 
 } // namespace clock
 } // namespace hal
