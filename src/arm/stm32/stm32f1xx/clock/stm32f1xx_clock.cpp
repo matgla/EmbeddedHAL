@@ -9,8 +9,7 @@ namespace stm32f1xx
 namespace clock
 {
 
-// eul::function<void(), sizeof(void*)* 2> on_core_clock_change_callback_ = []() {};
-eul::function<void(int), 8> f1([](int a) {});
+Clock::OnCoreClockChangeCallback Clock::on_core_clock_change_callback_ = []() {};
 
 
 uint32_t Clock::get_core_clock()
@@ -23,13 +22,13 @@ uint32_t Clock::get_core_clock()
 
 void Clock::set_core_clock(const uint32_t clock)
 {
-    // change clock
-    // on_core_clock_change_callback_();
+
+    on_core_clock_change_callback_();
 }
 
 void Clock::set_core_clock_change_callback(const OnCoreClockChangeCallback& callback)
 {
-    // on_core_clock_change_callback_ = callback;
+    on_core_clock_change_callback_ = callback;
 }
 
 
