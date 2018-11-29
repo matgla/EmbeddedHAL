@@ -5,6 +5,7 @@
 
 extern "C"
 {
+    int _gettimeofday(struct timeval* tv, void* tzvp);
     void _init();
     void _exit(int code);
     int _kill(int pid, int sig);
@@ -16,6 +17,11 @@ extern "C"
     int _lseek(int file, int ptr, int dir);
     int _close(int file);
     int _fstat(int file, struct stat* st);
+}
+
+int _gettimeofday(struct timeval* tv, void* tzvp)
+{
+    return 0;
 }
 
 void _init()
