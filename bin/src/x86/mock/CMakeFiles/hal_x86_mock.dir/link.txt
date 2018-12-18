@@ -1,0 +1,2 @@
+/usr/bin/ar qc libhal_x86_mock.a  CMakeFiles/hal_x86_mock.dir/clock/x86_mock_clock.cpp.o
+/usr/bin/ranlib libhal_x86_mock.a

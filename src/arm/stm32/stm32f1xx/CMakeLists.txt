@@ -19,4 +19,11 @@ target_include_directories(hal_stm32f1xx
         ${PROJECT_BINARY_DIR}/include
 )
 
-target_link_libraries(hal_stm32f1xx PUBLIC hal_stm32_common stm32 gsl eul)
+target_link_libraries(hal_stm32f1xx
+    PUBLIC
+        stm32
+    PRIVATE
+        hal_stm32_common
+        gsl
+        eul
+)
