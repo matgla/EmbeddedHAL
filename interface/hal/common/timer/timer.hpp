@@ -27,8 +27,14 @@ public:
     };
 
     Timer(const CallbackType& callback, const TimeProviderType& time_provider)
+        : Timer(time_provider)
+    {
+        callback_ = callback;
+    }
+
+    Timer(const TimeProviderType& time_provider)
         : time_provider_(time_provider),
-          start_time_(0), end_time_(0), callback_(callback), observing_node_(this), state_(State::Idle)
+          start_time_(0), end_time_(0), observing_node_(this), state_(State::Idle)
     {
     }
 
@@ -61,7 +67,10 @@ protected:
     {
         if (state_ == State::Running)
         {
-            callback_();
+            if (callback_)
+            {
+                callback_();
+            }
         }
     }
 

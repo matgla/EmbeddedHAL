@@ -1,2 +1,0 @@
-/usr/bin/ar qc libx86_mock.a  CMakeFiles/x86_mock.dir/boards/x86/mock/board.cpp.o
-/usr/bin/ranlib libx86_mock.a
