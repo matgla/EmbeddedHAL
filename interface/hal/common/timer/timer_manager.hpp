@@ -1,12 +1,14 @@
 #pragma once
 
-#include "hal/time/timer.hpp"
+#include "hal/common/timer/observed_timer.hpp"
 
 #include "eul/container/observable/observing_list.hpp"
 
 namespace hal
 {
-namespace time
+namespace common
+{
+namespace timer
 {
 
 class TimerManager
@@ -14,14 +16,14 @@ class TimerManager
 public:
     TimerManager();
 
-    void register_timer(ITimer* timer);
-    void deregister_timer(ITimer* timer);
-
+    void register_timer(ObservedTimer& timer);
+    void deregister_timer(ObservedTimer& timer);
     void run();
 
 private:
-    container::observing_list<observing_node<ITimer*>> timers_;
+    eul::container::observing_list<eul::container::observing_node<ObservedTimer*>> timers_;
 };
 
-} // namespace time
+} // namespace timer
+} // namespace common
 } // namespace hal

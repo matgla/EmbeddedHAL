@@ -27,6 +27,12 @@ target_sources(hal INTERFACE
     ${interface_sources_path}/time/time.hpp
     ${interface_sources_path}/time/watchdog.hpp
     ${interface_sources_path}/utils/assert.hpp
+    ${interface_sources_path}/common/timer/interval_timer.hpp
+    ${interface_sources_path}/common/timer/ITimer.hpp
+    ${interface_sources_path}/common/timer/observed_timer.hpp
+    ${interface_sources_path}/common/timer/timeout_timer.hpp
+    ${interface_sources_path}/common/timer/timer_manager.hpp
+    ${interface_sources_path}/common/timer/timer.hpp
 )
 
 target_include_directories(hal INTERFACE

@@ -11,6 +11,7 @@ target_sources(${binary_name}
 
         ${ut_source}/common/timer/TimerTests.cpp
         ${ut_source}/common/timer/TimeoutTimerTests.cpp
+        ${ut_source}/common/timer/TimerManagerTests.cpp
 )
 
 target_include_directories(${binary_name} PRIVATE ${PROJECT_SOURCE_DIR}/src)

@@ -2,10 +2,8 @@
 
 #include <chrono>
 
-#include "hal/common/timer/ITimer.hpp"
+#include "hal/common/timer/observed_timer.hpp"
 
-#include <eul/container/observable/observing_list.hpp>
-#include <eul/container/observable/observing_node.hpp>
 #include <eul/function.hpp>
 
 namespace hal
@@ -16,10 +14,11 @@ namespace timer
 {
 
 template <typename TimeProviderType>
-class Timer : public ITimer
+class Timer : public ObservedTimer
 {
 public:
     using CallbackType = eul::function<void(), sizeof(std::size_t)>;
+
     enum class State
     {
         Running,
@@ -34,7 +33,7 @@ public:
 
     Timer(const TimeProviderType& time_provider)
         : time_provider_(time_provider),
-          start_time_(0), end_time_(0), observing_node_(this), state_(State::Idle)
+          start_time_(0), end_time_(0), state_(State::Idle)
     {
     }
 
@@ -80,7 +79,6 @@ protected:
     std::chrono::milliseconds end_time_;
     CallbackType callback_;
 
-    eul::container::observing_node<ITimer*> observing_node_;
     State state_;
 };
 

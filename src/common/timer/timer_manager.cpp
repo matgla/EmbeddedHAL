@@ -1,19 +1,34 @@
-// #include "hal/timer/timer_manager.hpp"
+#include "hal/common/timer/timer_manager.hpp"
 
-// namespace hal
-// {
-// namespace time
-// {
+namespace hal
+{
+namespace common
+{
+namespace timer
+{
 
-// TimerManager::TimerManager()
-//     : timer_root_(nullptr)
-// {
-// }
+TimerManager::TimerManager()
+{
+}
 
-// void TimerManager::register_timer(ITimer* timer)
-// {
-//     timer->onDestroy
-// }
+void TimerManager::register_timer(ObservedTimer& timer)
+{
+    timers_.push_back(timer.observing_node());
+}
 
-// } // namespace time
-// } // namespace hal
+void TimerManager::deregister_timer(ObservedTimer& timer)
+{
+    timer.observing_node().reset();
+}
+
+void TimerManager::run()
+{
+    for (auto& timer : timers_)
+    {
+        timer.data()->run();
+    }
+}
+
+} // namespace timer
+} // namespace common
+} // namespace hal
