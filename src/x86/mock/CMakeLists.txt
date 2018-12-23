@@ -12,6 +12,7 @@ target_sources(${library_name}
     PRIVATE
         # CPP
         ${sources_path}/clock/x86_mock_clock.cpp
+        ${sources_path}/time/x86_mock_time.cpp
 )
 
 target_include_directories(${library_name}

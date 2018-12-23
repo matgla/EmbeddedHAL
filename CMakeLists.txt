@@ -48,7 +48,8 @@ message(STATUS "Link hal with: ${hal_device_library}")
 target_link_libraries(hal
     INTERFACE
         ${hal_device_library}
-        hal_common)
+        hal_common
+        eul)
 
 if (BUILD_UT)
     add_subdirectory(test)

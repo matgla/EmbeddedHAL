@@ -1,5 +1,6 @@
 #pragma once
 
+#include <chrono>
 #include <cstdint>
 
 namespace hal
@@ -10,14 +11,15 @@ namespace time
 class Time
 {
 public:
-    static uint64_t getTicks();
-    static void incrementTicks();
-    static void setTicks(uint64_t ticks);
-    static uint64_t milliseconds();
-    static void init();
+    void init();
+
+    Time operator++(int);
+    Time& operator++();
+
+    std::chrono::milliseconds milliseconds() const;
 
 private:
-    static volatile uint64_t ticks_;
+    std::chrono::milliseconds milliseconds_;
 };
 
 } // namespace time
