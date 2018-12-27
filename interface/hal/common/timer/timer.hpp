@@ -61,6 +61,21 @@ public:
         return true;
     }
 
+    bool stop()
+    {
+        if (state_ == State::Running)
+        {
+            state_ = State::Idle;
+            return true;
+        }
+        return false;
+    }
+
+    void setCallback(const CallbackType& callback)
+    {
+        callback_ = callback;
+    }
+
 protected:
     void fire()
     {

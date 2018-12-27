@@ -16,6 +16,8 @@ public:
     Time operator++(int);
     Time& operator++();
 
+    Time& operator+=(const std::chrono::milliseconds&);
+
     std::chrono::milliseconds milliseconds() const;
 
 private:

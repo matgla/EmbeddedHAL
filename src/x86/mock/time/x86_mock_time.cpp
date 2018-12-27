@@ -22,6 +22,12 @@ Time& Time::operator++()
     return *this;
 }
 
+Time& Time::operator+=(const std::chrono::milliseconds& time)
+{
+    milliseconds_ += time;
+    return *this;
+}
+
 std::chrono::milliseconds Time::milliseconds() const
 {
     return milliseconds_;
