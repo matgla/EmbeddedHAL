@@ -79,12 +79,9 @@ public:
 protected:
     void fire()
     {
-        if (state_ == State::Running)
+        if (callback_)
         {
-            if (callback_)
-            {
-                callback_();
-            }
+            callback_();
         }
     }
 

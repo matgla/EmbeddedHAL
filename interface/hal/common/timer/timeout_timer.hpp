@@ -27,8 +27,8 @@ public:
         {
             if (this->time_provider_.milliseconds() >= this->end_time_)
             {
-                this->fire();
                 this->state_ = TimerBase::State::Idle;
+                this->fire();
             }
         }
     }

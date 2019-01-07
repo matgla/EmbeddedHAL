@@ -1,5 +1,4 @@
 if (NOT EXISTS gsl)
-
     file(GLOB_RECURSE gsl_srcs
         "gsl/include/*."
     )
@@ -9,5 +8,4 @@ if (NOT EXISTS gsl)
     add_library(gsl INTERFACE)
     target_sources(gsl INTERFACE ${gsl_srcs})
     target_include_directories(gsl INTERFACE ${Gsl_INCLUDE_DIR})
-
 endif ()
