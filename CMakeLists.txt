@@ -41,6 +41,7 @@ target_include_directories(hal INTERFACE
 
 add_subdirectory(src/common)
 add_subdirectory(lib)
+add_subdirectory(interface/hal/memory)
 
 add_device_hal_library(hal_device_library)
 
