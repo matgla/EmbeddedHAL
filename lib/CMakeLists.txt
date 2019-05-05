@@ -1,3 +1,6 @@
 message(STATUS "Adding libraries")
-add_subdirectory(eul/eul)
+if (NOT TARGET eul)
+    add_subdirectory(eul/eul)
+endif ()
+
 add_subdirectory(gsl)
