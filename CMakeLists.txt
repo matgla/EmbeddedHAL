@@ -41,6 +41,7 @@ target_include_directories(hal INTERFACE
 
 add_subdirectory(src/common)
 add_subdirectory(lib)
+add_subdirectory(interface/memory)
 
 add_device_hal_library(hal_device_library)
 
@@ -48,6 +49,7 @@ message(STATUS "Link hal with: ${hal_device_library}")
 target_link_libraries(hal
     INTERFACE
         ${hal_device_library}
+        hal_memory
         hal_common
         eul)
 
