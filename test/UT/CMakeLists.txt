@@ -1,6 +1,6 @@
 enable_testing()
 
-set(ut_source "${CMAKE_SOURCE_DIR}/test/UT")
+set(ut_source "${CMAKE_CURRENT_SOURCE_DIR}")
 set(binary_name "hal_common_ut")
 
 add_executable(${binary_name})
