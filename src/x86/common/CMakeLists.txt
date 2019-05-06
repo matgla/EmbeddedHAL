@@ -9,9 +9,11 @@ target_include_directories(${library_name}
         ${PROJECT_BINARY_DIR}/include
 )
 
+add_subdirectory(memory)
 add_subdirectory(time)
 
 target_link_libraries(${library_name}
     INTERFACE
         hal_x86_common_time
+        hal_x86_common_memory
 )
