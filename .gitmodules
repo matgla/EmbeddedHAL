@@ -1,12 +1,16 @@
 [submodule "cmake"]
 	path = cmake
 	url = https://github.com/matgla/EmbeddedCMakes.git
+	branch = master
 [submodule "lib/gsl/gsl"]
 	path = lib/gsl/gsl
 	url = https://github.com/Microsoft/GSL.git
+	branch = master
 [submodule "lib/modm/modm/cmsis-header-stm32"]
 	path = lib/modm/modm/cmsis-header-stm32
 	url = https://github.com/modm-io/cmsis-header-stm32.git
+	branch = master
 [submodule "lib/eul/eul"]
 	path = lib/eul/eul
 	url = https://github.com/matgla/EmbeddedUtilityLibraries.git
+	branch = master
