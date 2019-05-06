@@ -11,12 +11,13 @@ namespace hal
 namespace memory
 {
 
+/* addressing 1byte */
 class Eeprom
 {
 public:
     Eeprom();
     void write(std::size_t address, const gsl::span<const uint32_t>& data);
-    const gsl::span<const uint32_t> read(uint32_t address, uint32_t size) const;
+    const gsl::span<const uint8_t> read(uint32_t address, uint32_t size) const;
 
     template <typename Data>
     void write(std::size_t address, const Data data)
