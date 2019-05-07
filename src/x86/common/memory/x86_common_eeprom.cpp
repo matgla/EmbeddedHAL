@@ -71,7 +71,7 @@ void Eeprom::write_u8(std::size_t address, uint8_t value)
     write_u32(address, value);
 }
 
-std::optional<uint32_t> Eeprom::read(std::size_t address)
+std::optional<uint32_t> Eeprom::read_u32(std::size_t address)
 {
     if (!was_initialized)
     {
@@ -84,6 +84,16 @@ std::optional<uint32_t> Eeprom::read(std::size_t address)
     }
 
     return std::optional<uint32_t>{};
+}
+
+std::optional<uint16_t> Eeprom::read_u16(std::size_t address)
+{
+    return read_u32(address);
+}
+
+std::optional<uint8_t> Eeprom::read_u8(std::size_t address)
+{
+    return read_u32(address);
 }
 
 } // namespace memory
