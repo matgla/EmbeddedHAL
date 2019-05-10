@@ -1,7 +1,7 @@
 message(STATUS "Adding libraries")
 
-if (NOT TARGET eul)
-    add_subdirectory(eul/eul)
+if (NOT TARGET embedded_utility_libraries)
+    add_subdirectory(eul)
 endif ()
 
 if (NOT TARGET gsl)
