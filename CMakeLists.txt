@@ -22,6 +22,20 @@ execute_process(
         ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
+execute_process(
+    COMMAND
+        git submodule foreach git checkout master
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
+execute_process(
+    COMMAND
+        git submodule foreach git pull
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
 
 project(EmbeddedHal CXX C ASM)
