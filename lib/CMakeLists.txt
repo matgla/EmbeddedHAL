@@ -1,9 +1,10 @@
 message(STATUS "Adding libraries")
 
-if (NOT TARGET embedded_utility_libraries)
-    add_subdirectory(eul)
-endif ()
+include (../cmake/GitModules.cmake)
 
-if (NOT TARGET gsl)
-    add_subdirectory(gsl)
-endif ()
+fetch_module(eul)
+fetch_module(gsl/gsl)
+
+
+execute_command("git submodule foreach git checkout master")
+execute_command("git submodule foreach git pull")

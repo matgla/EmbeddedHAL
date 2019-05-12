@@ -9,6 +9,19 @@ endif ()
 
 set(boards_path "${CMAKE_CURRENT_SOURCE_DIR}/boards")
 
+find_package(Git QUIET)
+if (NOT GIT_FOUND)
+    message (FATAL_ERROR "Can't find git")
+endif ()
+
+message(STATUS "Fetching dependency: EmbeddedCmakes")
+execute_process(
+    COMMAND
+        git submodule update --init -- cmake
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_SOURCE_DIR}
+)
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
 
 project(EmbeddedHal CXX C ASM)
