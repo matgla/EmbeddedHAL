@@ -20,6 +20,8 @@ execute_process(
         git submodule update --init -- cmake
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_QUIET
+    ERROR_QUIET
 )
 
 execute_process(
@@ -27,6 +29,8 @@ execute_process(
         git submodule foreach git checkout master
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_QUIET
+    ERROR_QUIET
 )
 
 execute_process(
@@ -34,6 +38,8 @@ execute_process(
         git submodule foreach git pull
     WORKING_DIRECTORY
         ${CMAKE_CURRENT_SOURCE_DIR}
+    OUTPUT_QUIET
+    ERROR_QUIET
 )
 
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
