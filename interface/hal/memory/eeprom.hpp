@@ -1,9 +1,8 @@
 #pragma once
 
+#include <cstdint>
 #include <type_traits>
 #include <optional>
-
-#include "details/utils.hpp"
 
 namespace hal
 {

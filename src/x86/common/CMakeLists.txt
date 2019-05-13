@@ -14,6 +14,9 @@ add_subdirectory(time)
 
 target_link_libraries(${library_name}
     INTERFACE
+    -Wl,--whole-archive
         hal_x86_common_time
         hal_x86_common_memory
+    -Wl,--no-whole-archive
+
 )

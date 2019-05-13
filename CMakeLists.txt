@@ -82,9 +82,11 @@ message(STATUS "Link hal with: ${hal_device_library}")
 
 target_link_libraries(hal
     INTERFACE
+        -Wl,--whole-archive
         ${hal_device_library}
         hal_memory
         hal_common
+        -Wl,--no-whole-archive
         eul
 )
 

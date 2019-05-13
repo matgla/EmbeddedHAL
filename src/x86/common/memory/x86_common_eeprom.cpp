@@ -1,6 +1,7 @@
 #include "hal/memory/eeprom.hpp"
 
 #include <optional>
+#include <type_traits>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -27,8 +28,9 @@ void store_to_file()
     file.close();
 }
 
-uint32_t get_hex(const std::string& hexstr) {
-    return (uint32_t)strtol(hexstr.c_str(), 0, 16);
+uint32_t get_hex(const std::string& hexstr)
+{
+    return static_cast<uint32_t>(strtol(hexstr.c_str(), 0, 16));
 }
 
 void initialize_from_file()
@@ -38,13 +40,16 @@ void initialize_from_file()
     {
         std::string line;
         std::getline(file, line);
+        if (line.empty())
+        {
+            break;
+        }
 
         auto delimiter = line.find(":");
         auto address_str = line.substr(0, delimiter);
         auto value_str = line.substr(delimiter + 1, line.size());
         memory[get_hex(address_str)] = get_hex(value_str);
     }
-
     file.close();
     was_initialized = true;
 }
@@ -77,7 +82,6 @@ std::optional<uint32_t> Eeprom::read_u32(std::size_t address)
     {
         initialize_from_file();
     }
-
     if (memory.count(address))
     {
         return memory[address];
