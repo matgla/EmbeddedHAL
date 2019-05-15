@@ -8,6 +8,7 @@ target_sources(${library_name}
     PRIVATE
         # CPP
         ${CMAKE_CURRENT_SOURCE_DIR}/x86_common_eeprom.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/x86_common_flash.cpp
 )
 
 target_include_directories(${library_name}
