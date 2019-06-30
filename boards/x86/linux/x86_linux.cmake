@@ -1,9 +1,9 @@
 function(get_device_info mcu mcu_family arch vendor)
     message(STATUS "Configuration of board: x86_linux")
-    set(${mcu} "none" PARENT_SCOPE)
-    set(${mcu_family} "none" PARENT_SCOPE)
-    set(${arch} "x86" PARENT_SCOPE)
-    set(${vendor} "none" PARENT_SCOPE)
+    set(${mcu} "none" CACHE STRING "MCU Name" FORCE)
+    set(${mcu_family} "none" CACHE STRING "MCU family" FORCE)
+    set(${arch} "x86" CACHE STRING "MCU architecture" FORCE)
+    set(${vendor} "none" CACHE STRING "MCU vendor" FORCE)
 endfunction()
 
 function(add_device_hal_library hal_device_library)
