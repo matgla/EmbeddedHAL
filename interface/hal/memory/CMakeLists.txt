@@ -16,3 +16,9 @@ target_link_libraries(${library_name}
     INTERFACE
         gsl
 )
+
+target_compile_options(${library_name} INTERFACE
+    $<$<COMPILE_LANGUAGE:CXX>:-std=c++2a>
+    $<$<CONFIG:DEBUG>:-O0 -g>
+    $<$<CONFIG:RELEASE>:-Os>
+)
