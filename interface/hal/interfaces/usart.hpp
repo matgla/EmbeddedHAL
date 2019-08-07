@@ -10,52 +10,42 @@ namespace hal
 namespace interfaces
 {
 
-// clang-format off
-template <typename T>
-concept bool UsartImpl = requires(T a)
-{
-    { a.init(uint32_t{}) } -> void;
-    { a.write(char{}) } -> void;
-    { a.write(gsl::span<const uint8_t>{})} -> void;
-    // TODO: fix this concept
-    // { a.onData()} -> void;
-};
-// clang-format on
-
-template <UsartImpl UsartImplType>
+template <typename UsartImplType>
 class Usart
 {
 public:
-    static void init(uint32_t baudrate)
+    void init(uint32_t baudrate)
     {
-        UsartImplType::init(baudrate);
+        impl_.init(baudrate);
     }
 
-    static void set_baudrate(uint32_t baudrate)
+    void set_baudrate(uint32_t baudrate)
     {
-        UsartImplType::set_baudrate(baudrate);
+        impl_.set_baudrate(baudrate);
     }
 
-    static void write(const char byte)
+    void write(const char byte)
     {
-        UsartImplType::write(byte);
+        impl_.write(byte);
     }
 
-    static void write(const gsl::span<const uint8_t>& data)
+    void write(const gsl::span<const uint8_t>& data)
     {
-        UsartImplType::write(data);
+        impl_.write(data);
     }
 
-    static void write(const std::string_view& data)
+    void write(const std::string_view& data)
     {
-        UsartImplType::write(data);
+        impl_.write(data);
     }
 
     template <typename CallbackType>
-    static void onData(CallbackType&& onDataCallback)
+    void onData(CallbackType&& onDataCallback)
     {
-        UsartImplType::onData(onDataCallback);
+        impl_.onData(onDataCallback);
     }
+private:
+    UsartImplType impl_;
 };
 
 } // namespace interfaces

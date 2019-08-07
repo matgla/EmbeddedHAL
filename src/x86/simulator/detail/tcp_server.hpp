@@ -44,11 +44,17 @@ struct Session : public std::enable_shared_from_this<Session>
         auto self(shared_from_this());
         boost::asio::async_write(socket_, boost::asio::buffer(data.data(), data.size()),
                                  [this, self](boost::system::error_code ec, std::size_t length) {
+                                     (void)(length);
                                      if (!ec)
                                      {
                                          //read();
                                      }
                                  });
+    }
+
+    void onData(const std::function<void(uint8_t)>& on_data)
+    {
+        on_data_ = on_data;
     }
 
 private:
@@ -59,10 +65,20 @@ private:
                                 [this, self](boost::system::error_code ec, std::size_t length) {
                                     if (ec == boost::asio::error::eof || ec == boost::asio::error::connection_reset)
                                     {
+                                     (void)(length);
+
                                         std::cout << "Client disconnected on port: " << socket_.remote_endpoint().port() << std::endl;
                                         socket_.close();
                                         //do_write(length);
                                     }
+                                    if (on_data_)
+                                    {
+                                        for (const auto byte : data_)
+                                        {
+                                            on_data_(byte);
+                                        }
+                                    }
+
                                 });
     }
 
@@ -73,6 +89,7 @@ private:
 
     tcp::socket socket_;
     std::vector<uint8_t> data_;
+    std::function<void(uint8_t)> on_data_;
 };
 
 class TcpServer
@@ -100,6 +117,11 @@ public:
         {
             session_->write(data);
         }
+    }
+
+    void onData(const std::function<void(uint8_t)>& on_data)
+    {
+        session_->onData(on_data);
     }
 
 private:
