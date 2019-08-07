@@ -1,5 +1,6 @@
 #pragma once
 
+#include <thread>
 #include <functional>
 
 #include <boost/asio/serial_port.hpp>
@@ -15,23 +16,33 @@ namespace simulator
 namespace usart
 {
 
-template <uint16_t port>
 class Usart
 {
 public:
-    Usart()
+    Usart(const std::string_view& device)
         : port_(io_)
-        {
+        , device_(device)
+    {
+    }
 
+    ~Usart()
+    {
+        if (port_.is_open())
+        {
+            port_.close();
+            thread_.join();
         }
+    }
 
     using CallbackType = std::function<void(uint8_t)>;
     void init(uint32_t baudrate)
     {
-        port_.open("/dev/ttyS0");
+        port_.open(std::string(device_));
         port_.set_option(boost::asio::serial_port_base::baud_rate(baudrate));
 
         startListening();
+
+        thread_ = std::thread([this] {io_.run();});
     }
 
     void write(const char byte)
@@ -86,6 +97,8 @@ private:
     boost::asio::io_service io_;
     boost::asio::serial_port port_;
     std::vector<uint8_t> buffer_;
+    std::thread thread_;
+    std::string_view device_;
 };
 
 

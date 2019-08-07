@@ -6,7 +6,7 @@ namespace hal
 namespace interfaces
 {
 
-static Usart<x86::simulator::usart::Usart<1234>> Usart1{};
+using Usart = x86::simulator::usart::Usart;
 
 } // namespace interfaces
 } // namespace hal

@@ -43,7 +43,7 @@ struct Session : public std::enable_shared_from_this<Session>
         }
         auto self(shared_from_this());
         boost::asio::async_write(socket_, boost::asio::buffer(data.data(), data.size()),
-                                 [this, self](boost::system::error_code ec, std::size_t length) {
+                                 [self](boost::system::error_code ec, std::size_t length) {
                                      (void)(length);
                                      if (!ec)
                                      {
