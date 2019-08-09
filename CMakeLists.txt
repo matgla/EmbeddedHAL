@@ -24,24 +24,6 @@ execute_process(
     ERROR_QUIET
 )
 
-execute_process(
-    COMMAND
-        git submodule foreach git checkout master
-    WORKING_DIRECTORY
-        ${CMAKE_CURRENT_SOURCE_DIR}
-    OUTPUT_QUIET
-    ERROR_QUIET
-)
-
-execute_process(
-    COMMAND
-        git submodule foreach git pull
-    WORKING_DIRECTORY
-        ${CMAKE_CURRENT_SOURCE_DIR}
-    OUTPUT_QUIET
-    ERROR_QUIET
-)
-
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
 
 project(EmbeddedHal CXX C ASM)
@@ -70,6 +52,7 @@ target_sources(hal INTERFACE
 
 target_include_directories(hal INTERFACE
     ${PROJECT_SOURCE_DIR}/interface
+    ${PROJECT_SOURCE_DIR}
 )
 
 add_subdirectory(src/common)
