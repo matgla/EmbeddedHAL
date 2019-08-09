@@ -7,6 +7,8 @@
 
 #include "x86/simulator/detail/tcp_server.hpp"
 
+#include "hal/interfaces/usart.hpp"
+
 namespace hal
 {
 namespace x86
@@ -16,16 +18,16 @@ namespace simulator
 namespace usart
 {
 
-class Usart
+class UsartDriver : public hal::interfaces::UsartInterface
 {
 public:
-    Usart(const std::string_view& device)
+    UsartDriver(const std::string_view& device)
         : port_(io_)
         , device_(device)
     {
     }
 
-    ~Usart()
+    ~UsartDriver()
     {
         if (port_.is_open())
         {
@@ -35,7 +37,8 @@ public:
     }
 
     using CallbackType = std::function<void(uint8_t)>;
-    void init(uint32_t baudrate)
+
+    void init(uint32_t baudrate) override
     {
         port_.open(std::string(device_));
         port_.set_option(boost::asio::serial_port_base::baud_rate(baudrate));
@@ -45,7 +48,21 @@ public:
         thread_ = std::thread([this] {io_.run();});
     }
 
-    void write(const char byte)
+    void setBaudrate(uint32_t baudrate)
+    {
+
+    }
+
+    void write(const StreamType& data) override
+    {
+        for (const byte : data)
+        {
+            write(byte);
+        }
+    }
+
+private:
+    void write(const uint8_t byte)
     {
         uint8_t buffer[1];
         buffer[0] = byte;
@@ -53,20 +70,6 @@ public:
         port_.write_some(boost::asio::buffer(buffer, 1), ec);
     }
 
-    void write(const std::string_view& data)
-    {
-        for (auto byte : data)
-        {
-            write(byte);
-        }
-    }
-
-    void onData(const CallbackType& callback)
-    {
-        on_data_ = callback;
-    }
-
-private:
     void startListening()
     {
         port_.async_read_some(

@@ -36,7 +36,8 @@ function(add_device_hal_library hal_device_library)
         ${PROJECT_BINARY_DIR}/include)
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/x86/simulator)
+    add_subdirectory(${PROJECT_SOURCE_DIR}/boards/containers)
 
-    target_link_libraries(${hal_device_library} PUBLIC -Wl,--whole-archive hal_x86_simulator -Wl,--no-whole-archive gsl)
+    target_link_libraries(${hal_device_library} PUBLIC -Wl,--whole-archive hal_x86_simulator boards_containers -Wl,--no-whole-archive gsl)
 
 endfunction()

@@ -1,52 +1,39 @@
-// #pragma once
+#pragma once
 
-// #include <cstdint>
-// #include <string_view>
+#include <cstdint>
+#include <string_view>
 
-// #include <gsl/span>
+#include <gsl/span>
 
-// namespace hal
-// {
-// namespace interfaces
-// {
+#include <eul/signals/signal.hpp>
 
-// template <typename UsartImplType>
-// class Usart
-// {
-// public:
-//     void init(uint32_t baudrate)
-//     {
-//         impl_.init(baudrate);
-//     }
+namespace hal
+{
+namespace interfaces
+{
 
-//     void set_baudrate(uint32_t baudrate)
-//     {
-//         impl_.set_baudrate(baudrate);
-//     }
+class UsartInterface
+{
+public:
+    using StreamType = gsl::span<const uint8_t>;
+private:
+    using OnDataSignal = eul::signals::signal<void(const StreamType&)>;
+public:
+    using OnDataSlot = OnDataSignal::slot_t;
 
-//     void write(const char byte)
-//     {
-//         impl_.write(byte);
-//     }
+    virtual ~UsartInterface() = default;
 
-//     void write(const gsl::span<const uint8_t>& data)
-//     {
-//         impl_.write(data);
-//     }
+    virtual void init(uint32_t baudrate) = 0;
+    virtual void setBaudrate(uint32_t baudrate) = 0;
+    virtual void write(const StreamType& data) = 0;
 
-//     void write(const std::string_view& data)
-//     {
-//         impl_.write(data);
-//     }
+    void onData(OnDataSlot& slot)
+    {
+        on_data_signal_.connect(slot);
+    }
+protected:
+    OnDataSignal on_data_signal_;
+};
 
-//     template <typename CallbackType>
-//     void onData(CallbackType&& onDataCallback)
-//     {
-//         impl_.onData(onDataCallback);
-//     }
-// private:
-//     UsartImplType impl_;
-// };
-
-// } // namespace interfaces
-// } // namespace hal
+} // namespace interfaces
+} // namespace hal
