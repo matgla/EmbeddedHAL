@@ -33,6 +33,7 @@ function(add_device_hal_library hal_device_library)
     )
 
     target_include_directories(${hal_device_library} PUBLIC
+        ${PROJECT_BINARY_DIR}
         ${PROJECT_BINARY_DIR}/include)
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/x86/simulator)

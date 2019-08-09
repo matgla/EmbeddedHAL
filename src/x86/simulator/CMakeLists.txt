@@ -37,6 +37,7 @@ target_link_libraries(hal_x86_simulator
         Boost::exception
         Boost::thread
         Boost::system
+
 )
 
 
