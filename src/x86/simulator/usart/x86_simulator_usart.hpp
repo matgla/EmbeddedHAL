@@ -48,14 +48,14 @@ public:
         thread_ = std::thread([this] {io_.run();});
     }
 
-    void setBaudrate(uint32_t baudrate)
+    void setBaudrate(uint32_t baudrate) override
     {
-
+        (void)(baudrate);
     }
 
     void write(const StreamType& data) override
     {
-        for (const byte : data)
+        for (const auto byte : data)
         {
             write(byte);
         }

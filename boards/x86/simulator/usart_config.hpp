@@ -14,8 +14,8 @@ class Usart0;
 class Usart1;
 
 static UsartContainer = hal::boards::make_usart_container(hal::boards::DriverPack(
-    hal::boards::make_holder<Usart0>(x86::simulator::usart::Usart("/dev/ttyS0")),
-    hal::boards::make_holder<Usart1>(x86::simulator::usart::Usart("/dev/ttyS1"))
+    hal::boards::make_holder<Usart0>(x86::simulator::usart::UsartDriver("/dev/ttyS0")),
+    hal::boards::make_holder<Usart1>(x86::simulator::usart::UsartDriver("/dev/ttyS1"))
 ));
 
 } // namespace board
