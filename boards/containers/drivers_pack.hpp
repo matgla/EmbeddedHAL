@@ -3,7 +3,7 @@
 #include <tuple>
 #include <utility>
 
-#include "hal/boards/containers/driver_holder.hpp"
+#include "boards/containers/driver_holder.hpp"
 
 namespace hal
 {

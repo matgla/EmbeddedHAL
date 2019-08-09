@@ -22,9 +22,18 @@ class UsartDriver : public hal::interfaces::UsartInterface
 {
 public:
     UsartDriver(const std::string_view& device)
-        : port_(io_)
+        : io_(new boost::asio::io_service())
+        , port_(*io_)
         , device_(device)
     {
+    }
+
+    UsartDriver(UsartDriver&& usart)
+        : io_(std::move(usart.io_))
+        , port_(*io_)
+        , device_(usart.device_)
+    {
+
     }
 
     ~UsartDriver()
@@ -45,7 +54,7 @@ public:
 
         startListening();
 
-        thread_ = std::thread([this] {io_.run();});
+        thread_ = std::thread([this] {io_->run();});
     }
 
     void setBaudrate(uint32_t baudrate) override
@@ -97,7 +106,7 @@ private:
     }
 
     CallbackType on_data_;
-    boost::asio::io_service io_;
+    std::unique_ptr<boost::asio::io_service> io_;
     boost::asio::serial_port port_;
     std::vector<uint8_t> buffer_;
     std::thread thread_;

@@ -10,7 +10,7 @@ namespace boards
 template <typename DriverType, typename KeyType>
 struct DriverHolder
 {
-    DriverHolder(DriverType&& driver) : driver_(driver)
+    DriverHolder(DriverType&& driver) : driver_(std::move(driver))
     {
 
     }
