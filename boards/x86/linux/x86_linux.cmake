@@ -30,6 +30,9 @@ function(add_device_hal_library hal_device_library)
     )
     target_sources(${hal_device_library} PRIVATE
         ${source_path}/board.cpp
+        ${source_path}/clock_config.hpp
+        ${source_path}/gpio_config.hpp
+        ${source_path}/usart_config.hpp
     )
 
     target_include_directories(${hal_device_library} PUBLIC

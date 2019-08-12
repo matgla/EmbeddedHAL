@@ -10,7 +10,10 @@ target_include_directories(${library_name}
         ${PROJECT_BINARY_DIR}/include
 )
 
+add_subdirectory(../simulator)
+
 target_link_libraries(${library_name}
     INTERFACE
         hal_x86_common
+        hal_x86_simulator
 )
