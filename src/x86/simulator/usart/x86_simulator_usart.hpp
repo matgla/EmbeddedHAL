@@ -23,14 +23,15 @@ class UsartDriver : public hal::interfaces::UsartInterface
 public:
     UsartDriver(const std::string_view& device)
         : io_(new boost::asio::io_service())
-        , port_(*io_)
+        , port_(new boost::asio::serial_port(*io_))
         , device_(device)
     {
     }
 
     UsartDriver(UsartDriver&& usart)
         : io_(std::move(usart.io_))
-        , port_(*io_)
+        , port_(std::move(usart.port_))
+        , thread_(std::move(usart.thread_))
         , device_(usart.device_)
     {
 
@@ -38,19 +39,20 @@ public:
 
     ~UsartDriver()
     {
-        if (port_.is_open())
+        if (port_ != nullptr && port_->is_open())
         {
-            port_.close();
+            port_->cancel();
+            port_->close();
+
+            io_->stop();
             thread_.join();
         }
     }
 
-    using CallbackType = std::function<void(uint8_t)>;
-
     void init(uint32_t baudrate) override
     {
-        port_.open(std::string(device_));
-        port_.set_option(boost::asio::serial_port_base::baud_rate(baudrate));
+        port_->open(std::string(device_));
+        port_->set_option(boost::asio::serial_port_base::baud_rate(baudrate));
 
         startListening();
 
@@ -76,39 +78,41 @@ private:
         uint8_t buffer[1];
         buffer[0] = byte;
         boost::system::error_code ec;
-        port_.write_some(boost::asio::buffer(buffer, 1), ec);
+        port_->write_some(boost::asio::buffer(buffer, 1), ec);
     }
 
     void startListening()
     {
-        port_.async_read_some(
+        if (port_ == nullptr || !port_->is_open())
+        {
+            return;
+        }
+        port_->async_read_some(
             boost::asio::buffer(buffer_, 256),
             [this](boost::system::error_code ec, std::size_t bytes_transferred)
             {
-                (void)(bytes_transferred);
+                if (!bytes_transferred)
+                {
+                    startListening();
+                    return;
+                }
+
                 if (ec)
                 {
                     startListening();
                     return;
                 }
 
-                if (on_data_)
-                {
-                    for (auto byte : buffer_)
-                    {
-                        on_data_(byte);
-                    }
-                }
-                buffer_.clear();
+                on_data_signal_.emit(gsl::make_span(buffer_, bytes_transferred));
+
                 startListening();
             }
         );
     }
 
-    CallbackType on_data_;
     std::unique_ptr<boost::asio::io_service> io_;
-    boost::asio::serial_port port_;
-    std::vector<uint8_t> buffer_;
+    std::unique_ptr<boost::asio::serial_port> port_;
+    uint8_t buffer_[256];
     std::thread thread_;
     std::string_view device_;
 };
