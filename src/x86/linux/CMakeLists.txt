@@ -13,5 +13,4 @@ target_include_directories(${library_name}
 target_link_libraries(${library_name}
     INTERFACE
         hal_x86_common
-        hal_x86_simulator
 )
