@@ -11,12 +11,14 @@ target_include_directories(${library_name}
 
 add_subdirectory(memory)
 add_subdirectory(time)
+add_subdirectory(usart)
 
 target_link_libraries(${library_name}
     INTERFACE
     -Wl,--whole-archive
         hal_x86_common_time
         hal_x86_common_memory
+        hal_x86_common_usart
     -Wl,--no-whole-archive
 
 )
