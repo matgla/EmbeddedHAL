@@ -2,6 +2,8 @@ set(library_name "hal_x86_common_usart")
 
 add_library(${library_name})
 
+find_package(Boost REQUIRED COMPONENTS system exception thread)
+
 target_sources(${library_name}
     PUBLIC
         # HPP
@@ -16,4 +18,16 @@ target_include_directories(${library_name}
         ${PROJECT_SOURCE_DIR}/src
         ${PROJECT_SOURCE_DIR}/interface
         ${PROJECT_BINARY_DIR}/include
+    PRIVATE
+        ${Boost_INCLUDE_DIRS}
+)
+
+link_directories(${Boost_LIBRARY_DIRS})
+
+target_link_libraries(hal_x86_common_usart
+    PRIVATE
+        Boost::exception
+        Boost::thread
+        Boost::system
+
 )
