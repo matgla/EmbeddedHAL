@@ -1,6 +1,6 @@
 #pragma once
 
-#include "x86/common/usart/x86_simulator_usart.hpp"
+#include "x86/common/usart/x86_common_usart.hpp"
 #include "boards/containers/usart_container.hpp"
 #include "boards/containers/drivers_pack.hpp"
 #include "boards/containers/driver_holder.hpp"
