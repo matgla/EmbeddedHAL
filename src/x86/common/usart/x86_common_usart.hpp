@@ -18,6 +18,21 @@ namespace common
 namespace usart
 {
 
+namespace
+{
+    void handler(
+        const boost::system::error_code& error,
+        int signal_number)
+    {
+        (void)(error);
+        if (signal_number == SIGINT || signal_number == SIGTERM)
+        {
+            throw "Signal captured";
+        }
+    }
+}
+
+
 class UsartDriver : public hal::interfaces::UsartInterface
 {
 public:
@@ -55,6 +70,9 @@ public:
         port_->set_option(boost::asio::serial_port_base::baud_rate(baudrate));
 
         startListening();
+
+        boost::asio::signal_set signals(*io_, SIGINT, SIGTERM);
+        signals.async_wait(handler);
 
         thread_ = std::thread([this] {io_->run();});
     }
