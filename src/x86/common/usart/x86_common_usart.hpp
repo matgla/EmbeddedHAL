@@ -102,7 +102,6 @@ private:
                     startListening();
                     return;
                 }
-
                 on_data_signal_.emit(gsl::make_span(buffer_, bytes_transferred));
 
                 startListening();
