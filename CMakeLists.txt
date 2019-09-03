@@ -24,6 +24,25 @@ execute_process(
     ERROR_QUIET
 )
 
+execute_process(
+    COMMAND
+        git checkout master
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+    OUTPUT_QUIET
+    ERROR_QUIET
+)
+
+execute_process(
+    COMMAND
+        git pull
+    WORKING_DIRECTORY
+        ${CMAKE_CURRENT_SOURCE_DIR}/cmake
+    OUTPUT_QUIET
+    ERROR_QUIET
+)
+
+
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
 
 project(EmbeddedHal CXX C ASM)
