@@ -18,5 +18,9 @@ target_sources(avr_libstdcpp
 )
 
 target_include_directories(avr_libstdcpp PUBLIC avr_libstdcpp/include)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/avr_libstdcpp/include)
 
-set(CMAKE_CXX_STANDARD_LIBRARIES  "${CMAKE_STANDARD_LIBRARIES} -l:${CMAKE_CURRENT_SOURCE_DIR}/avr_libstdcpp/include")
+message ("${CMAKE_STANDARD_LIBRARIES} -l:${CMAKE_CURRENT_SOURCE_DIR}/avr_libstdcpp/include")
+set(CMAKE_STANDARD_LIBRARIES "${CMAKE_STANDARD_LIBRARIES} -l:${CMAKE_CURRENT_SOURCE_DIR}/avr_libstdcpp/include")
+
+set (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -I${CMAKE_CURRENT_SOURCE_DIR}/avr_libstdcpp/include")
