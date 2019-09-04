@@ -88,6 +88,7 @@ target_link_libraries(hal
         ${hal_device_library}
         hal_memory
         hal_common
+        avr_libstdcpp
         -Wl,--no-whole-archive
         eul
 )

@@ -9,3 +9,6 @@
 [submodule "lib/eul"]
 	path = lib/eul
 	url = https://github.com/matgla/EmbeddedUtilityLibraries
+[submodule "lib/avr_libstdcpp/avr_libstdcpp"]
+	path = lib/avr_libstdcpp/avr_libstdcpp
+	url = https://github.com/modm-io/avr-libstdcpp.git
