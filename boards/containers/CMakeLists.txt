@@ -7,6 +7,5 @@ target_sources(boards_containers
         ${CMAKE_CURRENT_SOURCE_DIR}/drivers_pack.hpp
 )
 
-message("Including: ${PROJECT_SOURCE_DIR}")
 target_include_directories(boards_containers
     INTERFACE ${PROJECT_SOURCE_DIR})

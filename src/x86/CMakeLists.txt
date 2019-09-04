@@ -22,7 +22,7 @@ if (${BOARD} STREQUAL "x86_linux")
     add_subdirectory(time)
 endif ()
 
-message("-- Generate config file: ${path_to_specific_gpio_config}")
+message(STATUS "Generate config file: ${path_to_specific_gpio_config}")
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../config/gpio_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/gpio.hpp @ONLY)
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/../../config/usart_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/usart.hpp @ONLY)
 
