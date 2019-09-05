@@ -7,18 +7,18 @@ namespace hal
 namespace gpio
 {
 
-// clang-format off
-template <typename T>
-concept bool GpioImpl = requires(T a)
-{
-    { a.init(Output{}, Speed{}) } -> void;
-    { a.init(Input{}) } -> void;
-    { a.setHigh() } -> void;
-    { a.setLow() } -> void;
-};
-// clang-format on
+// // clang-format off
+// template <typename T>
+// concept bool GpioImpl = requires(T a)
+// {
+//     { a.init(Output{}, Speed{}) } -> void;
+//     { a.init(Input{}) } -> void;
+//     { a.setHigh() } -> void;
+//     { a.setLow() } -> void;
+// };
+// // clang-format on
 
-template <GpioImpl GpioImplType>
+template <typename GpioImplType>
 class Gpio
 {
 public:

@@ -42,15 +42,17 @@ execute_process(
     ERROR_QUIET
 )
 
-
+message("HAL1 name: ${CMAKE_SYSTEM_NAME}")
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
+message("HAL2 name: ${CMAKE_SYSTEM_NAME}")
 
 project(EmbeddedHal CXX C ASM)
+message("HAL3 name: ${CMAKE_SYSTEM_NAME}")
 
 set(interface_sources_path "${PROJECT_SOURCE_DIR}/interface/hal")
 
-add_library(hal INTERFACE)
-target_sources(hal INTERFACE
+add_library(hal_interface INTERFACE)
+target_sources(hal_interface INTERFACE
     ${interface_sources_path}/core/backupRegisters.hpp
     ${interface_sources_path}/core/core.hpp
     ${interface_sources_path}/core/criticalSection.hpp
@@ -69,7 +71,7 @@ target_sources(hal INTERFACE
     ${interface_sources_path}/common/timer/timer.hpp
 )
 
-target_include_directories(hal INTERFACE
+target_include_directories(hal_interface INTERFACE
     ${PROJECT_SOURCE_DIR}/interface
     ${PROJECT_SOURCE_DIR}
 )
@@ -82,16 +84,9 @@ add_device_hal_library(hal_device_library)
 
 message(STATUS "Link hal with: ${hal_device_library}")
 
-target_link_libraries(hal
-    INTERFACE
-        -Wl,--whole-archive
-        ${hal_device_library}
-        hal_memory
-        hal_common
-        avr_libstdcpp
-        -Wl,--no-whole-archive
-        eul
-)
+add_library(hal INTERFACE)
+
+target_link_libraries(hal INTERFACE ${hal_device_library})
 
 if (BUILD_UT)
     add_subdirectory(test)
