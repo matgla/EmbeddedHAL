@@ -9,11 +9,11 @@ target_include_directories(hal_avr
         ${PROJECT_BINARY_DIR}/include
 )
 
-add_subdirectory(gpio)
+add_subdirectory(common)
 
 target_link_libraries(hal_avr
     INTERFACE
         avr
         avr_libstdcpp
-        hal_avr_gpio
+        hal_avr_common
 )

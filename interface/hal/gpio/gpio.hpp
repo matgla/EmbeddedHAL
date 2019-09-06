@@ -42,6 +42,11 @@ public:
         GpioImplType::setLow();
     }
 
+    constexpr static bool read()
+    {
+        return GpioImplType::read();
+    }
+
     using Implementation = GpioImplType;
 };
 

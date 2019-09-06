@@ -9,7 +9,8 @@ enum class Speed
 {
     High,
     Medium,
-    Low
+    Low,
+    Default
 };
 
 enum class Input

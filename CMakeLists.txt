@@ -42,12 +42,9 @@ execute_process(
     ERROR_QUIET
 )
 
-message("HAL1 name: ${CMAKE_SYSTEM_NAME}")
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
-message("HAL2 name: ${CMAKE_SYSTEM_NAME}")
 
 project(EmbeddedHal CXX C ASM)
-message("HAL3 name: ${CMAKE_SYSTEM_NAME}")
 
 set(interface_sources_path "${PROJECT_SOURCE_DIR}/interface/hal")
 
