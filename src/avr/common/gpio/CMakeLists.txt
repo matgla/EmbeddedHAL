@@ -12,3 +12,9 @@ target_include_directories(hal_avr_gpio
         ${PROJECT_SOURCE_DIR}/interface
         ${PROJECT_BINARY_DIR}/include
 )
+
+add_subdirectory(ports)
+target_link_libraries(hal_avr_gpio
+    INTERFACE
+        hal_avr_common_gpio_ports
+)

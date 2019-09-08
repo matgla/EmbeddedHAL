@@ -15,7 +15,7 @@ template <typename Port, uint32_t pin>
 class AvrGpio
 {
 public:
-    constexpr static void init(const hal::gpio::Output mode)
+    constexpr static void init(const hal::gpio::Output mode, const hal::gpio::Speed)
     {
         Port::directionRegister() |= (1 << pin);
     }
