@@ -1,10 +1,16 @@
 #pragma once
 
 #include "hal/gpio/digital_input_output_pin.hpp"
+#include "hal/interfaces/i2c.hpp"
+#include "hal/interfaces/usart.hpp"
+
 #include "avr/common/gpio/avr_gpio.hpp"
 #include "avr/common/gpio/ports/avr_port_b.hpp"
 #include "avr/common/gpio/ports/avr_port_c.hpp"
 #include "avr/common/gpio/ports/avr_port_d.hpp"
+
+#include "avr/common/interfaces/avr_i2c.hpp"
+#include "avr/common/interfaces/avr_usart.hpp"
 
 namespace hal
 {
@@ -65,6 +71,16 @@ using PD6 = hal::gpio::DigitalInputOutputPin<hal::avr::gpio::AvrGpio<hal::avr::g
 using PD7 = hal::gpio::DigitalInputOutputPin<hal::avr::gpio::AvrGpio<hal::avr::gpio::AvrPortD, 7>>;
 
 } // namespace gpio
+
+namespace interfaces
+{
+
+using I2C_1 = hal::interfaces::I2C<hal::avr::common::interfaces::AvrI2C>;
+using USART_1_RX = gpio::PD0;
+using USART_1_TX = gpio::PD1;
+using USART = hal::interfaces::Usart<hal::avr::common::interfaces::AvrUsart>;
+
+} // namespace interfaces
 
 
 } // namespace devices

@@ -73,6 +73,8 @@ target_include_directories(hal_interface INTERFACE
     ${PROJECT_SOURCE_DIR}
 )
 
+target_link_libraries(hal_interface INTERFACE gsl)
+
 add_subdirectory(src/common)
 add_subdirectory(lib)
 add_subdirectory(interface/hal/memory)

@@ -37,6 +37,8 @@ constexpr const char* to_string(const Speed& speed)
             return "Medium";
         case Speed::Low:
             return "Low";
+        case Speed::Default:
+            return "Default";
     }
     return "Unknown";
 }

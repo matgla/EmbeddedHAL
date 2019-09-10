@@ -5,34 +5,38 @@
 
 #include <gsl/span>
 
-#include <eul/signals/signal.hpp>
 
 namespace hal
 {
 namespace interfaces
 {
 
-class UsartInterface
+template <typename UsartImpl>
+class Usart
 {
 public:
     using StreamType = gsl::span<const uint8_t>;
-private:
-    using OnDataSignal = eul::signals::signal<void(const StreamType&)>;
-public:
-    using OnDataSlot = OnDataSignal::slot_t;
 
-    virtual ~UsartInterface() = default;
-
-    virtual void init(uint32_t baudrate) = 0;
-    virtual void setBaudrate(uint32_t baudrate) = 0;
-    virtual void write(const StreamType& data) = 0;
-
-    void onData(OnDataSlot& slot)
+    template <typename RxPin, typename TxPin>
+    static void init(uint32_t baudrate)
     {
-        on_data_signal_.connect(slot);
+        UsartImpl::template init<RxPin, TxPin>(baudrate);
     }
-protected:
-    OnDataSignal on_data_signal_;
+
+    static void setBaudrate(uint32_t baudrate)
+    {
+        UsartImpl::setBaudrate(baudrate);
+    }
+
+    static void write(const StreamType& data)
+    {
+        UsartImpl::write(data);
+    }
+
+    static void write(const std::string_view& str)
+    {
+        UsartImpl::write(str);
+    }
 };
 
 } // namespace interfaces

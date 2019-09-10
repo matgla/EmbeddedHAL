@@ -16,6 +16,8 @@ public:
     using Implementation = GpioImplType;
     using OutputType = DigitalOutputPin<GpioImplType>;
     using InputType = DigitalInputPin<GpioImplType>;
+    using DigitalInputPin<GpioImplType>::init;
+    using DigitalOutputPin<GpioImplType>::init;
 };
 
 } // namespace gpio

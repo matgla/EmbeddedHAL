@@ -1,8 +1,8 @@
 set(target_name hal_devices_avr_atmega8)
 
-set(HAS_PORT_B true)
-set(HAS_PORT_C true)
-set(HAS_PORT_D true)
+set(HAS_PORT_B true CACHE INTERNAL "")
+set(HAS_PORT_C true CACHE INTERNAL "")
+set(HAS_PORT_D true CACHE INTERNAL "")
 
 add_library(${target_name} INTERFACE)
 
