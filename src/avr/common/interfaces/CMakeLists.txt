@@ -13,6 +13,7 @@ target_include_directories(hal_avr_interfaces
     PUBLIC
         ${PROJECT_SOURCE_DIR}/src
         ${PROJECT_SOURCE_DIR}/interface
+        ${PROJECT_SOURCE_DIR}/../../../board
 )
 
 target_link_libraries(hal_avr_interfaces PUBLIC avr gsl)
