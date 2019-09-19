@@ -37,6 +37,11 @@ public:
     {
         I2CImpl::stop();
     }
+
+    static uint8_t read()
+    {
+        return I2CImpl::read();
+    }
 };
 
 } // namespace interfaces

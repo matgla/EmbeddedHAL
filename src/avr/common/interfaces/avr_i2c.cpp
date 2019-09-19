@@ -14,7 +14,7 @@ namespace common
 namespace interfaces
 {
 
-constexpr uint32_t SCL_CLOCK = 9000000;
+constexpr uint32_t SCL_CLOCK = 800000;
 void AvrI2C::init()
 {
     TWSR = 0;
@@ -62,6 +62,15 @@ bool __attribute__((optimize("O0"))) AvrI2C::write(uint8_t byte)
     } else {
         return true;
     }
+}
+
+uint8_t __attribute__((optimize("O0"))) AvrI2C::read()
+{
+    TWCR = (1<<TWINT) | (1<<TWEN) | (1<<TWEA);
+    // wait for end of transmission
+    while( !(TWCR & (1<<TWINT)) );
+    // return received data from TWDR
+    return TWDR;
 }
 
 void AvrI2C::write(gsl::span<uint8_t>& data)
