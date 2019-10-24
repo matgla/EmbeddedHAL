@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <cstdio>
 
-#include <stm32f1xx.h>
+#include <stm32f10x.h>
 
 #include <eul/memory_ptr.hpp>
 
@@ -57,6 +57,7 @@ constexpr uint8_t get_mode_mask(hal::gpio::Output m)
         case hal::gpio::Output::OutputOpenDrain:
             return 0x1;
     }
+    return 0x0;
 }
 
 constexpr uint8_t get_alternate_mode_mask(hal::gpio::Output m)
@@ -68,12 +69,14 @@ constexpr uint8_t get_alternate_mode_mask(hal::gpio::Output m)
         case hal::gpio::Output::OutputOpenDrain:
             return 0x3;
     }
+    return 0x0;
 }
 
 constexpr uint8_t get_speed_mask(hal::gpio::Speed s)
 {
     switch (s)
     {
+        case hal::gpio::Speed::Default:
         case hal::gpio::Speed::Low:
             return 0x1;
         case hal::gpio::Speed::Medium:
@@ -81,6 +84,7 @@ constexpr uint8_t get_speed_mask(hal::gpio::Speed s)
         case hal::gpio::Speed::High:
             return 0x3;
     }
+    return 0x0;
 }
 
 } // namespace detail

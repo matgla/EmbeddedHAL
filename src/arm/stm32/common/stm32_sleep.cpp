@@ -1,7 +1,7 @@
 #include "hal/time/sleep.hpp"
 #include "hal/time/time.hpp"
 
-#include <stm32f1xx.h>
+#include <stm32f10x.h>
 
 namespace hal
 {
@@ -21,13 +21,13 @@ void __attribute__((optimize("O0"))) sleep(std::chrono::microseconds time)
 
 void sleep(std::chrono::milliseconds time)
 {
-    auto previous = Time::getTicks();
+    auto previous = Time::milliseconds();
 
     auto counter = previous;
 
-    while (counter < time.count() + previous)
+    while (counter < time + previous)
     {
-        counter = Time::getTicks();
+        counter = Time::milliseconds();
     }
 
 
