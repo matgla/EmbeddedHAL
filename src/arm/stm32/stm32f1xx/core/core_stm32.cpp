@@ -1,6 +1,6 @@
 #include "hal/core/core.hpp"
 
-#include <stm32f1xx.h>
+#include <stm32f10x.h>
 
 #include "hal/utils/assert.hpp"
 

@@ -85,7 +85,7 @@ message(STATUS "Link hal with: ${hal_device_library}")
 
 add_library(hal OBJECT)
 
-target_link_libraries(hal PUBLIC hal_stm32_common ${hal_device_library})
+target_link_libraries(hal PUBLIC ${hal_device_library})
 
 if (BUILD_UT)
     add_subdirectory(test)
