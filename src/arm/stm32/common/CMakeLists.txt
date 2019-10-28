@@ -7,7 +7,7 @@ set(sources
     ${sources_path}/syscalls.cpp
 )
 
-add_library(hal_stm32_common ${sources})
+add_library(hal_stm32_common OBJECT ${sources})
 
 target_include_directories(hal_stm32_common
     PUBLIC
