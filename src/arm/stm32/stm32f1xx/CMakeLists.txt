@@ -1,20 +1,16 @@
-set(sources_path ${PROJECT_SOURCE_DIR}/src/arm/stm32/stm32f1xx)
 
 add_library(hal_stm32f1xx OBJECT)
 
-target_sources(hal_stm32f1xx PRIVATE 
-## CPP
-#    ${sources_path}/clock/stm32f1xx_clock.cpp
-    ${sources_path}/interfaces/stm32f1xx_usart.cpp
-    ${sources_path}/core/core_stm32.cpp
-## HPP
-    PUBLIC
-#    ${sources_path}/clock/stm32f1xx_clock.hpp
-    ${sources_path}/gpio/stm32f1xx_gpio.hpp
-    ${sources_path}/interfaces/stm32f1xx_usart.hpp
-
-    )
-
+target_sources(hal_stm32f1xx
+    PUBLIC  
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/stm32f1xx_gpio.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/interfaces/stm32f1xx_usart.hpp
+        
+        ${CMAKE_CURRENT_SOURCE_DIR}/interfaces/stm32f1xx_usart.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/core/core_stm32.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/utils/assert_stm32.cpp
+)
+    
 target_include_directories(hal_stm32f1xx
     PUBLIC
         ${PROJECT_SOURCE_DIR}/src

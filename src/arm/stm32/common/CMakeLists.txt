@@ -1,13 +1,16 @@
 set (sources_path ${PROJECT_SOURCE_DIR}/src/arm/stm32/common)
 
-set(sources
-    ${sources_path}/stm32_assert.c
-    ${sources_path}/stm32_sleep.cpp
-    ${sources_path}/stm32_time.cpp
-    ${sources_path}/syscalls.cpp
-)
+add_library(hal_stm32_common OBJECT)
 
-add_library(hal_stm32_common OBJECT ${sources})
+target_sources(hal_stm32_common 
+    PUBLIC 
+        ${PROJECT_SOURCE_DIR}/interface/hal/core/core.hpp
+        
+        ${CMAKE_CURRENT_SOURCE_DIR}/stm32_assert.c 
+        ${CMAKE_CURRENT_SOURCE_DIR}/stm32_sleep.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/stm32_time.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/syscalls.cpp 
+)
 
 target_include_directories(hal_stm32_common
     PUBLIC

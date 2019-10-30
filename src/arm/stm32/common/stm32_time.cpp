@@ -14,7 +14,6 @@
  void Time::init()
  {
      /* set SysTick to 1ms */
-     SystemCoreClockUpdate();
      SysTick_Config(SystemCoreClock / 1000);
  }
 

@@ -13,6 +13,7 @@ namespace core
 
 void Core::initializeClocks()
 {
+    SystemCoreClockUpdate();
     // systick interrupt at 1 ms
     if (SysTick_Config(SystemCoreClock / 1000) != 0)
     {
