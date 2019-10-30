@@ -46,6 +46,7 @@ constexpr uint8_t get_mode_mask(hal::gpio::Input m)
         case hal::gpio::Input::InputPullUpDown:
             return 0x02;
     }
+    return 0x0;
 }
 
 constexpr uint8_t get_mode_mask(hal::gpio::Output m)

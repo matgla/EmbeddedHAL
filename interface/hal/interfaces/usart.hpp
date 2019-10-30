@@ -17,10 +17,9 @@ class Usart
 public:
     using StreamType = gsl::span<const uint8_t>;
 
-    template <typename RxPin, typename TxPin>
     static void init(uint32_t baudrate)
     {
-        UsartImpl::template init<RxPin, TxPin>(baudrate);
+        UsartImpl::init(baudrate);
     }
 
     static void setBaudrate(uint32_t baudrate)
