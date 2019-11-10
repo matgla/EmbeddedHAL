@@ -10,6 +10,7 @@ target_sources(hal_stm32f1xx
         ${CMAKE_CURRENT_SOURCE_DIR}/clock/stm32f1xx_clock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/interfaces/stm32f1xx_usart.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/core/core_stm32.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/core/backupRegisters_stm32.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/assert_stm32.cpp
 )
     

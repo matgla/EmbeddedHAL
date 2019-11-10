@@ -1,51 +1,80 @@
-#include "hal/core/backupRegisters.hpp"
-
-#include <stm32f1xx.h>
-
-#define STARTUP_REGISTER BKP_DR1
-#define STARTUP_MAGIC_COOKIE 0xBEEF
-
-
-namespace hal
-{
-namespace core
-{
-
-BackupRegisters& BackupRegisters::get()
-{
-    static BackupRegisters br;
-    return br;
-}
-
-bool BackupRegisters::isFirstStartup()
-{
-    return BKP_ReadBackupRegister(STARTUP_REGISTER) != STARTUP_MAGIC_COOKIE;
-}
-
-void BackupRegisters::write(u16 registerNumber, u16 value)
-{
-    PWR_BackupAccessCmd(ENABLE);
-    BKP_WriteBackupRegister(registerNumber, value);
-    PWR_BackupAccessCmd(DISABLE);
-}
-
-void BackupRegisters::startupDone()
-{
-    if (isFirstStartup())
-    {
-        write(STARTUP_REGISTER, STARTUP_MAGIC_COOKIE);
-    }
-}
-
-BackupRegisters::BackupRegisters()
-{
-    RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP, ENABLE);
-    if (isFirstStartup())
-    {
-        BKP_DeInit();
-    }
-}
-
-
-} // namespace hal
-} // namespace core
+// #include "hal/core/backupRegisters.hpp"
+// 
+// #include <stm32f10x.h>
+// 
+// 
+// #define STARTUP_REGISTER 1 
+// #define STARTUP_MAGIC_COOKIE 0xBEEF
+// 
+// #define PWR_OFFSET (PWR_BASE - PERIPH_BASE)
+// 
+// #define CR_OFFSET (PWR_OFFSET + 0x00)
+// #define DBP_BitNumber 0x08
+// #define CR_DBP_BB  (PERIPH_BB_BASE + (CR_OFFSET * 32) + (DBP_BitNumber * 4))
+// 
+// #define RCC_OFFSET (RCC_BASE - PERIPH_BASE)
+// #define BDCR_OFFSET (RCC_OFFSET + 0x20)
+// #define BDRST_BitNumber 0x10
+// #define BDCR_BDRST_BB (PERIPH_BB_BASE + (BDCR_OFFSET * 32) + (BDRST_BitNumber * 4))
+// 
+// namespace 
+// {
+//     constexpr uint16_t numberToRegister(const uint16_t reg)
+//     {
+//         switch (reg)
+//         {
+//             case 1: return 0x0008;
+//             case 2: return 0x000c;
+//             case 3: return 0x0010;
+//         }
+//         return 0x0004; 
+//     }
+// }
+// 
+// namespace hal
+// {
+// namespace core
+// {
+// 
+// constexpr bool BackupRegisters::isFirstStartup()
+// {
+//     return read(STARTUP_REGISTER) != STARTUP_MAGIC_COOKIE;
+// }
+// 
+// constexpr void BackupRegisters::write(u16 registerNumber, u16 value)
+// {
+//     /* enable backup register power */
+//     *reinterpret_cast<uint32_t*>(CR_DBP_BB) = 1;
+//     const uint32_t address = 0x40006c00 + numberToRegister(registerNumber);
+//     *reinterpret_cast<uint32_t*>(address) = value;
+//     *reinterpret_cast<uint32_t*>(CR_DBP_BB) = 0;
+// }
+// 
+// constexpr uint32_t BackupRegisters::read(uint16_t registerNumber)
+// {
+//     const uint32_t address = 0x40006c00 + numberToRegister(registerNumber);
+//     return *reinterpret_cast<uint16_t*>(address);
+// }
+// 
+// constexpr void BackupRegisters::startupDone()
+// {
+//     if (isFirstStartup())
+//     {
+//         write(STARTUP_REGISTER, STARTUP_MAGIC_COOKIE);
+//     }
+// }
+// 
+// void BackupRegisters::init()
+// {
+//     RCC->APB1ENR |= 0x08000000; // bkp 
+//     RCC->APB1ENR |= 0x10000000; // pwr
+//     if (isFirstStartup())
+//     {
+//        *(uint32_t*) BDCR_BDRST_BB = 1;
+//        *(uint32_t*) BDCR_BDRST_BB = 0;
+//     }
+// }
+// 
+// 
+// } // namespace hal
+// } // namespace core
