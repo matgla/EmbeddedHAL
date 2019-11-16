@@ -27,12 +27,12 @@ public:
         UsartImpl::setBaudrate(baudrate);
     }
 
-    static void write(const StreamType& data)
+    static void write(const StreamType& data) 
     {
         UsartImpl::write(data);
     }
 
-    static void write(const std::string_view& str)
+    static void write(const std::string_view& str) 
     {
         UsartImpl::write(str);
     }
