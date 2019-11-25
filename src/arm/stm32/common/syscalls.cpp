@@ -1,7 +1,11 @@
 #include <errno.h>
 #include <string.h>
+#include <cstdint>
 #include <sys/stat.h>
 #include <sys/time.h>
+#include <sys/types.h>
+
+#include "hal/memory/heap.hpp"
 
 extern "C"
 {
@@ -39,10 +43,42 @@ int _getpid(int n)
     return 0;
 }
 
+extern char __heap_start;
+extern char __heap_end;
+
+static char* current_heap_end = &__heap_start;
+
 caddr_t _sbrk(int incr)
 {
-    return 0;
+
+    if (current_heap_end + incr >= (&__heap_end))
+    {
+        errno = ENOMEM;
+        return NULL;
+    }
+
+    char* previous_heap_end = current_heap_end;
+    current_heap_end += incr;
+    return static_cast<caddr_t>(previous_heap_end);
 }
+
+namespace hal
+{
+namespace memory
+{
+
+std::size_t get_heap_size()
+{
+    return (&__heap_end) - (&__heap_start);
+}
+
+std::size_t get_heap_usage()
+{
+    return current_heap_end - (&__heap_start);
+}
+
+} // namespace memory
+} // namespace hal
 
 int _write(int file, const char* ptr, int len)
 {

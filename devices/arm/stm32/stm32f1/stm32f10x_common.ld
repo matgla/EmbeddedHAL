@@ -99,7 +99,9 @@ SECTIONS
     ._heap :
     {
         . = ALIGN(4);
+        __heap_start = .;
         . = . + _heap_size;
+        __heap_end = .;
         . = ALIGN(4);
     } >RAM
     ._stack :
