@@ -51,7 +51,7 @@ static char* current_heap_end = &__heap_start;
 caddr_t _sbrk(int incr)
 {
 
-    if (current_heap_end + incr >= (&__heap_end))
+    if (current_heap_end + incr > (&__heap_end))
     {
         errno = ENOMEM;
         return NULL;
