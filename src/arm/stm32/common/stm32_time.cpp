@@ -1,42 +1,63 @@
- #include "hal/time/time.hpp"
+#include "hal/time/time.hpp"
 
- #include <cstdint>
+#include <cstdint>
+#include <cstdio>
 
- #include <stm32f10x.h>
+#include <vector>
 
- namespace hal
- {
- namespace time
- {
+#include <stm32f10x.h>
 
- static std::chrono::milliseconds ticks_{0};
+#include <eul/function.hpp>
 
- void Time::init()
- {
-     /* set SysTick to 1ms */
-     SysTick_Config(SystemCoreClock / 1000);
- }
+namespace hal
+{
+namespace time
+{
 
- void Time::increment_time(const std::chrono::milliseconds& time) 
- {
-    ticks_ += time;
- }
- 
- std::chrono::milliseconds Time::milliseconds()
- {
-     return ticks_;
- }
+static std::chrono::milliseconds ticks_{0};
+static eul::function<void(std::chrono::milliseconds), sizeof(void*)> callback_;
 
- } // namespace time
- } // namespace hal
+void Time::init()
+{
+    /* set SysTick to 1ms */
+    SysTick_Config(SystemCoreClock / 1000);
+}
+
+void Time::increment_time(const std::chrono::milliseconds& time) 
+{
+   ticks_ += time;
+}
+
+void Time::increment_time(int time)
+{
+    ticks_ += std::chrono::milliseconds(time);
+}
+
+std::chrono::milliseconds Time::milliseconds()
+{
+    return ticks_;
+}
+
+void Time::add_handler(const eul::function<void(std::chrono::milliseconds), sizeof(void*)>& callback)
+{
+    callback_ = callback;
+}
+
+} // namespace time
+} // namespace hal
 
 
- extern "C"
- {
-     void SysTick_Handler(void);
- }
+extern "C"
+{
+    void SysTick_Handler(void);
+}
 
- void SysTick_Handler(void)
- {
-     hal::time::Time::increment_time(std::chrono::milliseconds(1));
- }
+void SysTick_Handler(void)
+{
+    hal::time::Time::increment_time(1);
+    if (hal::time::callback_) 
+    {
+        hal::time::callback_(hal::time::ticks_);
+    }
+}
+

@@ -16,7 +16,7 @@ SECTIONS
         . = ALIGN(4);
     } >FLASH
 
-    /* user code & read only data */
+    /* user code */
     .text :
     {
         . = ALIGN(4);
@@ -32,6 +32,7 @@ SECTIONS
         _etext = .;
     } >FLASH
 
+    /* read only data */
     .rodata :
     {
         . = ALIGN(4);
@@ -83,8 +84,7 @@ SECTIONS
         _edata = .;
     } >RAM AT> FLASH
 
-    . = ALIGN(4);
-    .bss :
+    .bss (NOLOAD):
     {
         _sbss = .;
         __bss_start__ = _sbss;
@@ -96,19 +96,20 @@ SECTIONS
         __bss_end__ = _ebss;
     } >RAM
 
+    /* Test that stack and heap will fit in memory */
     ._heap :
     {
         . = ALIGN(4);
         __heap_start = .;
         . = . + _heap_size;
         __heap_end = .;
-        . = ALIGN(4);
     } >RAM
     ._stack :
     {
-        . = ALIGN(4);
+        __stack_end = .;
         . = . + _stack_size;
         . = ALIGN(4);
+        __stack_start = .;
     } >RAM
 
     /DISCARD/ :
