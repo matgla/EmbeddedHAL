@@ -3,6 +3,8 @@
 
 #include <stm32f10x.h>
 
+#include <cstdio>
+
 namespace hal
 {
 namespace time
@@ -27,24 +29,9 @@ void sleep(std::chrono::milliseconds time)
 
     while (counter < time + previous)
     {
+
         counter = Time::milliseconds();
     }
-
-
-    // while (counter < time.count())
-    // {
-    //     const auto current = Time::getTicks();
-    //     if (previous < current)
-    //     {
-    //         counter += current - previous;
-    //         previous = current;
-    //     }
-    //     else if (previous > current)
-    //     {
-    //         counter += previous + current;
-    //         previous = current;
-    //     }
-    // }
 }
 
 void sleep(std::chrono::seconds time)

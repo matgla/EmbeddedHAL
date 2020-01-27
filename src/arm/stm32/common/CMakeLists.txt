@@ -21,4 +21,4 @@ target_compile_options(hal_stm32_common PUBLIC
     $<$<COMPILE_LANGUAGE:CXX>:-fconcepts>
 )
 
-target_link_libraries(hal_stm32_common PUBLIC stm32 eul)
+target_link_libraries(hal_stm32_common PUBLIC hal_common_utils stm32 eul)

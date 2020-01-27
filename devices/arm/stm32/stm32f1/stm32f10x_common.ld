@@ -10,9 +10,7 @@ SECTIONS
     .isr_vector :
     {
         . = ALIGN(4);
-        __isr_vector_start__ = .;
         KEEP(*(.isr_vector))
-        ASSERT(. != __isr_vector_start__, ".isr_vector section is empty! Startup code must be provided");
         . = ALIGN(4);
     } >FLASH
 
@@ -26,8 +24,8 @@ SECTIONS
         *(.glue_7)
         *(.glue_7t)
         *(.eh_frame)
-        KEEP(*(.init)) /* static constructors */
-        KEEP(*(.fini)) /* static destructors */
+        KEEP (*(.init))
+        KEEP (*(.fini))
         . = ALIGN(4);
         _etext = .;
     } >FLASH
@@ -58,6 +56,7 @@ SECTIONS
         KEEP(*(.preinit_array*))
         PROVIDE_HIDDEN(__preinit_array_end = .);
     } >FLASH
+
     .init_array :
     {
         PROVIDE_HIDDEN(__init_array_start = .);
@@ -68,13 +67,13 @@ SECTIONS
     .fini_array :
     {
         PROVIDE_HIDDEN(__fini_array_start = .);
-        KEEP(*(SORT(.fini_array.*)))
         KEEP(*(.fini_array*))
+        KEEP(*(SORT(.fini_array.*)))
         PROVIDE_HIDDEN(__fini_array_end = .);
     } >FLASH
 
-    _sidata = LOADADDR(.data);
-    .data :
+    _sidata = .;
+    .data : AT ( _sidata ) 
     {
         . = ALIGN(4);
         _sdata = .;
@@ -82,9 +81,11 @@ SECTIONS
         *(.data*)
         . = ALIGN(4);
         _edata = .;
-    } >RAM AT> FLASH
+    } >RAM 
 
-    .bss (NOLOAD):
+    . = ALIGN(4);
+    
+    .bss :
     {
         _sbss = .;
         __bss_start__ = _sbss;
@@ -96,20 +97,17 @@ SECTIONS
         __bss_end__ = _ebss;
     } >RAM
 
+    PROVIDE ( end = _ebss );
+    PROVIDE ( _end = _ebss );
     /* Test that stack and heap will fit in memory */
-    ._heap :
+    ._heap_stack :
     {
         . = ALIGN(4);
         __heap_start = .;
         . = . + _heap_size;
         __heap_end = .;
-    } >RAM
-    ._stack :
-    {
-        __stack_end = .;
         . = . + _stack_size;
         . = ALIGN(4);
-        __stack_start = .;
     } >RAM
 
     /DISCARD/ :

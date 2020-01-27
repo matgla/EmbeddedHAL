@@ -21,7 +21,7 @@ public:
 
     static void add_handler(const eul::function<void(std::chrono::milliseconds), sizeof(void*)>& callback);
 private:
-    static std::chrono::milliseconds milliseconds_;
+    static std::chrono::milliseconds ticks_;
 };
 
 } // namespace time

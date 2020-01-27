@@ -85,6 +85,7 @@ public:
         /* enable Rx intterupt */
         usart_->CR1 |= USART_CR1_RXNEIE;
         NVIC_EnableIRQ(USART1_IRQn);
+        was_initialized = true;
     }
 
 
@@ -97,6 +98,10 @@ public:
     {
         wait_for_tx();
 
+        if (!was_initialized)
+        {
+            return;
+        }
         usart_->DR = byte;
     }
 
@@ -130,7 +135,7 @@ protected:
         }
     }
 
-
+    inline static bool was_initialized = false;
     constexpr static eul::memory_ptr<USART_TypeDef> usart_ = eul::memory_ptr<USART_TypeDef>(usart_address);
 };
 
