@@ -24,9 +24,7 @@ target_include_directories(hal_stm32f1xx
 
 target_link_libraries(hal_stm32f1xx
     PUBLIC
-        -Wl,--whole-archive
         hal_stm32_common
-        -Wl,--no-whole-archive
         gsl
         eul
 )
