@@ -143,6 +143,12 @@ public:
         write_number_as_text(data, base, zeros_at_end);
     }
 
+    void write(char data)
+    {
+        char buf[1] = { data };
+        write(buf);
+    }
+
 protected:
     template <typename T>
     void write_number_as_text(T number, int base, int zeros_at_end)
