@@ -1,4 +1,4 @@
-// This file is part of MSOS project. 
+// This file is part of MSOS project.
 // Copyright (C) 2020 Mateusz Stadnik
 //
 // This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,7 @@
 
 #include <unistd.h>
 
-namespace hal 
+namespace hal
 {
 
 struct logging_flags
@@ -145,7 +145,7 @@ public:
 
     void write(char data)
     {
-        char buf[1] = { data };
+        char buf[] = { data, '\0' };
         write(buf);
     }
 
@@ -227,5 +227,5 @@ protected:
     logging_flags flags_;
 };
 
-} // namespace hal 
+} // namespace hal
 
