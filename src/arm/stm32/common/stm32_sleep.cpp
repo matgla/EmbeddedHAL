@@ -3,8 +3,6 @@
 
 #include <stm32f10x.h>
 
-#include <cstdio>
-
 namespace hal
 {
 namespace time
@@ -29,7 +27,6 @@ void sleep(std::chrono::milliseconds time)
 
     while (counter < time + previous)
     {
-
         counter = Time::milliseconds();
     }
 }
