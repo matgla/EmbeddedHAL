@@ -12,6 +12,11 @@ void USART1_IRQHandler(void)
     if (USART1->SR & USART_SR_RXNE)
     {
         hal::stm32f1xx::interfaces::usart1_rx(USART1->DR);
-        USART1->SR &= ~USART_SR_RXNE;
+        // USART1->SR &= ~USART_SR_RXNE;
+    }
+
+    if (USART1->SR & USART_SR_TXE)
+    {
+
     }
 }

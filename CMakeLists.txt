@@ -46,6 +46,9 @@ include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
 
 project(EmbeddedHal CXX C ASM)
 
+set(CMAKE_CXX_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
+set(CMAKE_C_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
+
 set(interface_sources_path "${PROJECT_SOURCE_DIR}/interface/hal")
 
 add_library(hal_interface INTERFACE)

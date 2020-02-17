@@ -103,6 +103,7 @@ public:
             return;
         }
         usart_->DR = byte;
+        wait_for_tx();
     }
 
     static void write(const gsl::span<const uint8_t>& data)
