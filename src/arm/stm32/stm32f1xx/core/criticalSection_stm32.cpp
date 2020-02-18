@@ -4,40 +4,6 @@
 
 #include <cstdio>
 
-extern "C"
-{
-    void SVC_Handler();
-}
-
-volatile uint32_t old;
-volatile uint32_t counter = 0;
-
-void SVC_Handler()
-{
-    uint32_t number;
-    asm volatile("mov %0, r0" :"=r"(number));
-    if (number == 1)
-    {
-        printf("Disable interrupts!!!!!!!! %d\n", counter);
-        old = NVIC->ISER[0];
-        NVIC->ICER[0] = 0xffffffff;
-        __disable_irq();
-        __disable_fault_irq();
-        ++counter;
-    }
-    else if (number == 2 && counter != 1)
-    {
-        --counter;
-    }
-    else if (number == 2 && counter == 1)
-    {
-        printf("Enable interrupts!!!!!!!! %d\n", counter);
-        NVIC->ISER[0] = old;
-        __enable_irq();
-        __enable_fault_irq();
-        --counter;
-    }
-}
 
 namespace hal
 {
