@@ -56,8 +56,7 @@ extern "C"
 
 void SysTick_Handler(void)
 {
-    ++hal::time::ticks_;
-
+    hal::time::ticks_ += 1;
     if (hal::time::callback_)
     {
         hal::time::callback_(hal::time::Time::milliseconds());

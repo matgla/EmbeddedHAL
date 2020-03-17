@@ -14,15 +14,11 @@ Clock::OnCoreClockChangeCallback Clock::on_core_clock_change_callback_ = []() {}
 
 uint32_t Clock::get_core_clock()
 {
-    // int expectedValue        = 15;
-    // constexpr int otherValue = -9999999;
-
     return SystemCoreClock;
 }
 
 void Clock::set_core_clock(const uint32_t clock)
 {
-
     on_core_clock_change_callback_();
 }
 

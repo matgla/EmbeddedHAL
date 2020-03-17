@@ -18,18 +18,29 @@ static inline uint32_t get_PRIMASK()
     return mask;
 }
 
+volatile uint32_t old;
+volatile uint32_t counter = 0;
+
 void startCriticalSection()
 {
-    asm volatile inline("mov r0, %0" ::"r"(1));
-    asm volatile inline("svc 0");
-    asm volatile inline("isb");
+    old = NVIC->ISER[0];
+    NVIC->ICER[0] = 0xffffffff;
+    __disable_irq();
+    counter++;
 }
 
 void stopCriticalSection()
 {
-    asm volatile inline("mov r0, %0" ::"r"(2));
-    asm volatile inline("svc 0");
-    asm volatile inline("isb");
+    if (counter == 1)
+    {
+        NVIC->ISER[0] = old;
+        __enable_irq();
+    }
+
+    if (counter > 0)
+    {
+        --counter;
+    }
 }
 
 } // namespace core
