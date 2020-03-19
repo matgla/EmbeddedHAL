@@ -21,7 +21,7 @@ void Time::init()
 {
     ticks_ = 0;
     /* set SysTick to 1ms */
-    SysTick_Config(SystemCoreClock / 1000);
+    SysTick_Config(SystemCoreClock / 10);
 }
 
 void Time::increment_time(const std::chrono::milliseconds& time)
@@ -56,7 +56,7 @@ extern "C"
 
 void SysTick_Handler(void)
 {
-    hal::time::ticks_ += 1;
+    hal::time::ticks_ += 100;
     if (hal::time::callback_)
     {
         hal::time::callback_(hal::time::Time::milliseconds());
