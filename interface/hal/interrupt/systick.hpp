@@ -29,9 +29,10 @@ namespace interrupt
 using SystickHandler = eul::function<void(std::chrono::milliseconds), 0>;
 void set_systick_handler(const SystickHandler& handler);
 void set_systick_priority(uint8_t priority);
-void set_systick_period(const std::chrono::milliseconds& time);
+void set_systick_period(std::chrono::milliseconds time);
 
 std::chrono::milliseconds get_ticks();
+void disable_systick();
 
 } // namespace interrupt
 } // namespace hal

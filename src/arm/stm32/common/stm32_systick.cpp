@@ -17,6 +17,7 @@
 #include <chrono>
 
 #include <stm32f10x.h>
+#include <cstdio>
 
 #include "hal/interrupt/systick.hpp"
 
@@ -36,10 +37,10 @@ void set_systick_handler(const SystickHandler& handler)
     callback = handler;
 }
 
-void set_systick_period(const std::chrono::milliseconds& time)
+void set_systick_period(std::chrono::milliseconds time)
 {
     period = time;
-    SysTick_Config(SystemCoreClock / time.count());
+    SysTick_Config(SystemCoreClock / (1000 / time.count()));
 }
 
 void set_systick_priority(uint8_t priority)
@@ -50,6 +51,11 @@ void set_systick_priority(uint8_t priority)
 std::chrono::milliseconds get_ticks()
 {
     return ticks;
+}
+
+void disable_systick()
+{
+    SysTick->CTRL &= ~(SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk);
 }
 
 

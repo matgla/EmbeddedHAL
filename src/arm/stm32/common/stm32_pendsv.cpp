@@ -50,10 +50,7 @@ void trigger_pendsv()
 extern "C"
 {
 
-void PendSV_Handler(void)
-{
-    hal::interrupt::callback();
-}
+
 
 }
 
