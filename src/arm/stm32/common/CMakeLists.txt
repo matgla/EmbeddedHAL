@@ -9,6 +9,9 @@ target_sources(hal_stm32_common
         ${CMAKE_CURRENT_SOURCE_DIR}/stm32_assert.c
         ${CMAKE_CURRENT_SOURCE_DIR}/stm32_sleep.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/stm32_time.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/stm32_pendsv.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/stm32_systick.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/stm32_svc.cpp
 )
 
 target_include_directories(hal_stm32_common

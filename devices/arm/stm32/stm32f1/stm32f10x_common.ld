@@ -3,6 +3,12 @@ ENTRY(Reset_Handler)
 /* begin of stack in ARM adresses are decreasing */
 _estack = ORIGIN(RAM) + LENGTH(RAM);
 
+_fs_flash_start = ORIGIN(FS_FLASH);
+_fs_flash_end = ORIGIN(FS_FLASH) + LENGTH(FS_FLASH);
+
+_kernel_ram_start = ORIGIN(KERNEL_RAM);
+_kernel_ram_end = ORIGIN(KERNEL_RAM) + LENGTH(KERNEL_RAM);
+
 /* Place sections in memory */
 SECTIONS
 {
@@ -73,7 +79,7 @@ SECTIONS
     } >FLASH
 
     _sidata = .;
-    .data : AT ( _sidata ) 
+    .data : AT ( _sidata )
     {
         . = ALIGN(4);
         _sdata = .;
@@ -81,10 +87,10 @@ SECTIONS
         *(.data*)
         . = ALIGN(4);
         _edata = .;
-    } >RAM 
+    } >RAM
 
     . = ALIGN(4);
-    
+
     .bss :
     {
         _sbss = .;

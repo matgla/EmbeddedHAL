@@ -69,6 +69,9 @@ target_sources(hal_interface INTERFACE
     ${interface_sources_path}/common/timer/timeout_timer.hpp
     ${interface_sources_path}/common/timer/timer_manager.hpp
     ${interface_sources_path}/common/timer/timer.hpp
+    ${interface_sources_path}/interrupt/pendsv.hpp
+    ${interface_sources_path}/interrupt/systick.hpp
+    ${interface_sources_path}/interrupt/svc.hpp
 )
 
 target_include_directories(hal_interface INTERFACE
