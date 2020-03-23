@@ -47,13 +47,13 @@ extern "C"
 
 void SVC_Handler(void)
 {
-    uint32_t number;
-    void* arg;
-    void* out;
+    register uint32_t number asm("r0");
+    register void* arg asm("r1");
+    register void* out asm("r2");
 
-    asm volatile("mov %0, r0" :"=r"(number));
-    asm volatile("mov %0, r1" :"=r"(arg));
-    asm volatile("mov %0, r2" :"=r"(out));
+    asm volatile("mov %0, r0" : "=r"(number));
+    asm volatile("mov %0, r1" : "=r"(arg));
+    asm volatile("mov %0, r2" : "=r"(out));
 
     hal::interrupt::callback(number, arg, out);
 }
