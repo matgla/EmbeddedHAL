@@ -15,6 +15,8 @@
 #include "arm/stm32/stm32f1xx/gpio/stm32f1xx_gpio.hpp"
 #include "arm/stm32/stm32f1xx/clock/stm32f1xx_clock.hpp"
 
+void set_rx(const eul::function<void(uint8_t), sizeof(void*)>& callback);
+
 namespace hal
 {
 namespace stm32f1xx
@@ -57,9 +59,6 @@ struct Pinout
     using RtsPin = Rts;
     using CtPin  = Ct;
 };
-
-static inline eul::function<void(const uint8_t), 0> usart1_rx = [](const uint8_t data) {};
-
 
 template <std::size_t usart_address>
 class UsartCommon
@@ -122,10 +121,9 @@ public:
         }
     }
 
-    template <typename CallbackType>
-    static void onData(CallbackType&& onDataCallback)
+    static void onData(const eul::function<void(uint8_t), sizeof(void*)>& callback)
     {
-        usart1_rx = onDataCallback;
+        set_rx(callback);
     }
 
 protected:

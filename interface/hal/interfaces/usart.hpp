@@ -4,6 +4,7 @@
 #include <string_view>
 
 #include <gsl/span>
+#include <eul/function.hpp>
 
 
 namespace hal
@@ -27,14 +28,19 @@ public:
         UsartImpl::setBaudrate(baudrate);
     }
 
-    static void write(const StreamType& data) 
+    static void write(const StreamType& data)
     {
         UsartImpl::write(data);
     }
 
-    static void write(const std::string_view& str) 
+    static void write(const std::string_view& str)
     {
         UsartImpl::write(str);
+    }
+
+    static void on_data(const eul::function<void(const uint8_t), sizeof(void*)>& callback)
+    {
+        UsartImpl::onData(callback);
     }
 };
 
