@@ -17,18 +17,23 @@
 add_library(hal_common_utils INTERFACE)
 
 target_sources(hal_common_utils
-    INTERFACE 
+    INTERFACE
         ${CMAKE_CURRENT_SOURCE_DIR}/usart_printer.hpp
 )
 
-target_include_directories(hal_common_utils 
-    INTERFACE 
-        ${PROJECT_SOURCE_DIR}/include 
+target_include_directories(hal_common_utils
+    INTERFACE
+        ${PROJECT_SOURCE_DIR}/include
         ${PROJECT_SOURCE_DIR}/src
 )
 
-#target_compile_options(hal_common_utils 
-#    INTERFACE 
+target_link_libraries(hal_common_utils
+    INTERFACE
+        gsl
+)
+
+#target_compile_options(hal_common_utils
+#    INTERFACE
 #        $<$<COMPILE_LANGUAGE:CXX>:-std=c++2a -Wall -Werror -Wextra -Wpedantic -Wconversion -Wcast-align -Wunused -Wshadow -Wold-style-cast -Wpointer-arith -Wcast-qual -Wno-missing-braces>
 #        $<$<CONFIG:DEBUG>:-Og -g>
 #        $<$<CONFIG:RELEASE>:-Os>

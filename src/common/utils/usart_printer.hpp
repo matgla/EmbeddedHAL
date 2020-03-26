@@ -20,6 +20,8 @@
 
 #include <unistd.h>
 
+#include <gsl/span>
+
 namespace hal
 {
 
@@ -82,6 +84,7 @@ struct EndlineTag{};
 
 constexpr EndlineTag endl;
 
+template <typename UsartType>
 class UsartWriter
 {
 public:
@@ -113,8 +116,14 @@ public:
 
     void write(const std::string_view& str)
     {
-        ::write(0, str.data(), str.length());
+        UsartType::write(str);
     }
+
+    // template <typename T>
+    // void write(const gsl::span<T>& data_span)
+    // {
+    //     // UsartType::write(data_span.data());
+    // }
 
     template <typename T, typename std::enable_if_t<
         std::conjunction_v<std::is_integral<T>, std::is_signed<T>, std::negation<std::is_same<T, bool>>>, int> = 0>
@@ -124,8 +133,9 @@ public:
 
         if (data < 0)
         {
-            const char digit[] = {'-'};
-            ::write(0, digit, 1);
+            const char digit = {'-'};
+            UsartType::write(std::string_view(&digit, 1));
+
             data *= -1;
         }
 
@@ -155,16 +165,17 @@ protected:
     {
         while (number != 0)
         {
-            const char digit[2]  = {"0123456789abcdef"[number%base], 0};
+            const char digit = {"0123456789abcdef"[number%base]};
 
-            ::write(0, digit, 1);
+            UsartType::write(std::string_view(&digit, 1));
 
             number /= base;
         }
         while (zeros_at_end)
         {
-            const char digit[2] = {'0', 0};
-            ::write(0, digit, 1);
+            const char digit = {'0'};
+            UsartType::write(std::string_view(&digit, 1));
+
             --zeros_at_end;
         }
     }
