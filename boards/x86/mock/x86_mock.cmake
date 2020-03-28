@@ -39,4 +39,10 @@ function(add_device_hal_library hal_device_library)
 
     target_link_libraries(${hal_device_library} PUBLIC -Wl,--whole-archive hal_x86_mock -Wl,--no-whole-archive gsl)
 
+    target_compile_options(${hal_device_library} PUBLIC
+        $<$<COMPILE_LANGUAGE:CXX>:-std=c++2a>
+        $<$<CONFIG:DEBUG>:-Og -g>
+        $<$<CONFIG:RELEASE>:-Os>
+    )
+
 endfunction()

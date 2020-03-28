@@ -37,4 +37,10 @@ target_include_directories(hal
         ${Boost_INCLUDE_DIRS}
 )
 
-target_link_libraries(hal PRIVATE gsl ${Boost_LIBRARIES} pthread)
+target_link_libraries(hal
+    PUBLIC
+        hal_common_utils
+    PRIVATE
+        gsl
+        ${Boost_LIBRARIES}
+        pthread)

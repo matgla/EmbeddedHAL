@@ -12,3 +12,6 @@
 [submodule "lib/avr_libstdcpp/avr_libstdcpp"]
 	path = lib/avr_libstdcpp/avr_libstdcpp
 	url = https://github.com/matgla/avr-libstdcpp.git
+[submodule "test/ut/lib/googletest"]
+	path = test/ut/lib/googletest
+	url = https://github.com/google/googletest.git

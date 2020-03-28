@@ -5,30 +5,13 @@ namespace hal
 namespace time
 {
 
+static std::chrono::milliseconds milliseconds_;
+
 void Time::init()
 {
 }
 
-Time Time::operator++(int)
-{
-    Time time(*this);
-    ++milliseconds_;
-    return time;
-}
-
-Time& Time::operator++()
-{
-    ++milliseconds_;
-    return *this;
-}
-
-Time& Time::operator+=(const std::chrono::milliseconds& time)
-{
-    milliseconds_ += time;
-    return *this;
-}
-
-std::chrono::milliseconds Time::milliseconds() const
+std::chrono::milliseconds Time::milliseconds()
 {
     return milliseconds_;
 }

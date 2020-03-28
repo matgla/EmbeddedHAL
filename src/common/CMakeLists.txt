@@ -10,10 +10,12 @@ target_sources(hal_common
         ${sources}/empty.cpp
 )
 
-target_link_libraries(hal_common 
-    PUBLIC 
+target_link_libraries(hal_common
+    PUBLIC
         hal_common_utils
-    PRIVATE hal_common_time)
+    PRIVATE
+        hal_common_time
+)
 
 target_include_directories(hal_common
     PRIVATE

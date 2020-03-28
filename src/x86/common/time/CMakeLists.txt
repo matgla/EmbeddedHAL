@@ -16,3 +16,8 @@ target_include_directories(${library_name}
         ${PROJECT_SOURCE_DIR}/interface
         ${PROJECT_BINARY_DIR}/include
 )
+
+target_link_libraries(${library_name}
+    PUBLIC
+        eul
+)
