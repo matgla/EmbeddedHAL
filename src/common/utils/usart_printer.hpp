@@ -111,7 +111,7 @@ public:
     void writeln(const T& t)
     {
         write(t);
-        write("\n");
+        write("%d\n");
     }
 
     void write(const std::string_view& str)
