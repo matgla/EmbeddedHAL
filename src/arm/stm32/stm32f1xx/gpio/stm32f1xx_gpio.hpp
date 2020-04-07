@@ -127,12 +127,12 @@ public:
         configurePort(detail::get_mode_mask(mode), 0x0);
     }
 
-    constexpr static volatile void setHigh()
+    constexpr static void setHigh()
     {
         port_->BSRR |= 1 << pin;
     }
 
-    constexpr static volatile void setLow()
+    constexpr static void setLow()
     {
         port_->BRR |= 1 << pin;
     }
