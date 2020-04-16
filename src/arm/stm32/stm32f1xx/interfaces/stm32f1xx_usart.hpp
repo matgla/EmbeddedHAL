@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include <cstdint>
@@ -10,6 +11,7 @@
 #include <eul/function.hpp>
 #include <eul/memory_ptr.hpp>
 
+#include "hal/interfaces/usart.hpp"
 #include "hal/clock/clock.hpp"
 #include "hal/gpio/digital_input_output_pin.hpp"
 #include "arm/stm32/stm32f1xx/gpio/stm32f1xx_gpio.hpp"
@@ -61,11 +63,14 @@ struct Pinout
 };
 
 template <std::size_t usart_address>
-class UsartCommon
+class UsartCommon : public hal::interfaces::Usart
 {
 public:
+    using OnDataCallback = hal::interfaces::Usart::OnDataCallback;
+    using StreamType = gsl::span<const uint8_t>;
+
     template <typename RxPin, typename TxPin>
-    constexpr static void init(uint32_t bus_frequency, uint32_t baudrate)
+    constexpr void init(uint32_t bus_frequency, uint32_t baudrate)
     {
         TxPin::Implementation::init(hal::gpio::Output::OutputPushPull,
                                     hal::gpio::Speed::Medium,
@@ -88,12 +93,12 @@ public:
     }
 
 
-    constexpr static void set_baudrate(uint32_t bus_frequency, uint32_t baudrate)
+    void set_baudrate(uint32_t bus_frequency, uint32_t baudrate)
     {
         usart_->BRR = bus_frequency / baudrate;
     }
 
-    static void write(const char byte)
+    void write(const char byte)
     {
         wait_for_tx();
 
@@ -105,7 +110,7 @@ public:
         wait_for_tx();
     }
 
-    static void write(const gsl::span<const uint8_t>& data)
+    void write(const gsl::span<const uint8_t>& data) override
     {
         for (const auto byte : data)
         {
@@ -113,7 +118,7 @@ public:
         }
     }
 
-    static void write(const std::string_view& data)
+    void write(const std::string_view& data) override
     {
         for (const auto byte : data)
         {
@@ -121,7 +126,7 @@ public:
         }
     }
 
-    static void onData(const eul::function<void(uint8_t), sizeof(void*)>& callback)
+    void on_data(const OnDataCallback& callback) override
     {
         set_rx(callback);
     }
@@ -144,14 +149,14 @@ class Usart1 : public UsartCommon<USART1_BASE>
 public:
     using TxPin = Tx;
     using RxPin = Rx;
-    constexpr static void init(uint32_t baudrate)
+    void init(uint32_t baudrate) override
     {
         RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
 
         UsartCommon<USART1_BASE>::init<RxPin, TxPin>(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
     }
 
-    constexpr static void set_baudrate(uint32_t baudrate)
+    void set_baudrate(uint32_t baudrate) override
     {
         UsartCommon<USART1_BASE>::set_baudrate(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
     }

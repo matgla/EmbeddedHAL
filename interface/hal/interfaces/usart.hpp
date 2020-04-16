@@ -12,36 +12,17 @@ namespace hal
 namespace interfaces
 {
 
-template <typename UsartImpl>
 class Usart
 {
 public:
     using StreamType = gsl::span<const uint8_t>;
+    using OnDataCallback = eul::function<void(const uint8_t), sizeof(void*)>;
 
-    static void init(uint32_t baudrate)
-    {
-        UsartImpl::init(baudrate);
-    }
-
-    static void setBaudrate(uint32_t baudrate)
-    {
-        UsartImpl::setBaudrate(baudrate);
-    }
-
-    static void write(const StreamType& data)
-    {
-        UsartImpl::write(data);
-    }
-
-    static void write(const std::string_view& str)
-    {
-        UsartImpl::write(str);
-    }
-
-    static void on_data(const eul::function<void(const uint8_t), sizeof(void*)>& callback)
-    {
-        UsartImpl::onData(callback);
-    }
+    virtual void init(uint32_t baudrate) = 0;
+    virtual void set_baudrate(uint32_t baudrate) = 0;
+    virtual void write(const StreamType& data) = 0;
+    virtual void write(const std::string_view& str) = 0;
+    virtual void on_data(const OnDataCallback& callback) = 0;
 };
 
 } // namespace interfaces

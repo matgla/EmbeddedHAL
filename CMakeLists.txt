@@ -79,7 +79,7 @@ target_include_directories(hal_interface INTERFACE
     ${PROJECT_SOURCE_DIR}
 )
 
-target_link_libraries(hal_interface INTERFACE gsl)
+target_link_libraries(hal_interface INTERFACE gsl eul)
 
 add_subdirectory(src/common)
 add_subdirectory(lib)

@@ -125,6 +125,7 @@ public:
         initClocks();
 
         configurePort(detail::get_mode_mask(mode), 0x0);
+        port_->BSRR |= 1 << pin;
     }
 
     constexpr static void setHigh()
@@ -135,6 +136,11 @@ public:
     constexpr static void setLow()
     {
         port_->BRR |= 1 << pin;
+    }
+
+    static bool read()
+    {
+        return (port_->IDR & (1 << pin)) !=0;
     }
 
 private:
@@ -155,7 +161,7 @@ private:
         RCC->APB2ENR |= rcc_mask;
     }
 
-    constexpr static eul::memory_ptr<GPIO_TypeDef> port_ = eul::memory_ptr<GPIO_TypeDef>(port);
+    inline volatile static eul::memory_ptr<GPIO_TypeDef> port_ = eul::memory_ptr<GPIO_TypeDef>(port);
     uint32_t pin_                                        = pin;
 };
 
