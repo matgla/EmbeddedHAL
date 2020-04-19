@@ -9,16 +9,9 @@ namespace hal
 namespace gpio
 {
 
-template <class GpioImplType>
-class DigitalInputOutputPin : public DigitalInputPin<GpioImplType>, public DigitalOutputPin<GpioImplType>
-{
-public:
-    using Implementation = GpioImplType;
-    using OutputType = DigitalOutputPin<GpioImplType>;
-    using InputType = DigitalInputPin<GpioImplType>;
-    using DigitalInputPin<GpioImplType>::init;
-    using DigitalOutputPin<GpioImplType>::init;
-};
+// class DigitalInputOutputPin : public DigitalInputPin, DigitalOutputPin
+// {
+// };
 
 } // namespace gpio
 } // namespace hal

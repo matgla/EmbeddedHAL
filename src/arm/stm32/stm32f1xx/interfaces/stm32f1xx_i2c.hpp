@@ -39,19 +39,19 @@ struct I2CPinout
     using SDAPin = SDA;
 };
 
-template <std::size_t i2c_address>
 class I2CCommon
 {
 public:
+    virtual void init() = 0;
     template <typename SCL, typename SDA>
     constexpr static void init()
     {
-        SCL::Implementation::init(
+        SCL::get().init(
             hal::gpio::Output::OutputOpenDrain,
             hal::gpio::Speed::High,
             hal::stm32f1xx::gpio::Function::Alternate);
 
-        SDA::Implementation::init(
+        SDA::get().init(
             hal::gpio::Output::OutputOpenDrain,
             hal::gpio::Speed::High,
             hal::stm32f1xx::gpio::Function::Alternate);
@@ -74,7 +74,7 @@ public:
 
     }
 
-    static bool start(uint8_t address)
+    bool start(uint8_t address)
     {
         I2C_GenerateSTART(I2C1, ENABLE);
         while(!I2C_GetFlagStatus(I2C1, I2C_FLAG_SB));
@@ -91,13 +91,13 @@ public:
         return true;
     }
 
-    static void stop()
+    void stop()
     {
         I2C_GenerateSTOP(I2C1, ENABLE);
         while(I2C_GetFlagStatus(I2C1, I2C_FLAG_STOPF));
     }
 
-    static bool write(uint8_t byte)
+    bool write(uint8_t byte)
     {
         I2C_SendData(I2C1, byte);
         while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
@@ -105,7 +105,7 @@ public:
         return true;
     }
 
-    static void write(gsl::span<uint8_t>& data)
+    void write(gsl::span<uint8_t>& data)
     {
         for(auto byte : data)
         {
@@ -113,17 +113,17 @@ public:
         }
     }
 
-    static uint8_t read()
+    uint8_t read()
     {
         return 0;
     }
 };
 
 template <typename SCL, typename SDA, I2C1Mapping>
-class I2C_1 : public I2CCommon<I2C1_BASE>
+class I2C_1 : public I2CCommon
 {
 public:
-    constexpr static void init()
+    void init() override
     {
         RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;
         I2CCommon::init<SCL, SDA>();

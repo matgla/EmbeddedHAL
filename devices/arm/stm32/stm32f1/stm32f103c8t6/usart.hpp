@@ -6,6 +6,11 @@
 
 namespace hal
 {
+namespace interfaces
+{
+    using Usart = hal::stm32f1xx::interfaces::UsartCommon;
+}
+
 namespace devices
 {
 namespace interfaces

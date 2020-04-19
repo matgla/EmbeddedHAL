@@ -89,6 +89,12 @@ SECTIONS
         _edata = .;
     } >RAM
 
+    .drivers :
+    {
+        KEEP(*(.drivers))
+    } >RAM
+
+
     . = ALIGN(4);
 
     .bss :

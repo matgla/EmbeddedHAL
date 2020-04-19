@@ -28,6 +28,7 @@ target_include_directories(hal_stm32f1xx
 target_link_libraries(hal_stm32f1xx
     PUBLIC
         hal_stm32_common
+        stm32
         gsl
         eul
 )

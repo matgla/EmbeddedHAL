@@ -62,20 +62,26 @@ struct Pinout
     using CtPin  = Ct;
 };
 
-template <std::size_t usart_address>
-class UsartCommon : public hal::interfaces::Usart
+class UsartCommon
 {
 public:
-    using OnDataCallback = hal::interfaces::Usart::OnDataCallback;
+    using OnDataCallback = eul::function<void(const uint8_t), sizeof(void*)>;
     using StreamType = gsl::span<const uint8_t>;
+
+    UsartCommon(uint32_t usart_address)
+        : usart_(usart_address)
+    {
+    }
+
+    virtual void init(uint32_t baudrate) = 0;
 
     template <typename RxPin, typename TxPin>
     constexpr void init(uint32_t bus_frequency, uint32_t baudrate)
     {
-        TxPin::Implementation::init(hal::gpio::Output::OutputPushPull,
+        TxPin::get().init(hal::gpio::Output::OutputPushPull,
                                     hal::gpio::Speed::Medium,
                                     hal::stm32f1xx::gpio::Function::Alternate);
-        RxPin::init(hal::gpio::Input::InputFloating);
+        RxPin::get().init(hal::gpio::Input::InputFloating);
 
         set_baudrate(bus_frequency, baudrate);
         /* enable tx */
@@ -110,7 +116,7 @@ public:
         wait_for_tx();
     }
 
-    void write(const gsl::span<const uint8_t>& data) override
+    void write(const gsl::span<const uint8_t>& data)
     {
         for (const auto byte : data)
         {
@@ -118,7 +124,7 @@ public:
         }
     }
 
-    void write(const std::string_view& data) override
+    void write(const std::string_view& data)
     {
         for (const auto byte : data)
         {
@@ -126,39 +132,43 @@ public:
         }
     }
 
-    void on_data(const OnDataCallback& callback) override
+    void on_data(const OnDataCallback& callback)
     {
         set_rx(callback);
     }
 
 protected:
-    constexpr static void wait_for_tx()
+    void wait_for_tx()
     {
         while (!(usart_->SR & USART_SR_TXE))
         {
         }
     }
 
-    inline static bool was_initialized = false;
-    constexpr static eul::memory_ptr<USART_TypeDef> usart_ = eul::memory_ptr<USART_TypeDef>(usart_address);
+    bool was_initialized = false;
+    const eul::memory_ptr<USART_TypeDef> usart_;
 };
 
 template <typename Rx, typename Tx, Usart1Mapping mapping>
-class Usart1 : public UsartCommon<USART1_BASE>
+class Usart1 : public UsartCommon
 {
 public:
     using TxPin = Tx;
     using RxPin = Rx;
+    Usart1() : UsartCommon(USART1_BASE)
+    {
+
+    }
     void init(uint32_t baudrate) override
     {
         RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
 
-        UsartCommon<USART1_BASE>::init<RxPin, TxPin>(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
+        UsartCommon::init<RxPin, TxPin>(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
     }
 
-    void set_baudrate(uint32_t baudrate) override
+    void set_baudrate(uint32_t baudrate)
     {
-        UsartCommon<USART1_BASE>::set_baudrate(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
+        UsartCommon::set_baudrate(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
     }
 };
 

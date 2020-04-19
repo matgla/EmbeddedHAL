@@ -7,26 +7,13 @@ namespace hal
 namespace gpio
 {
 
-template <typename GpioImplType>
 class DigitalOutputPin
 {
 public:
-    constexpr static void init(Output mode, Speed speed)
-    {
-        GpioImplType::init(mode, speed);
-    }
-
-    constexpr static void setHigh()
-    {
-        GpioImplType::setHigh();
-    }
-
-    constexpr static void setLow()
-    {
-        GpioImplType::setLow();
-    }
-
-    using Implementation = GpioImplType;
+    virtual ~DigitalOutputPin() = default;
+    virtual void init(Output mode, Speed speed) = 0;
+    virtual void set_high() = 0;
+    virtual void set_low() = 0;
 };
 
 } // namespace gpio
