@@ -66,7 +66,7 @@ public:
         I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
         I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
 
-        I2C_InitStructure.I2C_ClockSpeed = 1000000;
+        I2C_InitStructure.I2C_ClockSpeed = 400000;
         I2C1->CR1 &= ~I2C_CR1_PE;
         I2C_Init(I2C1, &I2C_InitStructure);
         I2C1->CR1 |= I2C_CR1_PE;
