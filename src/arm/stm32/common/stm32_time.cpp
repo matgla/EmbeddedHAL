@@ -30,7 +30,7 @@ void initialize_dwt_counter(void)
 
 void Time::init()
 {
-    initialize_dwt_counter();
+    // initialize_dwt_counter();
 }
 
 std::chrono::milliseconds Time::milliseconds()
@@ -40,7 +40,8 @@ std::chrono::milliseconds Time::milliseconds()
 
 std::chrono::microseconds Time::microseconds()
 {
-    return std::chrono::microseconds(interrupt::get_ticks().count() * 1000 + (*DWT_CYCCNT / (SystemCoreClock/1000000)));
+    return 0;
+    // return std::chrono::microseconds(interrupt::get_ticks().count() * 1000 + (*DWT_CYCCNT / (SystemCoreClock/1000000)));
 }
 
 } // namespace time
