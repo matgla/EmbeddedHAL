@@ -29,6 +29,7 @@ namespace
 {
 static std::chrono::milliseconds period(100);
 static std::chrono::milliseconds ticks(0);
+
 static SystickHandler callback = [](std::chrono::milliseconds){};
 }
 
@@ -67,8 +68,11 @@ extern "C"
 
 void SysTick_Handler(void)
 {
+    volatile unsigned int *DWT_CYCCNT   = (volatile unsigned int *)0xE0001004;
+    uint32_t dwt_backup =  *DWT_CYCCNT;
     hal::interrupt::ticks += hal::interrupt::period;
     hal::interrupt::callback(hal::interrupt::ticks);
+    *DWT_CYCCNT = (*DWT_CYCCNT) - dwt_backup;
 }
 
 }

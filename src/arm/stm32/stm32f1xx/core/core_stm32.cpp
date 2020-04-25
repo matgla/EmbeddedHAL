@@ -4,6 +4,8 @@
 
 #include "hal/utils/assert.hpp"
 
+#include "hal/time/time.hpp"
+
 extern uint32_t SystemCoreClock;
 
 namespace hal
@@ -19,6 +21,7 @@ void Core::initializeClocks()
     {
         HAL_ASSERT_MSG(false, "Systick initialization failed");
     }
+    time::Time::init();
 }
 
 

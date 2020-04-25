@@ -66,7 +66,7 @@ public:
         I2C_InitStructure.I2C_Ack = I2C_Ack_Enable;
         I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
 
-        I2C_InitStructure.I2C_ClockSpeed = 400000;
+        I2C_InitStructure.I2C_ClockSpeed = 1000000;
         I2C1->CR1 &= ~I2C_CR1_PE;
         I2C_Init(I2C1, &I2C_InitStructure);
         I2C1->CR1 |= I2C_CR1_PE;
@@ -80,13 +80,6 @@ public:
         while(!I2C_GetFlagStatus(I2C1, I2C_FLAG_SB));
         I2C_Send7bitAddress(I2C1, address << 1, I2C_Direction_Transmitter);
         while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED));
-
-        // I2C1->CR1 |= I2C_CR1_START;
-        // while (!(I2C1->SR1 & I2C_SR1_SB));
-        // I2C1->DR = (address) & ~I2C_OAR1_ADD0;
-
-        // while (!(I2C1->SR1 & I2C_SR1_ADDR));
-        // I2C1->SR2;
 
         return true;
     }
