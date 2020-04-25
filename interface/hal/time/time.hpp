@@ -16,6 +16,7 @@ public:
     static void init();
 
     static std::chrono::milliseconds milliseconds();
+    static std::chrono::microseconds microseconds();
 };
 
 } // namespace time
