@@ -4,7 +4,12 @@
 
 #include <gsl/span>
 
+#include <eul/function.hpp>
+
+#include <misc.h>
 #include "stm32f10x.h"
+#include "stm32f10x_rcc.h"
+#include "stm32f10x_dma.h"
 #include "hal/time/sleep.hpp"
 #include <stm32f10x_i2c.h>
 
@@ -17,6 +22,8 @@ namespace stm32f1xx
 {
 namespace interfaces
 {
+
+static inline eul::function<void(), sizeof(void*)> on_dma_finished = []{};
 
 enum class I2C1Mapping
 {
@@ -43,6 +50,7 @@ class I2CCommon
 {
 public:
     virtual void init() = 0;
+
     template <typename SCL, typename SDA>
     constexpr static void init()
     {
@@ -72,6 +80,38 @@ public:
         I2C1->CR1 |= I2C_CR1_PE;
         I2C_Cmd(I2C1, ENABLE);
 
+
+
+    }
+
+    void initialize_dma(void* buffer)
+    {
+        RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1, ENABLE);
+        DMA_DeInit(DMA1_Channel6);
+        DMA_InitTypeDef dma_config_;
+        dma_config_.DMA_PeripheralBaseAddr = (uint32_t)&(I2C1->DR);
+        dma_config_.DMA_DIR = DMA_DIR_PeripheralDST;
+        dma_config_.DMA_MemoryBaseAddr = (uint32_t)buffer;
+        dma_config_.DMA_BufferSize = 1024;
+        dma_config_.DMA_PeripheralInc = DMA_PeripheralInc_Disable;
+        dma_config_.DMA_MemoryInc = DMA_MemoryInc_Enable;
+        dma_config_.DMA_PeripheralDataSize = DMA_PeripheralDataSize_Byte;
+        dma_config_.DMA_MemoryDataSize = DMA_MemoryDataSize_Byte;
+        dma_config_.DMA_Mode = DMA_Mode_Normal;
+        dma_config_.DMA_Priority = DMA_Priority_High;
+        dma_config_.DMA_M2M = DMA_M2M_Disable;
+        DMA_Init(DMA1_Channel6, &dma_config_);
+        NVIC_InitTypeDef nvicStructure;
+        nvicStructure.NVIC_IRQChannel = DMA1_Channel6_IRQn;
+        nvicStructure.NVIC_IRQChannelPreemptionPriority = 0;
+        nvicStructure.NVIC_IRQChannelSubPriority = 1;
+        nvicStructure.NVIC_IRQChannelCmd = ENABLE;
+        NVIC_Init(&nvicStructure);
+        on_dma_finished = [this]()
+        {
+            stop();
+            waiting_for_dma_write_ = false;
+        };
     }
 
     bool start(uint8_t address)
@@ -99,6 +139,8 @@ public:
 
     bool write(uint8_t byte)
     {
+        while (waiting_for_dma_write_);
+
         I2C_SendData(I2C1, byte);
         while(!I2C_CheckEvent(I2C1, I2C_EVENT_MASTER_BYTE_TRANSMITTED));
 
@@ -107,16 +149,32 @@ public:
 
     void write(gsl::span<uint8_t>& data)
     {
+        while (waiting_for_dma_write_);
+
         for(auto byte : data)
         {
             write(byte);
         }
     }
 
+    void dma_write(uint32_t size)
+    {
+        while (waiting_for_dma_write_);
+        waiting_for_dma_write_ = true;
+        DMA1_Channel6->CNDTR = size;
+        I2C_DMACmd(I2C1, ENABLE);
+        DMA_Cmd(DMA1_Channel6, ENABLE);
+        DMA_ClearITPendingBit(DMA1_IT_TC6);
+        DMA_ITConfig(DMA1_Channel6, DMA_IT_TC, ENABLE);
+    }
+
     uint8_t read()
     {
         return 0;
     }
+
+private:
+    bool waiting_for_dma_write_;
 };
 
 template <typename SCL, typename SDA, I2C1Mapping>
@@ -133,3 +191,4 @@ public:
 } // namespace interfaces
 } // namespace stm32f1xx
 } // namespace hal
+
