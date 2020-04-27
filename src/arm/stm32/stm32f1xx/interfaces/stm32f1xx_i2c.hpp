@@ -23,7 +23,7 @@ namespace stm32f1xx
 namespace interfaces
 {
 
-static inline eul::function<void(), sizeof(void*)> on_dma_finished = []{};
+void set_dma_callback(const eul::function<void(), sizeof(void*)>& callback);
 
 enum class I2C1Mapping
 {
@@ -49,6 +49,11 @@ struct I2CPinout
 class I2CCommon
 {
 public:
+    I2CCommon() : waiting_for_dma_write_(false)
+    {
+
+    }
+
     virtual void init() = 0;
 
     template <typename SCL, typename SDA>
@@ -79,9 +84,6 @@ public:
         I2C_Init(I2C1, &I2C_InitStructure);
         I2C1->CR1 |= I2C_CR1_PE;
         I2C_Cmd(I2C1, ENABLE);
-
-
-
     }
 
     void initialize_dma(void* buffer)
@@ -107,15 +109,17 @@ public:
         nvicStructure.NVIC_IRQChannelSubPriority = 1;
         nvicStructure.NVIC_IRQChannelCmd = ENABLE;
         NVIC_Init(&nvicStructure);
-        on_dma_finished = [this]()
+        set_dma_callback([this]()
         {
             stop();
             waiting_for_dma_write_ = false;
-        };
+        });
     }
 
     bool start(uint8_t address)
     {
+        while (waiting_for_dma_write_);
+
         I2C_GenerateSTART(I2C1, ENABLE);
         while(!I2C_GetFlagStatus(I2C1, I2C_FLAG_SB));
         I2C_Send7bitAddress(I2C1, address << 1, I2C_Direction_Transmitter);
@@ -166,8 +170,13 @@ public:
         return 0;
     }
 
+    bool busy()
+    {
+        return waiting_for_dma_write_;
+    }
+
 private:
-    bool waiting_for_dma_write_;
+    volatile bool waiting_for_dma_write_;
 };
 
 template <typename SCL, typename SDA, I2C1Mapping>
