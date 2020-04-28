@@ -23,14 +23,16 @@ volatile unsigned int *SCB_DEMCR    = (volatile unsigned int *)0xE000EDFC;
 void initialize_dwt_counter(void)
 {
     *SCB_DEMCR |= 0x01000000;
-    *DWT_CYCCNT = 0; // reset the counter
-    *DWT_CONTROL |= 1 ; // enable the counter
+    *DWT_CYCCNT = 0;
+    *DWT_CONTROL |= 1;
 }
 
 
 void Time::init()
 {
+#ifdef STM32_MICROSECONDS_COUNTER
     initialize_dwt_counter();
+#endif
 }
 
 std::chrono::milliseconds Time::milliseconds()
@@ -40,7 +42,10 @@ std::chrono::milliseconds Time::milliseconds()
 
 std::chrono::microseconds Time::microseconds()
 {
-    return std::chrono::microseconds(interrupt::get_ticks().count() * 1000 + (*DWT_CYCCNT / (SystemCoreClock/1000000)));
+    #ifdef STM32_MICROSECONDS_COUNTER
+        return std::chrono::microseconds(interrupt::get_ticks().count() * 1000 + (*DWT_CYCCNT / (SystemCoreClock/1000000)));
+    #endif
+    return std::chrono::microseconds{0};
 }
 
 } // namespace time

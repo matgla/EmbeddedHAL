@@ -21,6 +21,7 @@ void Core::initializeClocks()
     {
         HAL_ASSERT_MSG(false, "Systick initialization failed");
     }
+
     time::Time::init();
 }
 

@@ -51,6 +51,11 @@ public:
     {
         static_cast<void>(size);
     }
+
+    static bool busy()
+    {
+        return false;
+    }
 };
 
 } // namespace interfaces
