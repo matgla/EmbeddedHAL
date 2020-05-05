@@ -4,7 +4,7 @@ function (configure_device)
 
     add_library(${target_name} INTERFACE)
     target_sources(${target_name}
-        INTERFACE 
+        INTERFACE
             ${CMAKE_CURRENT_SOURCE_DIR}/devices/arm/stm32/stm32f1/stm32f103c8t6/gpio.hpp
     )
 
