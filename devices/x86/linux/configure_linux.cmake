@@ -1,5 +1,5 @@
 function (configure_device)
-    message(STATUS "Configuring X86 linux")
+    message(STATUS "Configuring X86 linux, name: ${target_name}")
     set(target_name hal_devices_x86_linux)
 
     add_library(${target_name} INTERFACE)
