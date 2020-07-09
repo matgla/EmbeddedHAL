@@ -85,15 +85,15 @@ public:
 
         set_baudrate(bus_frequency, baudrate);
         /* enable tx */
-        usart_->CR1 |= USART_CR1_TE;
+        usart_->CR1 = usart_->CR1 | USART_CR1_TE;
         /* enable rx */
-        usart_->CR1 |= USART_CR1_RE;
+        usart_->CR1 = usart_->CR1 | USART_CR1_RE;
 
         /* enable USART */
-        usart_->CR1 |= USART_CR1_UE;
+        usart_->CR1 = usart_->CR1 | USART_CR1_UE;
 
         /* enable Rx intterupt */
-        usart_->CR1 |= USART_CR1_RXNEIE;
+        usart_->CR1 = usart_->CR1 | USART_CR1_RXNEIE;
         NVIC_EnableIRQ(USART1_IRQn);
         was_initialized = true;
     }
@@ -161,7 +161,7 @@ public:
     }
     void init(uint32_t baudrate) override
     {
-        RCC->APB2ENR |= RCC_APB2ENR_USART1EN;
+        RCC->APB2ENR = RCC->APB2ENR | RCC_APB2ENR_USART1EN;
 
         UsartCommon::init<RxPin, TxPin>(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
     }

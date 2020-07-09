@@ -17,9 +17,9 @@ namespace
     }
 }
 
-namespace hal 
+namespace hal
 {
-namespace core 
+namespace core
 {
 
 constexpr uint16_t startup_register = 0;
@@ -54,12 +54,12 @@ void BackupRegisters::write(const uint16_t register_number, uint16_t value)
     const eul::memory_ptr<uint32_t> backup_register(address);
     *backup_register = value;
     *power_backup_access_register = 0;
-} 
+}
 
 void BackupRegisters::init()
 {
-    RCC->APB1ENR |= enable_bkp_rcc; 
-    RCC->APB1ENR |= enable_pwr_rcc;
+    RCC->APB1ENR = RCC->APB1ENR | enable_bkp_rcc;
+    RCC->APB1ENR = RCC->APB1ENR | enable_pwr_rcc;
     if (read(startup_register) == startup_magic_cookie)
     {
         reset();

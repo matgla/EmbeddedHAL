@@ -22,9 +22,9 @@ volatile unsigned int *SCB_DEMCR    = (volatile unsigned int *)0xE000EDFC;
 
 void initialize_dwt_counter(void)
 {
-    *SCB_DEMCR |= 0x01000000;
+    *SCB_DEMCR = *SCB_DEMCR | 0x01000000;
     *DWT_CYCCNT = 0;
-    *DWT_CONTROL |= 1;
+    *DWT_CONTROL = *DWT_CONTROL | 1;
 }
 
 

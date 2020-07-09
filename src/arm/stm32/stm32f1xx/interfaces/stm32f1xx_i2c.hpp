@@ -69,8 +69,8 @@ public:
             hal::gpio::Speed::High,
             hal::stm32f1xx::gpio::Function::Alternate);
 
-        RCC->APB1RSTR |= RCC_APB1RSTR_I2C1RST;
-        RCC->APB1RSTR &=~RCC_APB1RSTR_I2C1RST;
+        RCC->APB1RSTR = RCC->APB1RSTR | RCC_APB1RSTR_I2C1RST;
+        RCC->APB1RSTR = RCC->APB1RSTR & (~RCC_APB1RSTR_I2C1RST);
 
         I2C_InitTypeDef  I2C_InitStructure;
         I2C_InitStructure.I2C_Mode = I2C_Mode_I2C;
@@ -80,9 +80,9 @@ public:
         I2C_InitStructure.I2C_AcknowledgedAddress = I2C_AcknowledgedAddress_7bit;
 
         I2C_InitStructure.I2C_ClockSpeed = 1000000;
-        I2C1->CR1 &= ~I2C_CR1_PE;
+        I2C1->CR1 = I2C1->CR1 & (~I2C_CR1_PE);
         I2C_Init(I2C1, &I2C_InitStructure);
-        I2C1->CR1 |= I2C_CR1_PE;
+        I2C1->CR1 = I2C1->CR1 | I2C_CR1_PE;
         I2C_Cmd(I2C1, ENABLE);
     }
 
@@ -185,7 +185,7 @@ class I2C_1 : public I2CCommon
 public:
     void init() override
     {
-        RCC->APB1ENR |= RCC_APB1ENR_I2C1EN;
+        RCC->APB1ENR = RCC->APB1ENR | RCC_APB1ENR_I2C1EN;
         I2CCommon::init<SCL, SDA>();
     }
 };

@@ -26,7 +26,7 @@ void startCriticalSection()
     old = NVIC->ISER[0];
     NVIC->ICER[0] = 0xffffffff;
     __disable_irq();
-    counter++;
+    counter = counter + 1;
 }
 
 void stopCriticalSection()
@@ -39,7 +39,7 @@ void stopCriticalSection()
 
     if (counter > 0)
     {
-        --counter;
+        counter = counter - 1;
     }
 }
 

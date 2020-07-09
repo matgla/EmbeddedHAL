@@ -56,7 +56,7 @@ std::chrono::milliseconds get_ticks()
 
 void disable_systick()
 {
-    SysTick->CTRL &= ~(SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk);
+    SysTick->CTRL = SysTick->CTRL & ~(SysTick_CTRL_CLKSOURCE_Msk | SysTick_CTRL_ENABLE_Msk);
 }
 
 

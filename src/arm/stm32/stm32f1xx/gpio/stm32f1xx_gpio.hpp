@@ -131,17 +131,17 @@ public:
         initClocks();
 
         configurePort(detail::get_mode_mask(mode), 0x0);
-        port_->BSRR |= 1 << pin_;
+        port_->BSRR = port_->BSRR | (1 << pin_);
     }
 
     void setHigh()
     {
-        port_->BSRR |= 1 << pin_;
+        port_->BSRR = port_->BSRR | (1 << pin_);
     }
 
     void setLow()
     {
-        port_->BRR |= 1 << pin_;
+        port_->BRR = port_->BRR | (1 << pin_);
     }
 
     bool read()
@@ -164,7 +164,7 @@ private:
 
     void initClocks()
     {
-        RCC->APB2ENR |= rcc_mask_;
+        RCC->APB2ENR = RCC->APB2ENR | rcc_mask_;
     }
 
     volatile eul::memory_ptr<GPIO_TypeDef> port_;

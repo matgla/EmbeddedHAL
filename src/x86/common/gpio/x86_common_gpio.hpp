@@ -34,7 +34,7 @@ public:
         return is_high_;
     }
 
-    std::atomic<bool> is_high_ = false;
+    std::atomic<bool> is_high_ = true;
 };
 
 template <int id>

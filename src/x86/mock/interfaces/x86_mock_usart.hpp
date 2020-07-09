@@ -33,7 +33,10 @@ public:
 
     static void write(const gsl::span<const uint8_t>& str)
     {
-        static_cast<void>(str);
+        for (auto byte : str)
+        {
+            std::cout << static_cast<char>(byte);
+        }
     }
 
     void on_data(const OnDataCallback& callback)

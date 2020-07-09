@@ -41,7 +41,7 @@ void set_pendsv_priority(uint8_t priority)
 
 void trigger_pendsv()
 {
-    SCB->ICSR |= SCB_ICSR_PENDSVSET_Msk;
+    SCB->ICSR = SCB->ICSR | SCB_ICSR_PENDSVSET_Msk;
 }
 
 } // namespace interrupt
