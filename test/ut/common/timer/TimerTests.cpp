@@ -165,7 +165,7 @@ TEST_F(TimerShould, InvokeCallbackInRunningState)
 
     EXPECT_EQ(counter, 0);
     timer.run();
-    EXPECT_EQ(counter, 0);
+    EXPECT_EQ(counter, 1);
 }
 
 TEST_F(TimerShould, NotInvokeCallbackInIdleState)

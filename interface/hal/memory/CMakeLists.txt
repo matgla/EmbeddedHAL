@@ -14,7 +14,7 @@ target_include_directories(${library_name} INTERFACE
 
 target_link_libraries(${library_name}
     INTERFACE
-        gsl
+        GSL
 )
 
 target_compile_options(${library_name} INTERFACE

@@ -37,7 +37,7 @@ function(add_device_hal_library hal_device_library)
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/x86/mock)
 
-    target_link_libraries(${hal_device_library} PUBLIC -Wl,--whole-archive hal_x86_mock -Wl,--no-whole-archive gsl)
+    target_link_libraries(${hal_device_library} PUBLIC -Wl,--whole-archive hal_x86_mock -Wl,--no-whole-archive GSL)
 
     target_compile_options(${hal_device_library} PUBLIC
         $<$<COMPILE_LANGUAGE:CXX>:-std=c++2a>

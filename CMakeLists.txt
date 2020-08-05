@@ -2,6 +2,19 @@ cmake_minimum_required(VERSION 3.9)
 
 message (STATUS "Configuring HAL")
 
+include(FetchContent)
+
+FetchContent_Declare(
+  mspkg
+  GIT_REPOSITORY https://github.com/matgla/mspkg.git
+  GIT_TAG        master
+)
+
+FetchContent_MakeAvailable(mspkg)
+
+set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${mspkg_SOURCE_DIR}/cmake)
+include (mspkg)
+
 if (BUILD_UT)
     message (STATUS "Configuring HAL for UT")
     set (BOARD "x86_mock" CACHE STRING "Board name" FORCE)
@@ -45,9 +58,19 @@ execute_process(
 include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
 
 set (CMAKE_EXECUTABLE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX} CACHE INTERNAL "" FORCE)
-set (CMAKE_EXECUTABLE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX} PARENT_SCOPE)
+
+get_directory_property(has_parent PARENT_DIRECTORY)
+if (has_parent)
+    set (CMAKE_EXECUTABLE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX} PARENT_SCOPE)
+endif()
 
 project(EmbeddedHal CXX C ASM)
+
+setup_mspkg(${mspkg_SOURCE_DIR})
+
+find_package(eul REQUIRED)
+find_package(GSL REQUIRED)
+
 
 set(CMAKE_CXX_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
 set(CMAKE_C_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
@@ -82,10 +105,9 @@ target_include_directories(hal_interface INTERFACE
     ${PROJECT_SOURCE_DIR}
 )
 
-target_link_libraries(hal_interface INTERFACE gsl eul)
+target_link_libraries(hal_interface INTERFACE GSL eul)
 
 add_subdirectory(src/common)
-add_subdirectory(lib)
 add_subdirectory(interface/hal/memory)
 
 add_device_hal_library(hal_device_library)

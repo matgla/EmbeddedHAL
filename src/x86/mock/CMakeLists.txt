@@ -25,7 +25,7 @@ target_include_directories(${library_name}
 
 target_link_libraries(${library_name}
     PUBLIC
-        eul
         hal_common
         hal_common_utils
+        eul
 )

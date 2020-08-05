@@ -41,6 +41,6 @@ target_link_libraries(hal
     PUBLIC
         hal_common_utils
     PRIVATE
-        gsl
+        GSL
         ${Boost_LIBRARIES}
         pthread)

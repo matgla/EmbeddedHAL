@@ -29,7 +29,7 @@ target_include_directories(hal_common_utils
 
 target_link_libraries(hal_common_utils
     INTERFACE
-        gsl
+        GSL
 )
 
 #target_compile_options(hal_common_utils

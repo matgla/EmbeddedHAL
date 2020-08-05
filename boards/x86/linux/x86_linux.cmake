@@ -41,6 +41,6 @@ function(add_device_hal_library hal_device_library)
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/x86/common)
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/x86/linux)
 
-    target_link_libraries(${hal_device_library} PUBLIC -Wl,--whole-archive hal_x86_linux -Wl,--no-whole-archive gsl)
+    target_link_libraries(${hal_device_library} PUBLIC -Wl,--whole-archive hal_x86_linux -Wl,--no-whole-archive GSL)
 
 endfunction()

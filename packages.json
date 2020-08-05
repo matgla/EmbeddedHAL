@@ -1,0 +1,50 @@
+{
+    "dependencies": [
+        {
+            "name": "avr-libstdcpp",
+            "link": "https://github.com/modm-io/avr-libstdcpp.git",
+            "type": "git",
+            "version": "master",
+            "directory": "avr-libstdcpp",
+            "target": "avr-libstdcpp",
+            "options": {
+                "cmake_variables": {
+                    "DISABLE_TEST": "ON"
+                }
+            }
+        },
+        {
+            "name": "eul",
+            "link": "https://github.com/matgla/EmbeddedUtilityLibraries.git",
+            "type": "git",
+            "version": "master",
+            "directory": "eul",
+            "target": "eul",
+            "options": {
+            }
+        },
+        {
+            "name": "gsl",
+            "link": "https://github.com/microsoft/GSL.git",
+            "type": "git",
+            "version": "v3.0.0",
+            "directory": "gsl",
+            "target": "GSL",
+            "options": {
+                "cmake_variables": {
+                    "GSL_TERMINATE_ON_CONTRACT_VIOLATION": "ON",
+                    "GSL_MSVC_USE_STL_NOEXCEPTION_WORKAROUND": "ON"
+                }
+            }
+        },
+        {
+            "name": "googletest",
+            "link": "https://github.com/google/googletest.git",
+            "type": "git",
+            "version": "v1.10.x",
+            "directory": "googletest",
+            "target": "gtest",
+            "options": ""
+        }
+    ]
+}

@@ -2,16 +2,6 @@
 	path = cmake
 	url = https://github.com/matgla/EmbeddedCMakes.git
 	branch = master
-[submodule "lib/gsl/gsl"]
-	path = lib/gsl/gsl
-	url = https://github.com/Microsoft/GSL.git
-	branch = master
-[submodule "lib/eul"]
-	path = lib/eul
-	url = https://github.com/matgla/EmbeddedUtilityLibraries
-[submodule "lib/avr_libstdcpp/avr_libstdcpp"]
-	path = lib/avr_libstdcpp/avr_libstdcpp
-	url = https://github.com/matgla/avr-libstdcpp.git
 [submodule "test/ut/lib/googletest"]
 	path = test/ut/lib/googletest
 	url = https://github.com/google/googletest.git

@@ -27,7 +27,7 @@ target_link_libraries(${binary_name}
         gtest
         pthread
 
-        gsl
+        GSL
         eul
         ## production
         hal
