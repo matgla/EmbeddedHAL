@@ -8,9 +8,7 @@
             "directory": "avr-libstdcpp",
             "target": "avr-libstdcpp",
             "options": {
-                "cmake_variables": {
-                    "DISABLE_TEST": "ON"
-                }
+
             }
         },
         {
@@ -21,6 +19,9 @@
             "directory": "eul",
             "target": "eul",
             "options": {
+                "cmake_variables": {
+                    "DISABLE_TESTS": "ON"
+                }
             }
         },
         {
@@ -45,6 +46,21 @@
             "directory": "googletest",
             "target": "gtest",
             "options": ""
+        },
+        {
+            "link": "https://github.com/nematix/stm32f10x-stdperiph-lib.git",
+            "type": "git",
+            "version": "master",
+            "directory": "stm32f1xx_stdperiph",
+            "target": "stm32f1xx_stdperiph",
+            "options": {
+                "cmake_variables": {
+                    "stm32_libraries_root_dir": "${CMAKE_CURRENT_BINARY_DIR}/packages/sources/stm32f1xx_stdperiph/Libraries CACHE INTENAL \"\" FORCE"
+                },
+                "include": false
+            }
         }
+
+
     ]
 }

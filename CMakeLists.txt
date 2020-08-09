@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
+project(EmbeddedHal NONE)
 
 message (STATUS "Configuring HAL")
 
@@ -14,6 +15,8 @@ FetchContent_MakeAvailable(mspkg)
 
 set (CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${mspkg_SOURCE_DIR}/cmake)
 include (mspkg)
+
+setup_mspkg(${mspkg_SOURCE_DIR})
 
 if (BUILD_UT)
     message (STATUS "Configuring HAL for UT")
@@ -64,13 +67,10 @@ if (has_parent)
     set (CMAKE_EXECUTABLE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX} PARENT_SCOPE)
 endif()
 
-project(EmbeddedHal CXX C ASM)
-
-setup_mspkg(${mspkg_SOURCE_DIR})
+enable_language(CXX C ASM)
 
 find_package(eul REQUIRED)
 find_package(GSL REQUIRED)
-
 
 set(CMAKE_CXX_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
 set(CMAKE_C_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
@@ -112,12 +112,12 @@ add_subdirectory(interface/hal/memory)
 
 add_device_hal_library(hal_device_library)
 
-message(STATUS "Link hal with: ${hal_device_library}")
+message(FATAL_ERROR "Link hal with: ${hal_device_library}")
 
 add_library(hal INTERFACE)
 
 target_link_libraries(hal INTERFACE ${hal_device_library})
 
-if (BUILD_UT)
+if (BUILD_UT OR ENABLE_ST)
     add_subdirectory(test)
 endif ()

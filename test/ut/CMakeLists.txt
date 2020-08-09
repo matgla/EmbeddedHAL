@@ -42,3 +42,8 @@ target_compile_features(${binary_name}
     PRIVATE
         cxx_std_17
 )
+
+add_custom_target (run_hal_ut
+    COMMAND $<TARGET_FILE:hal_common_ut>
+    DEPENDS ${binary_name}
+)

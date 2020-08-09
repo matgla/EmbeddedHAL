@@ -146,7 +146,7 @@ protected:
     }
 
     bool was_initialized = false;
-    const eul::memory_ptr<USART_TypeDef> usart_;
+    eul::memory_ptr<USART_TypeDef> usart_;
 };
 
 template <typename Rx, typename Tx, Usart1Mapping mapping>

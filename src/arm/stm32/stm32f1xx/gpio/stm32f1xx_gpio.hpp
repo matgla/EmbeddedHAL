@@ -167,7 +167,7 @@ private:
         RCC->APB2ENR = RCC->APB2ENR | rcc_mask_;
     }
 
-    volatile eul::memory_ptr<GPIO_TypeDef> port_;
+    eul::memory_ptr<GPIO_TypeDef> port_;
     const uint32_t pin_;
     const uint32_t rcc_mask_;
 };

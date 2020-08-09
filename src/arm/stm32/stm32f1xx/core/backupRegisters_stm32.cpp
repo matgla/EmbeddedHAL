@@ -48,10 +48,10 @@ uint32_t BackupRegisters::read(uint16_t register_number)
 void BackupRegisters::write(const uint16_t register_number, uint16_t value)
 {
     /* enable backup register power */
-    static constexpr eul::memory_ptr<uint32_t> power_backup_access_register(cr_dbp_bb);
+    eul::memory_ptr<uint32_t> power_backup_access_register(cr_dbp_bb);
     *power_backup_access_register = 1;
     const uint32_t address = backup_register_base_address + register_number_to_address(register_number);
-    const eul::memory_ptr<uint32_t> backup_register(address);
+    eul::memory_ptr<uint32_t> backup_register(address);
     *backup_register = value;
     *power_backup_access_register = 0;
 }

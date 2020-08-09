@@ -1,6 +1,11 @@
 get_filename_component(root_dir ${PROJECT_SOURCE_DIR}/../.. ABSOLUTE)
 
-find_package(gtest REQUIRED)
+if (BUILD_UT)
+    find_package(gtest REQUIRED)
 
-add_subdirectory(ut)
+    add_subdirectory(ut)
+endif ()
 
+if (ENABLE_ST)
+    add_subdirectory(st)
+endif ()
