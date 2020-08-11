@@ -30,6 +30,7 @@ target_include_directories(hal_common_utils
 target_link_libraries(hal_common_utils
     INTERFACE
         GSL
+        hal_flags
 )
 
 #target_compile_options(hal_common_utils

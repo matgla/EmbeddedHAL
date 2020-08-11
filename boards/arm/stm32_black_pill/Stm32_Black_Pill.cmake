@@ -1,48 +1,56 @@
+# This file is part of MSOS project. This is simple OS for embedded development devices.
+# Copyright (C) 2019 Mateusz Stadnik
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 function(get_device_info mcu mcu_family arch vendor)
-    message(STATUS "Configuration of board: Stm32_Black_Pill")
+    message(STATUS "Configuration of board: KeychainGamer")
     set(${mcu} "STM32F103C8T6" PARENT_SCOPE)
     set(${mcu_family} "STM32F1xx" PARENT_SCOPE)
     set(${arch} "ARM" PARENT_SCOPE)
     set(${vendor} "STM32" PARENT_SCOPE)
 endfunction()
 
+
 function(get_linker_script linker_script linker_scripts_directory)
-    set (${linker_script} ${PROJECT_SOURCE_DIR}/Stm32_Black_Pill/linker_script.ld PARENT_SCOPE)
-    set (${linker_scripts_directory} ${PROJECT_SOURCE_DIR}/Stm32_Black_Pill PARENT_SCOPE)
+    set (${linker_script} ${boards_path}/arm/stm32_black_pill/linker_script.ld PARENT_SCOPE)
+    set (${linker_scripts_directory} ${boards_path}/arm/stm32_black_pill PARENT_SCOPE)
 endfunction()
 
 function(add_device_hal_library hal_device_library)
-    set(${hal_device_library} "stm32_black_pill")
-    set(hal_device_library ${hal_device_library} PARENT_SCOPE)
-    set(path_to_specific_gpio_config "${PROJECT_SOURCE_DIR}/boards/arm/stm32_black_pill/gpio_config.hpp")
-    set(path_to_specific_usart_config "${PROJECT_SOURCE_DIR}/boards/arm/stm32_black_pill/usart_config.hpp")
-    set(path_to_specific_clock_config "${PROJECT_SOURCE_DIR}/boards/arm/stm32_black_pill/clock_config.hpp")
+    message(STATUS "Configuring STM32_Black_Pill")
+    set(hal_device_library board PARENT_SCOPE)
+    add_library(board STATIC)
 
-    message(STATUS "Generate config file: ${path_to_specific_gpio_config}")
-    message(STATUS "Generate config file: ${path_to_specific_usart_config}")
-    message(STATUS "Generate config file: ${path_to_specific_clock_config}")
-    configure_file(${PROJECT_SOURCE_DIR}/config/gpio_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/gpio.hpp @ONLY)
-    configure_file(${PROJECT_SOURCE_DIR}/config/usart_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/usart.hpp @ONLY)
-    configure_file(${PROJECT_SOURCE_DIR}/config/clock_config.hpp.in ${PROJECT_BINARY_DIR}/include/hal/clock.hpp @ONLY)
+    target_sources(board PUBLIC
+        PUBLIC
+            ${boards_path}/arm/stm32_black_pill/board.hpp
 
-    add_library(${hal_device_library})
-
-    set(source_path "${PROJECT_SOURCE_DIR}/boards/arm/stm32_black_pill")
-    target_sources(${hal_device_library} PUBLIC
-        ${path_to_specific_gpio_config}
-        ${path_to_specific_usart_config}
-        ${path_to_specific_clock_config}
-    )
-    target_sources(${hal_device_library} PRIVATE
-        ${source_path}/board.cpp
+        PRIVATE
+            ${boards_path}/arm/stm32_black_pill/board.cpp
     )
 
-    target_include_directories(${hal_device_library} PUBLIC
-        ${PROJECT_BINARY_DIR}/include)
+    target_include_directories(board PUBLIC
+        ${boards_path}/arm/stm32_black_pill)
 
-    add_subdirectory(${PROJECT_SOURCE_DIR}/src/arm/stm32/common)
-    add_subdirectory(${PROJECT_SOURCE_DIR}/src/arm/stm32/stm32f1xx)
 
-    target_link_libraries(${hal_device_library} PUBLIC -Wl,--whole-archive hal_stm32f1xx -Wl,--no-whole-archive GSL)
+    target_link_libraries(board
+        PUBLIC
+            hal_interface
+            hal_devices_arm_stm32f103c8t6
+    )
 
+    include(${PROJECT_SOURCE_DIR}/devices/arm/stm32/stm32f1/stm32f103c8t6/configure_stm32f103c8t6.cmake)
+    configure_device()
 endfunction()

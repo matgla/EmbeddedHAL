@@ -1,4 +1,4 @@
-// This file is part of EmbeddedHAL project. This is simple OS for embedded development devices.
+// This file is part of EmbeddedHAL project. This is abstraction layer for MCUs and boards.
 // Copyright (C) 2020 Mateusz Stadnik
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,17 +14,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "board.hpp"
-
-#include <stm32f10x.h>
-
 namespace board
 {
 
-void board_init()
-{
-    SystemInit();
-}
+void board_init();
 
 } // namespace board
-

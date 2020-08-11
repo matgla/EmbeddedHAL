@@ -72,8 +72,8 @@ enable_language(CXX C ASM)
 find_package(eul REQUIRED)
 find_package(GSL REQUIRED)
 
-set(CMAKE_CXX_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
-set(CMAKE_C_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
+# set(CMAKE_CXX_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
+# set(CMAKE_C_FLAGS_RELEASE ""  CACHE STRING "Some description" FORCE)
 
 set(interface_sources_path "${PROJECT_SOURCE_DIR}/interface/hal")
 
@@ -112,11 +112,9 @@ add_subdirectory(interface/hal/memory)
 
 add_device_hal_library(hal_device_library)
 
-message(FATAL_ERROR "Link hal with: ${hal_device_library}")
-
 add_library(hal INTERFACE)
 
-target_link_libraries(hal INTERFACE ${hal_device_library})
+target_link_libraries(hal INTERFACE ${hal_device_library} hal_flags)
 
 if (BUILD_UT OR ENABLE_ST)
     add_subdirectory(test)

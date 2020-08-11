@@ -15,4 +15,5 @@ target_include_directories(hal_common_time
 target_link_libraries(hal_common_time
     PRIVATE
         eul
+        hal_flags
 )
