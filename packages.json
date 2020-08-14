@@ -55,7 +55,7 @@
             "target": "stm32f1xx_stdperiph",
             "options": {
                 "cmake_variables": {
-                    "stm32_libraries_root_dir": "${CMAKE_CURRENT_BINARY_DIR}/packages/sources/stm32f1xx_stdperiph/Libraries CACHE INTERNAL \"\" FORCE"
+                    "stm32_libraries_root_dir": "${mspkg_SOURCE_DIR}/packages/sources/stm32f1xx_stdperiph/Libraries CACHE INTERNAL \"\" FORCE"
                 },
                 "include": false
             }
