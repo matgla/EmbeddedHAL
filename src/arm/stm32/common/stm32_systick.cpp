@@ -33,6 +33,16 @@ static std::chrono::milliseconds ticks(0);
 static SystickHandler callback = [](std::chrono::milliseconds){};
 }
 
+void reset_ticks_counter()
+{
+    ticks = std::chrono::milliseconds(0);
+}
+
+void reset_systick_handler()
+{
+    callback = [](std::chrono::milliseconds){};
+}
+
 void set_systick_handler(const SystickHandler& handler)
 {
     callback = handler;

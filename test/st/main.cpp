@@ -1,9 +1,18 @@
 #include <board.hpp>
 
-int main()
+#include <stdio.h>
+
+#include <mstest.hpp>
+
+int main(void)
 {
     board::board_init();
-    while (1)
+
+
+    int rc = mstest::run_tests();
+    exit(rc);
+    while (true)
     {
+
     }
 }

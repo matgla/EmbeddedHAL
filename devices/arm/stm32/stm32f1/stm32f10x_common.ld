@@ -3,12 +3,6 @@ ENTRY(Reset_Handler)
 /* begin of stack in ARM adresses are decreasing */
 _estack = ORIGIN(RAM) + LENGTH(RAM);
 
-_fs_flash_start = ORIGIN(FS_FLASH);
-_fs_flash_end = ORIGIN(FS_FLASH) + LENGTH(FS_FLASH);
-
-_kernel_ram_start = ORIGIN(KERNEL_RAM);
-_kernel_ram_end = ORIGIN(KERNEL_RAM) + LENGTH(KERNEL_RAM);
-
 /* Place sections in memory */
 SECTIONS
 {

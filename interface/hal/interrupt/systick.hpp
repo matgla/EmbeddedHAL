@@ -34,6 +34,9 @@ void set_systick_period(std::chrono::milliseconds time);
 std::chrono::milliseconds get_ticks();
 void disable_systick();
 
+void reset_ticks_counter();
+void reset_systick_handler();
+
 } // namespace interrupt
 } // namespace hal
 
