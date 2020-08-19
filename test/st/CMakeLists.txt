@@ -2,9 +2,7 @@ add_executable(st_tests)
 
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_CURRENT_SOURCE_DIR}/nanotest/cmake")
 
-
-set (test_sources
-)
+find_package(mstest REQUIRED)
 
 target_sources(st_tests
     PUBLIC
@@ -16,11 +14,7 @@ target_link_libraries(st_tests
     PUBLIC
         hal
         hal_flags
-)
-
-target_include_directories(st_tests
-    PUBLIC
-        ${CMAKE_CURRENT_SOURCE_DIR}/MsTest/include
+        mstest
 )
 
 include (GenerateBinary)
