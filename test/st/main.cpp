@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 
-#include <mstest.hpp>
+#include <mstest/mstest.hpp>
 
 int main(void)
 {

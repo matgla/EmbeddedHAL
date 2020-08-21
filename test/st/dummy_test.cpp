@@ -1,9 +1,10 @@
-#include <nanotest.h>
+#include <mstest/mstest.hpp>
+#include <mstest/expectations.hpp>
 
 #include <cstring>
 
-NANOTEST(Embedded, ARMv7HelloWorld)
+MSTEST(Embedded, ARMv7HelloWorld)
 {
-    EXPECT_EQ(11, strlen("Hello World"));
+    mstest::expect_eq(11, strlen("Hello World"));
 }
 
