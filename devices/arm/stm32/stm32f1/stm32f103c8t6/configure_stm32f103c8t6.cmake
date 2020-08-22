@@ -10,6 +10,6 @@ function (configure_device)
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/arm/stm32/stm32f1xx)
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/arm/stm32/common)
-    target_link_libraries(${target_name} INTERFACE hal_stm32f1xx)
+    target_link_libraries(${target_name} INTERFACE hal_stm32f1xx hal_common)
     target_include_directories(${target_name} INTERFACE ${PROJECT_SOURCE_DIR}/src)
 endfunction()

@@ -50,7 +50,13 @@ void trigger_pendsv()
 extern "C"
 {
 
-
+void __attribute__((weak)) PendSV_Handler(void)
+{
+    if (hal::interrupt::callback)
+    {
+        hal::interrupt::callback();
+    }
+}
 
 }
 

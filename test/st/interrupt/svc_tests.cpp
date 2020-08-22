@@ -23,7 +23,7 @@ protected:
 
 extern "C"
 {
-    void trigger_syscall(int number, void* argument, void* output)
+    void trigger_syscall(int number, const void* argument, void* output)
     {
         asm volatile inline ("svc 0\n"
                   "bx lr\n");
@@ -32,11 +32,19 @@ extern "C"
 
 MSTEST_F(SvcShould, CallHandlerAndPassArguments)
 {
-    int value_a = 103;
+    const int value_a = 103;
     double output = 0.0;
     trigger_syscall(10, &value_a, &output);
 
     mstest::expect_eq(*static_cast<int*>(argument_), 103);
     mstest::expect_eq(output_, &output);
     mstest::expect_eq(number_, 10);
+
+    const int value_b = 123111;
+    int output_b = 0;
+    trigger_syscall(123, &value_b, &output_b);
+
+    mstest::expect_eq(*static_cast<int*>(argument_), 123111);
+    mstest::expect_eq(output_, &output_b);
+    mstest::expect_eq(number_, 123);
 }
