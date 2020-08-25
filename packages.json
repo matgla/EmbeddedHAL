@@ -74,6 +74,16 @@
                     "MSTEST_LINKER_FLAGS": "${hal_exe_linker_flags}"
                 }
             }
+        },
+        {
+            "link": "https://github.com/matgla/EmbeddedCMakes.git",
+            "type": "git",
+            "version": "master",
+            "directory": "embedded_cmake",
+            "target": "EmbeddedCMake",
+            "options": {
+                "is_cmake_library": true
+            }
         }
     ]
 }

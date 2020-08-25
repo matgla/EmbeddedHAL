@@ -15,6 +15,12 @@ class SvcShould : public mstest::Test
             output_ = output;
         });
     }
+
+    void teardown() override
+    {
+        hal::interrupt::set_svc_handler([this](uint32_t number, void* argument, void* output){
+        });
+    }
 protected:
     int number_;
     void* argument_;
@@ -23,11 +29,7 @@ protected:
 
 extern "C"
 {
-    void trigger_syscall(int number, const void* argument, void* output)
-    {
-        asm volatile inline ("svc 0\n"
-                  "bx lr\n");
-    }
+    void trigger_syscall(int number, const void* argument, void* output);
 }
 
 MSTEST_F(SvcShould, CallHandlerAndPassArguments)

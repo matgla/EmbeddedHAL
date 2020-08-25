@@ -55,7 +55,11 @@ execute_process(
     ERROR_QUIET
 )
 
-include(${PROJECT_SOURCE_DIR}/cmake/ConfigureProject.cmake)
+find_package(EmbeddedCMake REQUIRED)
+
+message (STATUS "lalal: ${CMAKE_MODULE_PATH}")
+
+include(ConfigureProject)
 enable_language(CXX C ASM)
 
 set (CMAKE_EXECUTABLE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
@@ -64,7 +68,6 @@ get_directory_property(has_parent PARENT_DIRECTORY)
 if (has_parent)
     set (CMAKE_EXECUTABLE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX} PARENT_SCOPE)
 endif()
-
 
 find_package(eul REQUIRED)
 find_package(GSL REQUIRED)
@@ -76,7 +79,6 @@ target_sources(hal_interface INTERFACE
     ${interface_sources_path}/core/backupRegisters.hpp
     ${interface_sources_path}/core/core.hpp
     ${interface_sources_path}/core/criticalSection.hpp
-    ${interface_sources_path}/core/mutex.hpp
     ${interface_sources_path}/memory/eeprom.hpp
     ${interface_sources_path}/time/rtc.hpp
     ${interface_sources_path}/time/sleep.hpp
