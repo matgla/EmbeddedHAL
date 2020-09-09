@@ -14,6 +14,8 @@ target_sources(${library_name}
         # CPP
         ${CMAKE_CURRENT_SOURCE_DIR}/clock/x86_mock_clock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/time/x86_mock_time.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/interfaces/x86_mock_usart.cpp
+
 )
 
 target_include_directories(${library_name}
