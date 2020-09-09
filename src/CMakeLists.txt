@@ -57,8 +57,6 @@ execute_process(
 
 find_package(EmbeddedCMake REQUIRED)
 
-message (STATUS "lalal: ${CMAKE_MODULE_PATH}")
-
 include(ConfigureProject)
 enable_language(CXX C ASM)
 
