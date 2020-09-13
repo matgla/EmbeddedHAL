@@ -5,6 +5,8 @@
 
 #include <vector>
 
+#include <stm32f10x.h>
+
 #include <eul/function.hpp>
 
 #include "hal/interrupt/systick.hpp"
