@@ -6,6 +6,8 @@ function (configure_device)
     target_sources(${target_name}
         INTERFACE
             ${PROJECT_SOURCE_DIR}/devices/arm/stm32/stm32f1/stm32f103c8t6/gpio.hpp
+            ${PROJECT_SOURCE_DIR}/devices/arm/stm32/stm32f1/stm32f103c8t6/i2c.hpp
+            ${PROJECT_SOURCE_DIR}/devices/arm/stm32/stm32f1/stm32f103c8t6/usart.hpp
     )
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/arm/stm32/stm32f1xx)

@@ -1,12 +1,30 @@
-#include "hal/time/sleep.hpp"
-#include "hal/time/time.hpp"
 
-#include <stm32f10x.h>
+#include "hal/time/time.hpp"
 
 namespace hal
 {
 namespace time
 {
+
+void Time::init()
+{
+#ifdef STM32_MICROSECONDS_COUNTER
+    initialize_dwt_counter();
+#endif
+}
+
+std::chrono::milliseconds Time::milliseconds()
+{
+    return {};//interrupt::get_ticks();
+}
+
+std::chrono::microseconds Time::microseconds()
+{
+    #ifdef STM32_MICROSECONDS_COUNTER
+        return std::chrono::microseconds(interrupt::get_ticks().count() * 1000 + (*DWT_CYCCNT / (SystemCoreClock/1000000)));
+    #endif
+    return std::chrono::microseconds{0};
+}
 
 void sleep(std::chrono::microseconds time)
 {
@@ -37,3 +55,7 @@ void sleep(std::chrono::seconds time)
 
 } // namespace time
 } // namespace hal
+
+
+
+
