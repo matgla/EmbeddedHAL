@@ -26,16 +26,23 @@ set (arguments
     --output=${CMAKE_CURRENT_BINARY_DIR}/generated_soc
 )
 
-set (generated_soc_path ${CMAKE_CURRENT_BINARY_DIR}/generated_soc)
+set (hal_generated_soc_path ${CMAKE_CURRENT_BINARY_DIR}/generated_soc CACHE INTERNAL "")
 
 if (user_socs_config)
-    set (arguments ${arguments} --user_configs=${user_socs_config})
+    set (arguments ${arguments} --user_directory=${user_socs_config})
+endif ()
+
+if (hal_user_config_file)
+    set (arguments ${arguments} --user_configs=${hal_user_config_file})
 endif ()
 
 execute_process(
     COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generate_soc.py ${arguments}
     RESULT_VARIABLE rc
 )
+
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generate_soc.py)
+
 
 include (${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_config.cmake)
 

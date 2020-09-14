@@ -28,7 +28,8 @@ parser = argparse.ArgumentParser(description = "CMake configuration generator ba
 parser.add_argument("-s", "--soc", dest="soc", action="store", help="SOC name", required=True)
 parser.add_argument("-i", "--input", dest="input_directory", action="store", help="Path to input directory", required=True)
 parser.add_argument("-o", "--output", dest="output_directory", action="store", help="Path to output directory", required=True)
-parser.add_argument("-u", "--user_configs", dest="user_directory", action="store", help="Path to user provided configs")
+parser.add_argument("-u", "--user_directory", dest="user_directory", action="store", help="Path to user provided configs")
+parser.add_argument("-c", "--user_configs", dest="user_configs", action="store", help="Path to additional user provided config.json")
 
 args, rest = parser.parse_known_args()
 
@@ -149,6 +150,13 @@ def main():
     config = {}
     for c in configs:
         merge(config, c)
+
+    if "user_configs" in args:
+        for config_path in args.user_configs.split(';'):
+            with open(config_path) as cfg:
+                user_config = json.loads(cfg.read())
+                print("User cfg: ", user_config)
+                merge(config, user_config)
 
     with open(args.output_directory + "/soc_config.json", "w") as file:
         json.dump(config, file)

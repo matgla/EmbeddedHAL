@@ -16,7 +16,7 @@
 
 execute_process(
     COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generate_linker_script.py
-    --input=${generated_soc_path}/soc_config.json
+    --input=${hal_generated_soc_path}/soc_config.json
     --output=${CMAKE_CURRENT_BINARY_DIR}
     RESULT_VARIABLE rc
 )
