@@ -3,11 +3,7 @@
     "memory": {
         "sections": {
             "flash": {
-                "size": "64K",
-                "parts": [{
-                    "name": "fs_flash",
-                    "size": "10K"
-                }]
+                "size": "64K"
             },
             "ram": {
                 "size": "20K"
