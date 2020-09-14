@@ -21,10 +21,14 @@ execute_process(
     RESULT_VARIABLE rc
 )
 
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generate_linker_script.py)
+
 if (${rc})
     message (FATAL_ERROR "Linker script generation failure")
 endif ()
 
 set (linker_script ${CMAKE_CURRENT_BINARY_DIR}/linker_script.ld CACHE INTERNAL "" FORCE)
 set (linker_scripts_directory ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "" FORCE)
+
+include (${CMAKE_CURRENT_BINARY_DIR}/memory_config.cmake)
 

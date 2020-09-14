@@ -142,5 +142,9 @@ def main():
     print(rendered)
     with open(args.output + "/linker_script.ld", "w") as output:
         output.write(rendered)
+    with open(args.output + "/memory_config.cmake", "w") as output:
+        for section in sections:
+            print (section)
+            output.write("set(" + section["name"] + "_" + "size" + " " + section["length"] + " CACHE INTERNAL \"\" FORCE)\n")
 
 main()
