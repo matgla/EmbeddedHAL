@@ -1,0 +1,15 @@
+MEMORY
+{
+    {% for item in sections[:-1] %}{{ item.name.upper() }} ({{ item.access }}) : ORIGIN = {{ item.address }}, LENGTH = {{ item.length }},
+    {% endfor %}{{ sections[-1].name.upper() }} ({{ sections[-1].access }}) : ORIGIN = {{ sections[-1].address }}, LENGTH = {{ sections[-1].length }}
+}
+
+_heap_size = {{ heap }};
+_stack_size = {{ stack }};
+
+{% for item in sections %}
+_{{ item.name.lower() }}_start = ORIGIN({{ item.name.upper() }});
+_{{ item.name.lower() }}_end = ORIGIN({{ item.name.upper() }}) + LENGTH({{ item.name.upper() }});
+{% endfor %}
+
+INCLUDE devices/arm/stm32/stm32_common.ld

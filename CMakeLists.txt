@@ -5,6 +5,8 @@ if (HAL_ENABLE_ST)
     set (ENABLE_SEMIHOSTING ON)
 endif()
 
+add_subdirectory(socs)
+
 add_subdirectory(src)
 enable_language(C CXX ASM)
 add_subdirectory(interface/hal/memory)
