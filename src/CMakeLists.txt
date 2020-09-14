@@ -107,5 +107,5 @@ add_device_hal_library(hal_device_library)
 
 add_library(hal INTERFACE)
 
-target_link_libraries(hal INTERFACE ${hal_device_library} hal_flags)
+target_link_libraries(hal INTERFACE hal_interface ${hal_device_library} hal_flags)
 
