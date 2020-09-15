@@ -1,0 +1,8 @@
+{
+    "memory": {
+        "flash": {
+            "offset": "100"
+        }
+    },
+    "ram": "true"
+}

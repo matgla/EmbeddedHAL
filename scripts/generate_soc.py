@@ -71,6 +71,7 @@ def get_all_configs(soc, input_directory, user_directory):
     if base_config is None:
         sys.exit(-1)
 
+    print ("append base: ", base_config)
     configs.append(base_config)
     while not next_config is None:
         if "parent" in configs[-1]:
@@ -118,9 +119,13 @@ def get_all_configs(soc, input_directory, user_directory):
 def merge(old, new):
     for k in new:
         if k in old:
+            print (old[k])
             if isinstance(old[k], dict):
+                print (old[k], "instance")
                 merge(old[k], new[k])
             else:
+                print (old[k], new[k])
+
                 old[k] = new[k]
         else:
             old[k] = new[k]
@@ -146,16 +151,21 @@ def main():
 
     configs = get_all_configs(args.soc, args.input_directory, args.user_directory)
     config = {}
-    for c in configs:
-        merge(config, c)
+    for c in range(0, len(configs)):
+        print ("merge: ", config)
+        print ("with: ", c)
+        merge(config, configs[-c - 1])
 
-    if "user_configs" in args:
+    if not args.user_configs is None:
         for config_path in args.user_configs.split(';'):
             with open(config_path) as cfg:
+                processed_files.append(config_path)
                 user_config = json.loads(cfg.read())
                 print("User cfg: ", user_config)
                 merge(config, user_config)
 
+    if "parent" in config:
+        del config["parent"]
     with open(args.output_directory + "/soc_config.json", "w") as file:
         json.dump(config, file)
     cmake_soc_file = args.output_directory + "/soc_config.cmake"

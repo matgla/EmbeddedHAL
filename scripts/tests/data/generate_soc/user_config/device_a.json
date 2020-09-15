@@ -1,0 +1,9 @@
+{
+    "memory": {
+        "flash": {
+            "type": "nand"
+        },
+        "array": [3, 4]
+    },
+    "test": "a"
+}
