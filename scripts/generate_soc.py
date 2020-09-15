@@ -141,8 +141,6 @@ def write_node(node, prefix, file):
             write_node(node[key], pref, file)
 
 def main():
-    print("Searching: " + args.soc)
-
     if not os.path.exists(args.output_directory):
         os.makedirs(args.output_directory)
 
@@ -166,4 +164,5 @@ def main():
         for file in processed_files:
             soc_config.write("set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS " + str(file) + ")\n")
 
-main()
+if __name__ == '__main__':
+    main()

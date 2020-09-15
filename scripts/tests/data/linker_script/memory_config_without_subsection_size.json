@@ -1,0 +1,22 @@
+{
+    "memory": {
+        "sections": {
+            "flash": {
+                "size": "10K",
+                "address": "0x08000000",
+                "access": "rx",
+                "subsections": [
+                    {
+                        "name": "fs_flash"
+                    }
+                ]
+            }
+        },
+        "heap": {
+            "size": "5K"
+        },
+        "stack": {
+            "size": "7K"
+        }
+    }
+}

@@ -1,0 +1,42 @@
+{
+    "memory": {
+        "sections": {
+            "flash": {
+                "size": "10K",
+                "address": "0x08000000",
+                "access": "rx",
+                "subsections": [
+                    {
+                        "name": "fs_flash",
+                        "size": "5K"
+                    },
+                    {
+                        "name": "kernel_fs",
+                        "size": "2k"
+                    }
+                ]
+            },
+            "ram": {
+                "size": "20K",
+                "address": "0x20000000",
+                "access": "rwx",
+                "subsections": [
+                    {
+                        "name": "ram_sub_1",
+                        "size": "1K"
+                    },
+                    {
+                        "name": "ram_sub_2",
+                        "size": "2k"
+                    }
+                ]
+            }
+        },
+        "heap": {
+            "size": "5K"
+        },
+        "stack": {
+            "size": "7K"
+        }
+    }
+}

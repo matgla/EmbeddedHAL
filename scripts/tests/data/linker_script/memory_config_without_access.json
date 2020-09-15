@@ -1,0 +1,16 @@
+{
+    "memory": {
+        "sections": {
+            "flash": {
+                "size": "10K",
+                "address": "0x08000000"
+            }
+        },
+        "heap": {
+            "size": "5K"
+        },
+        "stack": {
+            "size": "7K"
+        }
+    }
+}

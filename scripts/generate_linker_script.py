@@ -23,7 +23,29 @@ import sys
 import re
 
 from jinja2 import Template, Environment, FileSystemLoader
+from utils.human_readable_size_parser import parse_size, to_kilobytes
+from utils.printers import print_error
 
+LINKER_SCRIPT_TEMPLATE_FILENAME = "linker_script.ld.template"
+
+def get_template():
+    current_path = os.path.dirname(os.path.abspath(__file__))
+    template_loader = FileSystemLoader(current_path)
+    env = Environment(loader = template_loader)
+    return env.get_template(LINKER_SCRIPT_TEMPLATE_FILENAME)
+
+def fetch_config(input_file):
+    with open(input_file) as config_file:
+        return json.loads(config_file.read())
+
+class ConfigValidator:
+    def __init__(self, path):
+        self.path = path
+
+    def check(self, node, key):
+        if not key in node:
+            error = "Failure while processing {path}\n {key} not found under: {obj}.".format(path=self.path, key=key, obj=node)
+            raise RuntimeError(error)
 
 parser = argparse.ArgumentParser(description = "Linker script generator for HAL")
 parser.add_argument("-i", "--input", dest="input", action="store", help="Path to configuration file file", required=True)
@@ -32,98 +54,45 @@ parser.add_argument("-s", "--sections", dest="options", action="store", help="Ad
 
 args, rest = parser.parse_known_args()
 
-size_units = {
-    "B": 1,
-    "KB": 10**3,
-    "K": 10**3,
-    "MB": 10**6,
-    "M": 10**6,
-    "GB": 10**9,
-    "G": 10**9,
-    "TB": 10**12,
-    "T": 10**12
-}
+def get_subsections(value, validator):
+    section_start_address = parse_size(value["address"])
+    section_size = parse_size(value["size"])
+    section_end_address = section_start_address + section_size
+    additional_size = 0
+    previous_address = section_end_address
+    subsections = []
+    for part_value in value["subsections"]:
+        validator.check(part_value, "name")
+        validator.check(part_value, "size")
 
-import re
+        subsection_size = parse_size(part_value["size"])
+        subsection_address = previous_address - subsection_size
+        additional_size = additional_size + subsection_size
+        previous_address = subsection_address
+        subsections.append({
+            "name": part_value["name"],
+            "access": value["access"],
+            "address": hex(subsection_address),
+            "length": to_kilobytes(subsection_size)
+        })
+        if additional_size > section_size:
+            raise RuntimeError("Subsections size higher that section (" + to_kilobytes(additional_size) + " > " + to_kilobytes(section_size) + ")")
+    return subsections, additional_size
 
-# based on https://stackoverflow.com/a/60708339
-units = {
-    "B": 1,
-    "K": 2**10,
-    "KB": 2**10,
-    "M": 2**20,
-    "MB": 2**20,
-    "G": 2**30,
-    "GB": 2**30,
-    "T": 2**40,
-    "TB": 2**40
-}
-
-def parse_size(size):
-    size = size.upper()
-    print("size before: ", size)
-    if not any(i in size for i in 'TGMKB'):
-        if size.find("X"):
-            return int(size, base=16)
-        else:
-            return int(size)
-    print("Size: ", size)
-    if not re.match(r' ', size):
-        print("Inserting space")
-        size = re.sub(r'([KMGT]B?)', r' \1', size)
-    print (size.split())
-    number, unit = [string.strip() for string in size.split()]
-
-    return int(float(number)*units[unit])
-
-def to_kilobytes(size):
-    return str(int(size/1024)) + "K"
-
-def main():
-
-    config = None
-    with open(args.input) as config_file:
-        config = json.loads(config_file.read())
-
-    if config is None:
-        sys.exit(-1)
-
-    current_path = os.path.dirname(os.path.abspath(__file__))
-    template_loader = FileSystemLoader(current_path)
-    env = Environment(loader = template_loader)
-    t = env.get_template("linker_script.ld.template")
-
+def get_sections(config, validator):
     sections = []
-    for section_key in config["memory"]["sections"]:
-        value = config["memory"]["sections"][section_key]
+    for section_key in config["sections"]:
+        value = config["sections"][section_key]
+        validator.check(value, "size")
+        validator.check(value, "address")
+        validator.check(value, "access")
         # if parts exists then section is splitted
         subsections = []
         section_size = parse_size(value["size"])
-        if "parts" in value:
-            section_start_address = parse_size(value["address"])
-            section_size = parse_size(value["size"])
-            section_end_address = section_start_address + section_size
-            print("start: ", hex(section_start_address))
-            print("start: ", hex(section_end_address))
-            additional_size = 0
-            previous_address = section_end_address
+        if "subsections" in value:
+            subsections, subsection_size = get_subsections(value, validator)
+            section_size = section_size - subsection_size
 
-            for part_value in value["parts"]:
-                print ("part: ", part_value)
-                subsection_size = parse_size(part_value["size"])
-                subsection_address = previous_address - subsection_size
-                additional_size = additional_size + subsection_size
-                previous_address = subsection_address
-                subsections.append({
-                    "name": part_value["name"],
-                    "access": value["access"],
-                    "address": hex(subsection_address),
-                    "length": to_kilobytes(subsection_size)
-                })
-                if additional_size > section_size:
-                    raise RuntimeError("Subsections size higher that section (" + to_kilobytes(additional_size) + " > " + to_kilobytes(section_size) + ")")
-
-            section_size = section_size - additional_size
         sections.append({
             "name": section_key,
             "access": value["access"],
@@ -132,19 +101,39 @@ def main():
         })
 
         sections = sections + subsections
+    return sections
 
-    rendered = t.render(
+def main():
+    config = fetch_config(args.input)
+    validator = ConfigValidator(args.input)
+
+    validator.check(config, "memory")
+    validator.check(config["memory"], "sections")
+
+    sections = get_sections(config["memory"], validator)
+
+    memory = config["memory"]
+    validator.check(memory, "heap")
+    validator.check(memory["heap"], "size")
+    validator.check(memory, "stack")
+    validator.check(memory["stack"], "size")
+    heap = hex(parse_size(config["memory"]["heap"]["size"]))
+    stack = hex(parse_size(config["memory"]["stack"]["size"]))
+
+    rendered = get_template().render(
         sections = sections,
-        heap = hex(parse_size(config["memory"]["heap"]["size"])),
-        stack = hex(parse_size(config["memory"]["stack"]["size"]))
+        heap = heap,
+        stack = stack
     )
 
-    print(rendered)
+    if not os.path.exists(args.output):
+        os.makedirs(args.output)
+
     with open(args.output + "/linker_script.ld", "w") as output:
         output.write(rendered)
     with open(args.output + "/memory_config.cmake", "w") as output:
         for section in sections:
-            print (section)
             output.write("set(" + section["name"] + "_" + "size" + " " + section["length"] + " CACHE INTERNAL \"\" FORCE)\n")
 
-main()
+if __name__ == '__main__':
+    main()

@@ -1,0 +1,10 @@
+{
+    "memory": {
+        "heap": {
+            "size": "5K"
+        },
+        "stack": {
+            "size": "7K"
+        }
+    }
+}
