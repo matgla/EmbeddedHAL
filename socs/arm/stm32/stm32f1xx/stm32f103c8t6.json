@@ -15,5 +15,23 @@
         "heap": {
             "size": "8K"
         }
+    },
+    "hal": {
+        "gpio": {
+            "ports": {
+                "A": {
+                    "pins": "0-15",
+                    "rcc": "RCC_APB2ENR_IOPAEN"
+                },
+                "B": {
+                    "pins": "0-15",
+                    "rcc": "RCC_APB2ENR_IOPAEN"
+                },
+                "C": {
+                    "pins": [13],
+                    "rcc": "RCC_APB2ENR_IOPAEN"
+                }
+            }
+        }
     }
 }

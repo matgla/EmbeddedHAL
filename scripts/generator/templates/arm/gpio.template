@@ -14,17 +14,32 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "board.hpp"
+#pragma once
 
-#include <stm32f10x.h>
+#include "hal/gpio/digital_input_output_pin.hpp"
+#include "{{ arch }}/{{ vendor }}/{{ family }}/gpio/{{ family }}_gpio.hpp"
 
-namespace board
+namespace hal
 {
-
-void board_init()
+namespace gpio
 {
-    SystemInit();
+using DigitalInputOutputPin = hal::{{ family }}::gpio::{{ gpio_class }};
 }
+namespace devices
+{
 
-} // namespace board
+/* --------------------- GPIO -------------------------- */
+namespace gpio
+{
 
+{%- for pin in pins %}
+    {% for number in pin.numbers %}
+    using P{{ pin.port_name }}{{ number }} = hal::gpio::DigitalInputOutputPin<GPIO{{ pin.port_name }}_BASE, {{ number }}, {{ pin.rcc_base }}>;
+    {%- endfor -%}
+{% endfor %}
+
+} // namespace gpio
+
+
+} // namespace devices
+} // namespace hal

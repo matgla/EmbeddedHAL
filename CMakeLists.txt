@@ -6,8 +6,8 @@ if (HAL_ENABLE_ST)
 endif()
 
 add_subdirectory(socs)
-
 add_subdirectory(src)
+
 enable_language(C CXX ASM)
 add_subdirectory(interface/hal/memory)
 

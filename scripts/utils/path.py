@@ -1,4 +1,6 @@
-# This file is part of EmbeddedHAL project.
+#!/usr/bin/python3
+
+# This file is part of Embedded HAL project.
 # Copyright (C) 2020 Mateusz Stadnik
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,8 +16,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# Configure SOC
+import os
 
-if (${arch} STREQUAL "ARM")
-    add_subdirectory(arm)
-endif ()
+def make_dir(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+

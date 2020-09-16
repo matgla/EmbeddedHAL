@@ -60,6 +60,43 @@ find_package(EmbeddedCMake REQUIRED)
 include(ConfigureProject)
 enable_language(CXX C ASM)
 
+message("mcu: ${mcu}")
+
+find_package (Python COMPONENTS Interpreter)
+
+message ("${board_configuration_file}")
+set (arguments
+    --board=${board_configuration_file}
+    --input=${PROJECT_SOURCE_DIR}/socs
+    --output=${CMAKE_CURRENT_BINARY_DIR}/generated_soc
+)
+
+set (hal_generated_soc_path ${CMAKE_CURRENT_BINARY_DIR}/generated_soc CACHE INTERNAL "")
+
+if (user_socs_config)
+    set (arguments ${arguments} --user_directory=${user_socs_config})
+endif ()
+
+if (hal_user_config_file)
+    set (arguments ${arguments} --user_configs=${hal_user_config_file})
+endif ()
+
+message ("${arguments}")
+
+execute_process(
+    COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generate_soc.py ${arguments}
+    RESULT_VARIABLE rc
+)
+
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generate_soc.py)
+
+include (${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_config.cmake)
+set (soc_config_path ${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_config.json CACHE INTERNAL "" FORCE)
+
+if (${rc})
+    message (FATAL_ERROR "SOC generation failed")
+endif ()
+
 set (CMAKE_EXECUTABLE_SUFFIX ${CMAKE_EXECUTABLE_SUFFIX})
 
 get_directory_property(has_parent PARENT_DIRECTORY)
@@ -103,9 +140,39 @@ target_link_libraries(hal_interface INTERFACE GSL eul)
 
 add_subdirectory(common)
 
-add_device_hal_library(hal_device_library)
+find_package (Python COMPONENTS Interpreter)
+
+execute_process(
+    COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generate_board.py
+    --input=${soc_config_path}
+    --user_config=${board_configuration_path}
+    --output=${CMAKE_CURRENT_BINARY_DIR}/generated_board
+    RESULT_VARIABLE rc
+)
+
+if (${rc})
+    message (FATAL_ERROR "Can't generate board from: ${soc_config_path}")
+endif ()
+
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generate_board.py)
+
+execute_process(
+    COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generator/generate_soc_library.py
+    --input=${soc_config_path}
+    --output=${CMAKE_CURRENT_BINARY_DIR}/generated_soc
+    RESULT_VARIABLE rc
+)
+
+set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generator/generate_soc_library.py)
+
+if (${rc})
+    message (FATAL_ERROR "Can't generate soc library from: ${soc_config_path}")
+
+endif ()
+
+include (${CMAKE_CURRENT_BINARY_DIR}/generated_board/board.cmake)
 
 add_library(hal INTERFACE)
 
-target_link_libraries(hal INTERFACE hal_interface ${hal_device_library} hal_flags)
+target_link_libraries(hal INTERFACE hal_interface board hal_flags)
 

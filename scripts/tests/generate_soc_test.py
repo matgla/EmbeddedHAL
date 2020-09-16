@@ -16,7 +16,6 @@ class Test(unittest.TestCase):
             shutil.rmtree(Test.output_directory + "/" + out, ignore_errors=True)
 
         command = "python generate_soc.py -s " + soc + " -i tests/data/generate_soc/hal_configs" + " -o " + Test.output_directory + "/" + out
-        print (command)
         out = subprocess.run(command, shell=True, capture_output=True)
 
         if out.stderr and not suppress:
@@ -31,7 +30,7 @@ class Test(unittest.TestCase):
             shutil.rmtree(Test.output_directory + "/" + out, ignore_errors=True)
 
         command = "python generate_soc.py -s " + soc + " -i tests/data/generate_soc/hal_configs " + " -u tests/data/generate_soc/user_config " + " -o " + Test.output_directory + "/" + out
-        print (command)
+        print(command)
         out = subprocess.run(command, shell=True, capture_output=True)
 
         if out.stderr and not suppress:
@@ -49,7 +48,6 @@ class Test(unittest.TestCase):
         + " -u tests/data/generate_soc/user_config " \
         + " -c tests/data/generate_soc/" + override \
         + " -o " + Test.output_directory + "/" + out
-        print (command)
         out = subprocess.run(command, shell=True, capture_output=True)
 
         if out.stderr and not suppress:

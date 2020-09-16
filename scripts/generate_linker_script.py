@@ -25,6 +25,7 @@ import re
 from jinja2 import Template, Environment, FileSystemLoader
 from utils.human_readable_size_parser import parse_size, to_kilobytes
 from utils.printers import print_error
+from utils.path import make_dir
 
 LINKER_SCRIPT_TEMPLATE_FILENAME = "linker_script.ld.template"
 
@@ -126,8 +127,7 @@ def main():
         stack = stack
     )
 
-    if not os.path.exists(args.output):
-        os.makedirs(args.output)
+    make_dir(args.output)
 
     with open(args.output + "/linker_script.ld", "w") as output:
         output.write(rendered)
