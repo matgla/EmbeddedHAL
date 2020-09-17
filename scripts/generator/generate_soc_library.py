@@ -131,6 +131,21 @@ def generate_i2c(config):
     with open(i2c_file, "w") as i2c_file:
         i2c_file.write(rendered)
 
+def generate_cmake(config):
+    template = get_template(config["info"]["arch"].lower(), "cmake")
+    peripherals = ["gpio", "i2c", "usart"]
+    rendered = template.render(
+        arch = config["info"]["arch"].lower(),
+        vendor = config["info"]["vendor"].lower(),
+        family = config["info"]["family"].lower(),
+        soc = config["info"]["mcu"].lower(),
+        peripherals = peripherals,
+        source_path = args.output
+    )
+
+    cmake_file = args.output + "/soc_library.cmake"
+    with open(cmake_file, "w") as cmake_file:
+        cmake_file.write(rendered)
 
 def main():
     with open(args.input) as config_file:
@@ -142,7 +157,7 @@ def main():
     generate_gpio(config)
     generate_usart(config)
     generate_i2c(config)
-
+    generate_cmake(config)
 
 if __name__ == '__main__':
     main()

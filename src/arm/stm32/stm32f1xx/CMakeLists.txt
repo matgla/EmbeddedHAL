@@ -1,3 +1,4 @@
+add_subdirectory(common)
 
 add_library(hal_stm32f1xx STATIC)
 

@@ -125,7 +125,6 @@ add_linker_script()
 include(ConfigureProject)
 enable_language(CXX C ASM)
 
-
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generate_soc.py)
 
 include (${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_config.cmake)
@@ -200,8 +199,11 @@ execute_process(
     RESULT_VARIABLE rc
 )
 
+include (${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_library.cmake)
+add_device_library()
+
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generator/generate_soc_library.py)
-include(${PROJECT_SOURCE_DIR}/scripts/generator/templates/arm/dependencies.cmake)
+include(${PROJECT_SOURCE_DIR}/scripts/dependencies.cmake)
 
 if (${rc})
     message (FATAL_ERROR "Can't generate soc library from: ${soc_config_path}")

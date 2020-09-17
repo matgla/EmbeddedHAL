@@ -30,11 +30,8 @@ target_include_directories(board PUBLIC {{user_board_config_path}})
 target_link_libraries(board
     PUBLIC
         hal_interface
-        hal_devices_{{ arch }}_{{ soc }}
+        hal_{{ soc }}
 )
-
-include(${PROJECT_SOURCE_DIR}/devices/arm/stm32/stm32f1/stm32f103c8t6/configure_stm32f103c8t6.cmake)
-configure_device()
 
 add_library(sysconfig STATIC)
 target_sources(sysconfig PUBLIC
