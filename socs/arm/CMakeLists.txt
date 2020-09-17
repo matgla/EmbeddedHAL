@@ -14,23 +14,27 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-find_package (Python COMPONENTS Interpreter)
+function (add_linker_script)
+    if (NOT ${arch} STREQUAL "ARM")
+        return ()
+    endif ()
+    find_package (Python COMPONENTS Interpreter)
 
-execute_process(
-    COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generate_linker_script.py
-    --input=${soc_config_path}
-    --output=${CMAKE_CURRENT_BINARY_DIR}
-    RESULT_VARIABLE rc
-)
+    execute_process(
+        COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generate_linker_script.py
+        --input=${soc_config_path}
+        --output=${CMAKE_CURRENT_BINARY_DIR}
+        RESULT_VARIABLE rc
+    )
 
-set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generate_linker_script.py)
+    set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generate_linker_script.py)
 
-if (${rc})
-    message (FATAL_ERROR "Linker script generation failure")
-endif ()
+    if (${rc})
+        message (FATAL_ERROR "Linker script generation failure")
+    endif ()
 
-set (linker_script ${CMAKE_CURRENT_BINARY_DIR}/linker_script.ld CACHE INTERNAL "" FORCE)
-set (linker_scripts_directory ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "" FORCE)
+    set (linker_script ${CMAKE_CURRENT_BINARY_DIR}/linker_script.ld CACHE INTERNAL "" FORCE)
+    set (linker_scripts_directory ${CMAKE_CURRENT_BINARY_DIR} CACHE INTERNAL "" FORCE)
 
-include (${CMAKE_CURRENT_BINARY_DIR}/memory_config.cmake)
-
+    include (${CMAKE_CURRENT_BINARY_DIR}/memory_config.cmake)
+endfunction()

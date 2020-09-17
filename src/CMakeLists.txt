@@ -120,6 +120,8 @@ execute_process(
 
 set (soc_config_path ${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_config.json CACHE INTERNAL "" FORCE)
 
+add_linker_script()
+
 include(ConfigureProject)
 enable_language(CXX C ASM)
 
