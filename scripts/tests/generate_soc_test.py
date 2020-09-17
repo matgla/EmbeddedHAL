@@ -11,11 +11,11 @@ class Test(unittest.TestCase):
     output_directory = "tests/tmp/generate_soc"
 
     @staticmethod
-    def execute_script(out, soc, suppress = False):
+    def execute_script(out, board, suppress = False):
         if os.path.exists(Test.output_directory + "/" + out):
             shutil.rmtree(Test.output_directory + "/" + out, ignore_errors=True)
 
-        command = "python generate_soc.py -s " + soc + " -i tests/data/generate_soc/hal_configs" + " -o " + Test.output_directory + "/" + out
+        command = "python generate_soc.py --board=" + board + " -i tests/data/generate_soc/hal_configs" + " -o " + Test.output_directory + "/" + out
         out = subprocess.run(command, shell=True, capture_output=True)
 
         if out.stderr and not suppress:
@@ -25,11 +25,11 @@ class Test(unittest.TestCase):
         return out
 
     @staticmethod
-    def execute_script_with_user_configs(out, soc, suppress = False):
+    def execute_script_with_user_configs(out, board, suppress = False):
         if os.path.exists(Test.output_directory + "/" + out):
             shutil.rmtree(Test.output_directory + "/" + out, ignore_errors=True)
 
-        command = "python generate_soc.py -s " + soc + " -i tests/data/generate_soc/hal_configs " + " -u tests/data/generate_soc/user_config " + " -o " + Test.output_directory + "/" + out
+        command = "python generate_soc.py --board=" + board + " -i tests/data/generate_soc/hal_configs " + " -u tests/data/generate_soc/user_config " + " -o " + Test.output_directory + "/" + out
         print(command)
         out = subprocess.run(command, shell=True, capture_output=True)
 
@@ -40,11 +40,11 @@ class Test(unittest.TestCase):
         return out
 
     @staticmethod
-    def execute_script_with_override(out, soc, override, suppress = False):
+    def execute_script_with_override(out, board, override, suppress = False):
         if os.path.exists(Test.output_directory + "/" + out):
             shutil.rmtree(Test.output_directory + "/" + out, ignore_errors=True)
 
-        command = "python generate_soc.py -s " + soc + " -i tests/data/generate_soc/hal_configs " \
+        command = "python generate_soc.py --board=" + board + " -i tests/data/generate_soc/hal_configs " \
         + " -u tests/data/generate_soc/user_config " \
         + " -c tests/data/generate_soc/" + override \
         + " -o " + Test.output_directory + "/" + out
@@ -58,11 +58,14 @@ class Test(unittest.TestCase):
 
     def test_generate_soc_from_hal_description(self):
         output_name = inspect.currentframe().f_code.co_name
-        self.assertEqual(Test.execute_script(output_name, "device_a").returncode, 0)
+        self.assertEqual(Test.execute_script(output_name, "tests/data/generate_soc/board_a.json").returncode, 0)
 
         with open(self.output_directory + "/" + output_name + "/soc_config.json") as config_file:
             config = json.loads(config_file.read())
             self.assertDictEqual(config, {
+                "info": {
+                    "mcu": "device_a"
+                },
                 "memory": {
                     "flash": {
                         "address": "0x123",
@@ -82,11 +85,14 @@ class Test(unittest.TestCase):
 
     def test_generate_soc_from_user_and_hal_configs(self):
         output_name = inspect.currentframe().f_code.co_name
-        self.assertEqual(Test.execute_script_with_user_configs(output_name, "device_a").returncode, 0)
+        self.assertEqual(Test.execute_script_with_user_configs(output_name, "tests/data/generate_soc/board_a.json").returncode, 0)
 
         with open(self.output_directory + "/" + output_name + "/soc_config.json") as config_file:
             config = json.loads(config_file.read())
             self.assertDictEqual(config, {
+                "info": {
+                    "mcu": "device_a"
+                },
                 "memory": {
                     "flash": {
                         "address": "0x123",
@@ -115,11 +121,14 @@ class Test(unittest.TestCase):
 
     def test_generate_soc_from_user(self):
         output_name = inspect.currentframe().f_code.co_name
-        self.assertEqual(Test.execute_script_with_user_configs(output_name, "device_c").returncode, 0)
+        self.assertEqual(Test.execute_script_with_user_configs(output_name, "tests/data/generate_soc/board_c.json").returncode, 0)
 
         with open(self.output_directory + "/" + output_name + "/soc_config.json") as config_file:
             config = json.loads(config_file.read())
             self.assertDictEqual(config, {
+                "info": {
+                    "mcu": "device_c"
+                },
                 "a": [1, 2, 3],
                 "b": "b"
             })
@@ -133,11 +142,14 @@ class Test(unittest.TestCase):
 
     def test_generate_soc_and_override(self):
         output_name = inspect.currentframe().f_code.co_name
-        self.assertEqual(Test.execute_script_with_override(output_name, "device_a", "override.json").returncode, 0)
+        self.assertEqual(Test.execute_script_with_override(output_name, "tests/data/generate_soc/board_a.json", "override.json").returncode, 0)
 
         with open(self.output_directory + "/" + output_name + "/soc_config.json") as config_file:
             config = json.loads(config_file.read())
             self.assertDictEqual(config, {
+                "info": {
+                    "mcu": "device_a"
+                },
                 "memory": {
                     "flash": {
                         "address": "0x123",
