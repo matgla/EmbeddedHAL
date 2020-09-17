@@ -1,3 +1,19 @@
+
+function (search_inside board_configuration_directory key out)
+file(GLOB_RECURSE jsons_in_board_configuration "${board_configuration_directory}/*.json")
+foreach(file_path ${jsons_in_board_configuration})
+    get_filename_component(file ${file_path} NAME_WE)
+    string (TOLOWER ${file} file)
+    if (${key} STREQUAL ${file})
+        message (STATUS "Found board configuration: ${file_path}")
+        set (${out} ${file_path} PARENT_SCOPE)
+        return()
+endif ()
+endforeach()
+
+
+endfunction()
+
 message (STATUS "Configuring HAL")
 
 include(FetchContent)
@@ -57,14 +73,28 @@ execute_process(
 
 find_package(EmbeddedCMake REQUIRED)
 
-include(ConfigureProject)
-enable_language(CXX C ASM)
-
 message("mcu: ${mcu}")
 
 find_package (Python COMPONENTS Interpreter)
 
-message ("${board_configuration_file}")
+string (TOLOWER ${BOARD} board_lowercased)
+message ("${user_boards_path} ${board_lowercased}")
+if (user_boards_path)
+    message(STATUS "Searching board configuration: ${board_file_glob_expression}")
+    search_inside(${user_boards_path} ${board_lowercased} board_configuration_file)
+endif ()
+
+if (board_configuration_file)
+    message (STATUS "Found user board configuration: ${board_configuration_file}")
+else ()
+    message(STATUS "Searching board configuration: ${board_file_glob_expression}")
+    search_inside(${boards_path} ${board_lowercased} board_configuration_file)
+endif ()
+
+if (NOT board_configuration_file)
+        message(FATAL_ERROR "Can't find configuration file: ${board_file_glob_expression}")
+endif ()
+
 set (arguments
     --board=${board_configuration_file}
     --input=${PROJECT_SOURCE_DIR}/socs
@@ -88,10 +118,15 @@ execute_process(
     RESULT_VARIABLE rc
 )
 
+set (soc_config_path ${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_config.json CACHE INTERNAL "" FORCE)
+
+include(ConfigureProject)
+enable_language(CXX C ASM)
+
+
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generate_soc.py)
 
 include (${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_config.cmake)
-set (soc_config_path ${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_config.json CACHE INTERNAL "" FORCE)
 
 if (${rc})
     message (FATAL_ERROR "SOC generation failed")
@@ -164,6 +199,7 @@ execute_process(
 )
 
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generator/generate_soc_library.py)
+include(${PROJECT_SOURCE_DIR}/scripts/generator/templates/arm/dependencies.cmake)
 
 if (${rc})
     message (FATAL_ERROR "Can't generate soc library from: ${soc_config_path}")
@@ -173,6 +209,8 @@ endif ()
 include (${CMAKE_CURRENT_BINARY_DIR}/generated_board/board.cmake)
 
 add_library(hal INTERFACE)
+
+target_include_directories(board PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/generated_soc)
 
 target_link_libraries(hal INTERFACE hal_interface board hal_flags)
 

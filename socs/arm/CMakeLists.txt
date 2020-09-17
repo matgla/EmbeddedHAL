@@ -14,9 +14,11 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+find_package (Python COMPONENTS Interpreter)
+
 execute_process(
     COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generate_linker_script.py
-    --input=${hal_generated_soc_path}/soc_config.json
+    --input=${soc_config_path}
     --output=${CMAKE_CURRENT_BINARY_DIR}
     RESULT_VARIABLE rc
 )

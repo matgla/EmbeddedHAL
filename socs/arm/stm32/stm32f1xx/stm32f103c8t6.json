@@ -32,6 +32,24 @@
                     "rcc": "RCC_APB2ENR_IOPAEN"
                 }
             }
+        },
+        "usart": {
+            "class": "UsartCommon",
+            "devices": {
+                "1": {
+                    "rx": "PA10",
+                    "tx": "PA9"
+                }
+            }
+        },
+        "i2c": {
+            "class": "",
+            "devices": {
+                "1": {
+                    "scl": "PB6",
+                    "sda": "PB7"
+                }
+            }
         }
     }
 }

@@ -36,17 +36,13 @@ parser.add_argument("-o", "--output", dest="output", action="store", help="Path 
 
 args, rest = parser.parse_known_args()
 
-def main():
-    with open(args.input) as config_file:
-        config = json.loads(config_file.read())
-    print ("GENERATE: ", config)
+def generate_gpio(config):
     template = get_template(config["info"]["arch"].lower(), "gpio")
 
     ports = config["hal"]["gpio"]["ports"]
 
     pins = []
     for port in ports:
-        print (ports[port])
         port_name = port.upper()
         port = ports[port]
         pin = {
@@ -60,25 +56,93 @@ def main():
             max = int(ranges[1]) + 1
             pin["numbers"] = range(min, max)
         else:
-            print ("p: ", port)
             pin["numbers"] = port["pins"]
         pins.append(pin)
 
-    print (pins)
     rendered = template.render(
         arch = config["info"]["arch"].lower(),
         vendor = config["info"]["vendor"].lower(),
         family = config["info"]["family"].lower(),
-        pins = pins
+        pins = pins,
+        gpio_class = config["hal"]["gpio"]["class"]
     )
-    print(rendered)
-
-    if not os.path.exists(args.output):
-        os.makedirs(args.output)
 
     gpio_file = args.output + "/" + config["info"]["mcu"] + "_gpio.hpp"
     with open(gpio_file, "w") as gpio_out:
         gpio_out.write(rendered)
+
+def generate_usart(config):
+    template = get_template(config["info"]["arch"].lower(), "usart")
+
+    usarts_config = config["hal"]["usart"]["devices"]
+
+    usarts = []
+
+    for usart in usarts_config:
+
+        usart_config = {
+            "number": usart,
+            "tx_pin": usarts_config[usart]["tx"],
+            "rx_pin": usarts_config[usart]["rx"]
+        }
+
+        usarts.append(usart_config)
+
+    rendered = template.render(
+        arch = config["info"]["arch"].lower(),
+        vendor = config["info"]["vendor"].lower(),
+        family = config["info"]["family"].lower(),
+        usart_class = config["hal"]["usart"]["class"],
+        soc = config["info"]["mcu"].lower(),
+        usarts = usarts
+    )
+
+    usart_file = args.output + "/" + config["info"]["mcu"] + "_usart.hpp"
+    with open(usart_file, "w") as usart_file:
+        usart_file.write(rendered)
+
+
+def generate_i2c(config):
+    template = get_template(config["info"]["arch"].lower(), "i2c")
+
+    i2cs_config = config["hal"]["i2c"]["devices"]
+
+    i2cs = []
+
+    for i2c in i2cs_config:
+
+        i2c_config = {
+            "number": i2c,
+            "scl": i2cs_config[i2c]["scl"],
+            "sda": i2cs_config[i2c]["sda"]
+        }
+
+        i2cs.append(i2c_config)
+
+    rendered = template.render(
+        arch = config["info"]["arch"].lower(),
+        vendor = config["info"]["vendor"].lower(),
+        family = config["info"]["family"].lower(),
+        soc = config["info"]["mcu"].lower(),
+        i2cs = i2cs
+    )
+
+    i2c_file = args.output + "/" + config["info"]["mcu"] + "_i2c.hpp"
+    with open(i2c_file, "w") as i2c_file:
+        i2c_file.write(rendered)
+
+
+def main():
+    with open(args.input) as config_file:
+        config = json.loads(config_file.read())
+
+    if not os.path.exists(args.output):
+        os.makedirs(args.output)
+
+    generate_gpio(config)
+    generate_usart(config)
+    generate_i2c(config)
+
 
 if __name__ == '__main__':
     main()

@@ -96,17 +96,11 @@ def merge(old, new):
 
     for k in new:
         if k in old:
-            print (old[k])
             if isinstance(old[k], dict):
-                print (old[k], "instance")
                 merge(old[k], new[k])
             else:
-                print ("update: ", old[k], new[k])
-
                 old[k] = new[k]
         else:
-            print ("update: ", new[k])
-
             old[k] = new[k]
 
     return old
@@ -145,6 +139,7 @@ def main():
     make_dir(args.output_directory)
     with open(args.board) as board_file:
         board = json.loads(board_file.read())
+    processed_files.append(args.board)
     configs = get_all_configs(board["info"]["mcu"], args.input_directory, args.user_directory)
     config = merge_configs(configs)
     config = merge(board, config)
@@ -158,6 +153,9 @@ def main():
     cmake_soc_file = args.output_directory + "/soc_config.cmake"
     with open(cmake_soc_file, "w") as soc_config:
         write_node(config, "", soc_config)
+        soc_config.write("set (board_configuration_path {board_configuration_path} CACHE INTERNAL \"\" FORCE)\n".format(
+            board_configuration_path = Path(processed_files[0]).parent
+        ))
         for file in processed_files:
             soc_config.write("set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS " + str(file) + ")\n")
 

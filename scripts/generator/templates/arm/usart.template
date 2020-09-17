@@ -16,31 +16,31 @@
 
 #pragma once
 
-#include "hal/gpio/digital_input_output_pin.hpp"
-#include "{{ arch }}/{{ vendor }}/{{ family }}/gpio/{{ family }}_gpio.hpp"
+#include "hal/interfaces/usart.hpp"
+#include "{{ arch }}/{{ vendor }}/{{ family }}/interfaces/{{ family }}_usart.hpp"
+#include "{{ soc }}_gpio.hpp"
 
 namespace hal
 {
-namespace gpio
+namespace interfaces
 {
-template <uint32_t port, uint32_t pin, uint32_t rcc_mask>
-using DigitalInputOutputPin = hal::{{ family }}::gpio::{{ gpio_class }}<port, pin, rcc_mask>;
+    using Usart = hal::{{ family }}::interfaces::{{ usart_class }};
 }
+
 namespace devices
 {
-
-/* --------------------- GPIO -------------------------- */
-namespace gpio
+namespace interfaces
 {
 
-{%- for pin in pins %}
-    {% for number in pin.numbers %}
-    using P{{ pin.port_name }}{{ number }} = hal::gpio::DigitalInputOutputPin<GPIO{{ pin.port_name }}_BASE, {{ number }}, {{ pin.rcc_base }}>;
-    {%- endfor -%}
+{%- for usart in usarts %}
+    using Usart{{ usart.number }} = hal::{{ family }}::interfaces::Usart{{ usart.number }}<
+        hal::devices::gpio::{{ usart.rx_pin }},
+        hal::devices::gpio::{{ usart.tx_pin }},
+        hal::{{ family }}::interfaces::Usart{{ usart.number }}Mapping::Standard
+    >;
 {% endfor %}
 
-} // namespace gpio
-
-
+} // namespace interfaces
 } // namespace devices
 } // namespace hal
+

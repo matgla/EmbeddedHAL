@@ -48,13 +48,11 @@ def main():
     with open(args.input) as config_file:
         config = json.loads(config_file.read())
 
-    print (config)
     if not os.path.exists(args.output_directory):
         os.makedirs(args.output_directory)
 
     board_path = Path(args.input)
     template = get_template()
-    print("c: ", config)
     rendered = template.render(
         path = get_template_path(),
         board = board_path.name.split('.')[0],

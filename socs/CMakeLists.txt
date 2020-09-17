@@ -16,6 +16,7 @@
 
 # Configure SOC
 
+message ("arch: ${arch}")
 if (${arch} STREQUAL "ARM")
     add_subdirectory(arm)
 endif ()

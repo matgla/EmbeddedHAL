@@ -16,31 +16,32 @@
 
 #pragma once
 
-#include "hal/gpio/digital_input_output_pin.hpp"
-#include "{{ arch }}/{{ vendor }}/{{ family }}/gpio/{{ family }}_gpio.hpp"
+#include "hal/interfaces/i2c.hpp"
+
+#include "arm/stm32/{{ family }}/interfaces/{{ family }}_i2c.hpp"
+#include "{{ soc }}_gpio.hpp"
 
 namespace hal
 {
-namespace gpio
+
+namespace interfaces
 {
-template <uint32_t port, uint32_t pin, uint32_t rcc_mask>
-using DigitalInputOutputPin = hal::{{ family }}::gpio::{{ gpio_class }}<port, pin, rcc_mask>;
-}
+using I2C = hal::{{ family }}::interfaces::I2CCommon;
+} // namespace interfaces
+
 namespace devices
 {
-
-/* --------------------- GPIO -------------------------- */
-namespace gpio
+namespace interfaces
 {
 
-{%- for pin in pins %}
-    {% for number in pin.numbers %}
-    using P{{ pin.port_name }}{{ number }} = hal::gpio::DigitalInputOutputPin<GPIO{{ pin.port_name }}_BASE, {{ number }}, {{ pin.rcc_base }}>;
-    {%- endfor -%}
+{%- for i2c in i2cs %}
+using I2C_{{ i2c.number }} = hal::{{ family }}::interfaces::I2C_{{ i2c.number }}<
+    hal::devices::gpio::{{ i2c.scl }},
+    hal::devices::gpio::{{ i2c.sda }},
+    hal::stm32f1xx::interfaces::I2C{{ i2c.number }}Mapping::Standard>;
 {% endfor %}
 
-} // namespace gpio
-
-
+} // namespace interfaces
 } // namespace devices
 } // namespace hal
+
