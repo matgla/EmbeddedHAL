@@ -8,7 +8,7 @@
 
 extern "C"
 {
-     void USART1_IRQHandler(void);
+    void USART1_IRQHandler(void);
 }
 
 static eul::function<void(uint8_t), sizeof(void*)> usart1_rx = [](uint8_t data) {
@@ -16,6 +16,32 @@ static eul::function<void(uint8_t), sizeof(void*)> usart1_rx = [](uint8_t data) 
 };
 
 void USART1_IRQHandler(void)
+{
+    if (USART1->SR & USART_SR_RXNE)
+    {
+        usart1_rx(USART1->DR);
+    }
+
+    if (USART1->SR & USART_SR_TXE)
+    {
+
+    }
+}
+
+void USART2_IRQHandler(void)
+{
+    if (USART1->SR & USART_SR_RXNE)
+    {
+        usart1_rx(USART1->DR);
+    }
+
+    if (USART1->SR & USART_SR_TXE)
+    {
+
+    }
+}
+
+void USART3_IRQHandler(void)
 {
     if (USART1->SR & USART_SR_RXNE)
     {

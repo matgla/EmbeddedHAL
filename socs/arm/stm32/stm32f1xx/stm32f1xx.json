@@ -18,7 +18,7 @@
     },
     "hal": {
         "gpio": {
-            "class": "StmGpio"
+            "class": "Stm32GpioCommon"
         }
     }
 }
