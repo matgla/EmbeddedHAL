@@ -17,7 +17,6 @@
 #pragma once
 
 #include "hal/gpio/digital_input_output_pin.hpp"
-#include "{{ arch }}/{{ vendor }}/{{ family }}/gpio/{{ family }}_gpio.hpp"
 
 namespace hal
 {

@@ -25,11 +25,15 @@
                 },
                 "B": {
                     "pins": "0-15",
-                    "rcc": "RCC_APB2ENR_IOPAEN"
+                    "rcc": "RCC_APB2ENR_IOPBEN"
                 },
                 "C": {
-                    "pins": [13],
-                    "rcc": "RCC_APB2ENR_IOPAEN"
+                    "pins": "13-15",
+                    "rcc": "RCC_APB2ENR_IOPCEN"
+                },
+                "D": {
+                    "pins": "0-1",
+                    "rcc": "RCC_APB2ENR_IOPDEN"
                 }
             }
         },

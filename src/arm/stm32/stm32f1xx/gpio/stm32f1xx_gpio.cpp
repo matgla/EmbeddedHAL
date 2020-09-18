@@ -127,9 +127,9 @@ constexpr uint8_t get_speed_mask(hal::gpio::Speed s)
 } // namespace
 
 DigitalInputOutputPin::Impl::Impl(uint32_t port, uint32_t pin, uint32_t rcc_mask)
-    : port_(port)
-    , pin_(pin)
+    : pin_(pin)
     , rcc_mask_(rcc_mask)
+    , port_(port)
 {
 }
 
