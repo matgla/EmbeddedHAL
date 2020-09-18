@@ -10,9 +10,8 @@ namespace gpio
 class DigitalInputPin
 {
 public:
-    virtual ~DigitalInputPin() = default;
-    virtual void init(Input mode) = 0;
-    virtual bool read() = 0;
+    void init(Input mode);
+    bool read();
 };
 
 } // namespace gpio

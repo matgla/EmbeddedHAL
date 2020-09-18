@@ -8,6 +8,7 @@
 #include <eul/memory_ptr.hpp>
 
 #include "hal/gpio/gpio_parameters.hpp"
+#include "hal/gpio/digital_input_pin.hpp"
 
 namespace hal
 {
@@ -96,7 +97,14 @@ enum class Function
     Alternate
 };
 
-template <uint32_t port, uint32_t pin, uint32_t rcc_mask>
+void DigitalInputPin::init(const hal::gpio::Input mode)
+{
+        initClocks();
+
+        configurePort(detail::get_mode_mask(mode), 0x0);
+        port_->BSRR = port_->BSRR | (1 << pin);
+}
+
 class Stm32GpioCommon
 {
 public:
