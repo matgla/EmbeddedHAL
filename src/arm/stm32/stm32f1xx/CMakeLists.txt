@@ -9,6 +9,8 @@ target_sources(hal_stm32f1xx
         ${CMAKE_CURRENT_SOURCE_DIR}/interfaces/stm32f1xx_usart.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/interfaces/stm32f1xx_i2c.hpp
 
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/gpio/stm32f1xx_gpio.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/clock/stm32f1xx_clock.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/interfaces/stm32f1xx_usart.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/core/core_stm32.cpp
@@ -16,7 +18,6 @@ target_sources(hal_stm32f1xx
         ${CMAKE_CURRENT_SOURCE_DIR}/core/criticalSection_stm32.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/utils/assert_stm32.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/interfaces/stm32f1xx_i2c.cpp
-
 )
 
 target_include_directories(hal_stm32f1xx

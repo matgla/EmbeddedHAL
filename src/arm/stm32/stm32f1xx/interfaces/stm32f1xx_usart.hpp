@@ -68,20 +68,22 @@ public:
     using OnDataCallback = eul::function<void(const uint8_t), sizeof(void*)>;
     using StreamType = gsl::span<const uint8_t>;
 
-    UsartCommon(uint32_t usart_address)
+    UsartCommon(hal::gpio::DigitalInputOutputPin& rx, hal::gpio::DigitalInputOutputPin& tx, uint32_t usart_address)
         : usart_(usart_address)
+        , rx_(rx)
+        , tx_(tx)
     {
     }
 
     virtual void init(uint32_t baudrate) = 0;
 
-    template <typename RxPin, typename TxPin>
-    constexpr void init(uint32_t bus_frequency, uint32_t baudrate)
+    // template <typename RxPin, typename TxPin>
+    void init(uint32_t bus_frequency, uint32_t baudrate)
     {
-        TxPin::get().init(hal::gpio::Output::OutputPushPull,
+        static_cast<hal::gpio::DigitalInputOutputPin::Impl*>(&tx_)->init(hal::gpio::Output::OutputPushPull,
                                     hal::gpio::Speed::Medium,
-                                    hal::stm32f1xx::gpio::Function::Alternate);
-        RxPin::get().init(hal::gpio::Input::InputFloating);
+                                    hal::gpio::Function::Alternate);
+        rx_.init(hal::gpio::Input::InputFloating);
 
         set_baudrate(bus_frequency, baudrate);
         /* enable tx */
@@ -147,15 +149,17 @@ protected:
 
     bool was_initialized = false;
     eul::memory_ptr<USART_TypeDef> usart_;
+    hal::gpio::DigitalInputOutputPin& rx_;
+    hal::gpio::DigitalInputOutputPin& tx_;
 };
 
-template <typename Rx, typename Tx, Usart1Mapping mapping>
+template <Usart1Mapping mapping>
 class Usart1 : public UsartCommon
 {
 public:
-    using TxPin = Tx;
-    using RxPin = Rx;
-    Usart1() : UsartCommon(USART1_BASE)
+    // using TxPin = Tx;
+    // using RxPin = Rx;
+    Usart1(hal::gpio::DigitalInputOutputPin& rx, hal::gpio::DigitalInputOutputPin& tx) : UsartCommon(rx, tx, USART1_BASE)
     {
 
     }
@@ -163,7 +167,7 @@ public:
     {
         RCC->APB2ENR = RCC->APB2ENR | RCC_APB2ENR_USART1EN;
 
-        UsartCommon::init<RxPin, TxPin>(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
+        UsartCommon::init(hal::stm32f1xx::clock::Clock::get_core_clock(), baudrate);
     }
 
     void set_baudrate(uint32_t baudrate)

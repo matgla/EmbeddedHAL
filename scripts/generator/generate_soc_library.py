@@ -37,8 +37,6 @@ parser.add_argument("-o", "--output", dest="output", action="store", help="Path 
 args, rest = parser.parse_known_args()
 
 def generate_gpio(config):
-    template = get_template(config["info"]["arch"].lower(), "gpio")
-
     ports = config["hal"]["gpio"]["ports"]
 
     pins = []
@@ -59,7 +57,7 @@ def generate_gpio(config):
             pin["numbers"] = port["pins"]
         pins.append(pin)
 
-    rendered = template.render(
+    rendered = get_template(config["info"]["arch"].lower(), "gpio.hpp").render(
         arch = config["info"]["arch"].lower(),
         vendor = config["info"]["vendor"].lower(),
         family = config["info"]["family"].lower(),
@@ -68,6 +66,18 @@ def generate_gpio(config):
     )
 
     gpio_file = args.output + "/" + config["info"]["mcu"] + "_gpio.hpp"
+    with open(gpio_file, "w") as gpio_out:
+        gpio_out.write(rendered)
+
+    rendered = get_template(config["info"]["arch"].lower(), "gpio.cpp").render(
+        arch = config["info"]["arch"].lower(),
+        vendor = config["info"]["vendor"].lower(),
+        family = config["info"]["family"].lower(),
+        pins = pins,
+        gpio_class = config["hal"]["gpio"]["class"]
+    )
+
+    gpio_file = args.output + "/" + config["info"]["mcu"] + "_gpio.cpp"
     with open(gpio_file, "w") as gpio_out:
         gpio_out.write(rendered)
 
@@ -101,6 +111,9 @@ def generate_usart(config):
     with open(usart_file, "w") as usart_file:
         usart_file.write(rendered)
 
+    usart_file = args.output + "/" + config["info"]["mcu"] + "_usart.cpp"
+    with open(usart_file, "w") as usart_file:
+        usart_file.write("")
 
 def generate_i2c(config):
     template = get_template(config["info"]["arch"].lower(), "i2c")
@@ -130,6 +143,10 @@ def generate_i2c(config):
     i2c_file = args.output + "/" + config["info"]["mcu"] + "_i2c.hpp"
     with open(i2c_file, "w") as i2c_file:
         i2c_file.write(rendered)
+
+    i2c_file = args.output + "/" + config["info"]["mcu"] + "_i2c.cpp"
+    with open(i2c_file, "w") as i2c_file:
+        i2c_file.write("")
 
 def generate_cmake(config):
     template = get_template(config["info"]["arch"].lower(), "cmake")

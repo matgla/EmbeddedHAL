@@ -36,8 +36,6 @@ namespace interfaces
 
 {%- for i2c in i2cs %}
 using I2C_{{ i2c.number }} = hal::{{ family }}::interfaces::I2C_{{ i2c.number }}<
-    hal::devices::gpio::{{ i2c.scl }},
-    hal::devices::gpio::{{ i2c.sda }},
     hal::stm32f1xx::interfaces::I2C{{ i2c.number }}Mapping::Standard>;
 {% endfor %}
 

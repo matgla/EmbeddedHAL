@@ -14,33 +14,24 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
-
-#include "hal/gpio/digital_input_output_pin.hpp"
-#include "{{ arch }}/{{ vendor }}/{{ family }}/gpio/{{ family }}_gpio.hpp"
+#include "arm/{{ vendor }}/{{ family }}/gpio/{{ family }}_gpio.hpp"
 
 namespace hal
 {
 namespace gpio
 {
-template <uint32_t port, uint32_t pin, uint32_t rcc_mask>
-using DigitalInputOutputPin = hal::{{ family }}::gpio::{{ gpio_class }}<port, pin, rcc_mask>;
-}
-namespace devices
-{
-
-/* --------------------- GPIO -------------------------- */
-namespace gpio
-{
 
 {%- for pin in pins %}
-    {% for number in pin.numbers %}
-    using P{{ pin.port_name }}{{ number }} = hal::gpio::DigitalInputOutputPin<GPIO{{ pin.port_name }}_BASE, {{ number }}, {{ pin.rcc_base }}>;
-    {%- endfor -%}
+{% for number in pin.numbers %}
+
+DigitalInputOutputPin& P{{ pin.port_name }}{{ number }}()
+{
+    static hal::gpio::DigitalInputOutputPin::Impl P{{ pin.port_name }}{{ number }}_impl(GPIO{{ pin.port_name }}_BASE, {{ number }}, {{ pin.rcc_base }});
+    return P{{ pin.port_name }}{{ number }}_impl;
+}
+
+{%- endfor -%}
 {% endfor %}
 
 } // namespace gpio
-
-
-} // namespace devices
 } // namespace hal

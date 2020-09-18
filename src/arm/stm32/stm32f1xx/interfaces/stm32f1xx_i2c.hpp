@@ -56,18 +56,18 @@ public:
 
     virtual void init() = 0;
 
-    template <typename SCL, typename SDA>
-    constexpr static void init()
+    // template <typename SCL, typename SDA>
+    static void init_()
     {
-        SCL::get().init(
-            hal::gpio::Output::OutputOpenDrain,
-            hal::gpio::Speed::High,
-            hal::stm32f1xx::gpio::Function::Alternate);
+        // SCL::get().init(
+        //     hal::gpio::Output::OutputOpenDrain,
+        //     hal::gpio::Speed::High,
+        //     hal::stm32f1xx::gpio::Function::Alternate);
 
-        SDA::get().init(
-            hal::gpio::Output::OutputOpenDrain,
-            hal::gpio::Speed::High,
-            hal::stm32f1xx::gpio::Function::Alternate);
+        // SDA::get().init(
+        //     hal::gpio::Output::OutputOpenDrain,
+        //     hal::gpio::Speed::High,
+        //     hal::stm32f1xx::gpio::Function::Alternate);
 
         RCC->APB1RSTR = RCC->APB1RSTR | RCC_APB1RSTR_I2C1RST;
         RCC->APB1RSTR = RCC->APB1RSTR & (~RCC_APB1RSTR_I2C1RST);
@@ -179,14 +179,14 @@ private:
     volatile bool waiting_for_dma_write_;
 };
 
-template <typename SCL, typename SDA, I2C1Mapping>
+template <I2C1Mapping>
 class I2C_1 : public I2CCommon
 {
 public:
     void init() override
     {
         RCC->APB1ENR = RCC->APB1ENR | RCC_APB1ENR_I2C1EN;
-        I2CCommon::init<SCL, SDA>();
+        I2CCommon::init_();
     }
 };
 

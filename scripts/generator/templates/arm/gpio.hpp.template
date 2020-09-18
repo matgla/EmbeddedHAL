@@ -1,4 +1,4 @@
-// This file is part of Embedded HAL project.
+// This file is part of EmbeddedHAL project.
 // Copyright (C) 2020 Mateusz Stadnik
 //
 // This program is free software: you can redistribute it and/or modify
@@ -16,24 +16,19 @@
 
 #pragma once
 
-#include "hal/gpio/gpio_parameters.hpp"
+#include "hal/gpio/digital_input_output_pin.hpp"
+#include "{{ arch }}/{{ vendor }}/{{ family }}/gpio/{{ family }}_gpio.hpp"
 
 namespace hal
 {
 namespace gpio
 {
 
-class DigitalInputOutputPin
-{
-public:
-    class Impl;
-
-    void init(const hal::gpio::Input mode);
-    void init(const hal::gpio::Output mode, const hal::gpio::Speed speed);
-    void setHigh();
-    void setLow();
-    bool read() const;
-};
+{%- for pin in pins %}
+{% for number in pin.numbers %}
+DigitalInputOutputPin& P{{ pin.port_name }}{{ number }}();
+{%- endfor -%}
+{% endfor %}
 
 } // namespace gpio
 } // namespace hal

@@ -33,11 +33,9 @@ namespace interfaces
 {
 
 {%- for usart in usarts %}
-    using Usart{{ usart.number }} = hal::{{ family }}::interfaces::Usart{{ usart.number }}<
-        hal::devices::gpio::{{ usart.rx_pin }},
-        hal::devices::gpio::{{ usart.tx_pin }},
+    static inline auto Usart{{ usart.number }} = hal::{{ family }}::interfaces::Usart{{ usart.number }}<
         hal::{{ family }}::interfaces::Usart{{ usart.number }}Mapping::Standard
-    >;
+    >(hal::gpio::{{ usart.rx_pin }}(), hal::gpio::{{ usart.tx_pin }}());
 {% endfor %}
 
 } // namespace interfaces
