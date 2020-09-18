@@ -24,18 +24,23 @@ namespace hal
 {
 namespace interfaces
 {
-    template <typename rx, typename tx, UsartMapping mapping, uint32_t base>
-    using Usart = hal::{{ family }}::interfaces::{{ usart_class }}<rx, tx, mapping, base>;
+    using Usart = hal::{{ family }}::interfaces::{{ usart_class }};
+}
+
+namespace devices
+{
+namespace interfaces
+{
 
 {%- for usart in usarts %}
-    using Usart{{ usart.number }} = hal::{{ family }}::interfaces::UsartCommon<
+    using Usart{{ usart.number }} = hal::{{ family }}::interfaces::Usart{{ usart.number }}<
         hal::devices::gpio::{{ usart.rx_pin }},
         hal::devices::gpio::{{ usart.tx_pin }},
-        hal::interfaces::UsartMapping::Standard,
-        USART{{ usart.number }}_BASE
+        hal::{{ family }}::interfaces::Usart{{ usart.number }}Mapping::Standard
     >;
 {% endfor %}
 
 } // namespace interfaces
+} // namespace devices
 } // namespace hal
 

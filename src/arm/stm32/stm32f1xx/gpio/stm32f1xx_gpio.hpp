@@ -96,18 +96,24 @@ enum class Function
     Alternate
 };
 
-template <uint32_t port, uint32_t pin, uint32_t rcc_mask>
 class Stm32GpioCommon
 {
 public:
-    constexpr static void init(const hal::gpio::Output mode, const hal::gpio::Speed speed)
+    constexpr Stm32GpioCommon(uint32_t port, uint32_t pin, uint32_t rcc_mask)
+        : port_(port)
+        , pin_(pin)
+        , rcc_mask_(rcc_mask)
+    {
+    }
+
+    void init(const hal::gpio::Output mode, const hal::gpio::Speed speed)
     {
         initClocks();
 
         configurePort(detail::get_mode_mask(mode), detail::get_speed_mask(speed));
     }
 
-    constexpr static void init(const hal::gpio::Output mode, const hal::gpio::Speed speed, Function function)
+    void init(const hal::gpio::Output mode, const hal::gpio::Speed speed, Function function)
     {
         if (function == Function::Standard)
         {
@@ -120,48 +126,65 @@ public:
         }
     }
 
-    constexpr static void init(const hal::gpio::Input mode)
+    void init(const hal::gpio::Input mode)
     {
         initClocks();
 
         configurePort(detail::get_mode_mask(mode), 0x0);
-        port_->BSRR = port_->BSRR | (1 << pin);
+        port_->BSRR = port_->BSRR | (1 << pin_);
     }
 
-    constexpr static void setHigh()
+    void setHigh()
     {
-        port_->BSRR = port_->BSRR | (1 << pin);
+        port_->BSRR = port_->BSRR | (1 << pin_);
     }
 
-    constexpr static void setLow()
+    void setLow()
     {
-        port_->BRR = port_->BRR | (1 << pin);
+        port_->BRR = port_->BRR | (1 << pin_);
     }
 
-    constexpr static bool read()
+    bool read()
     {
-        return (port_->IDR & (1 << pin)) !=0;
+        return (port_->IDR & (1 << pin_)) !=0;
     }
 
 private:
-    constexpr static void configurePort(uint8_t mode, uint8_t speed)
+    void configurePort(uint8_t mode, uint8_t speed)
     {
-        if (pin <= 7)
+        if (pin_ <= 7)
         {
-            port_->CRL = detail::get_port_state(port_->CRL, pin, mode, speed);
+            port_->CRL = detail::get_port_state(port_->CRL, pin_, mode, speed);
         }
         else
         {
-            port_->CRH = detail::get_port_state(port_->CRH, pin - 8, mode, speed);
+            port_->CRH = detail::get_port_state(port_->CRH, pin_ - 8, mode, speed);
         }
     }
 
-    constexpr static void initClocks()
+    void initClocks()
     {
-        RCC->APB2ENR = RCC->APB2ENR | rcc_mask;
+        RCC->APB2ENR = RCC->APB2ENR | rcc_mask_;
     }
 
-    inline static eul::memory_ptr<GPIO_TypeDef> port_{port};
+    eul::memory_ptr<GPIO_TypeDef> port_;
+    const uint32_t pin_;
+    const uint32_t rcc_mask_;
+};
+
+template <uint32_t port, uint32_t pin, uint32_t rcc_mask>
+class StmGpio : public Stm32GpioCommon
+{
+public:
+    StmGpio() : Stm32GpioCommon(port, pin, rcc_mask)
+    {
+    }
+
+    static Stm32GpioCommon& get()
+    {
+        static Stm32GpioCommon c(port, pin, rcc_mask);
+        return c;
+    }
 };
 
 } // namespace gpio
