@@ -16,25 +16,29 @@
 
 #pragma once
 
-#include "hal/gpio/gpio_parameters.hpp"
+#include <cstdint>
+
+#include <eul/function.hpp>
 
 namespace hal
 {
-namespace gpio
+namespace clock
 {
 
-class DigitalInputOutputPin
+class Clock
 {
 public:
-    class Impl;
+    using OnCoreClockChangeCallback = eul::function<void(), 2 * sizeof(void*)>;
+    static uint32_t get_core_clock();
 
-    void init(const Input mode, const PullUpPullDown pupd);
-    void init(const Output mode, const Speed speed, const PullUpPullDown pupd);
-    void init(const Alternate mode, const Speed speed, const PullUpPullDown pupd);
-    void setHigh();
-    void setLow();
-    bool read() const;
+    // TODO: add clock source
+    static void set_core_clock(const uint32_t clock);
+
+    static void set_core_clock_change_callback(const OnCoreClockChangeCallback& callback);
+
+private:
+    static OnCoreClockChangeCallback on_core_clock_change_callback_;
 };
 
-} // namespace gpio
+} // namespace clock
 } // namespace hal

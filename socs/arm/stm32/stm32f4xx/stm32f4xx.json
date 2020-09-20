@@ -1,0 +1,24 @@
+{
+    "info": {
+        "family": "STM32F4xx",
+        "arch": "ARM",
+        "vendor": "STM32"
+    },
+    "memory": {
+        "sections": {
+            "flash": {
+                "address": "0x08000000",
+                "access": "rx"
+            },
+            "ram": {
+                "address": "0x20000000",
+                "access": "rwx"
+            }
+        }
+    },
+    "hal": {
+        "gpio": {
+            "class": "StmGpio"
+        }
+    }
+}

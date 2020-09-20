@@ -14,27 +14,37 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
 
-#include "hal/gpio/gpio_parameters.hpp"
+#include "arm/stm32/stm32f4xx/clock/stm32f4xx_clock.hpp"
+
+#include <stm32f4xx.h>
+#include <eul/function.hpp>
+#include <eul/utils/unused.hpp>
 
 namespace hal
 {
-namespace gpio
+namespace clock
 {
 
-class DigitalInputOutputPin
+Clock::OnCoreClockChangeCallback Clock::on_core_clock_change_callback_ = []() {};
+
+
+uint32_t Clock::get_core_clock()
 {
-public:
-    class Impl;
+    return SystemCoreClock;
+}
 
-    void init(const Input mode, const PullUpPullDown pupd);
-    void init(const Output mode, const Speed speed, const PullUpPullDown pupd);
-    void init(const Alternate mode, const Speed speed, const PullUpPullDown pupd);
-    void setHigh();
-    void setLow();
-    bool read() const;
-};
+void Clock::set_core_clock(const uint32_t clock)
+{
+    UNUSED1(clock);
+    on_core_clock_change_callback_();
+}
 
-} // namespace gpio
+void Clock::set_core_clock_change_callback(const OnCoreClockChangeCallback& callback)
+{
+    on_core_clock_change_callback_ = callback;
+}
+
+
+} // namespace clock
 } // namespace hal

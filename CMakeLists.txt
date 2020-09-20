@@ -8,6 +8,11 @@ endif()
 add_subdirectory(socs)
 add_subdirectory(src)
 
+string (TOLOWER "${arch}" arch_l)
+string (TOLOWER "${mcu}" mcu_l)
+string (TOLOWER "${vendor}" vendor_l)
+string (TOLOWER "${family}" family_l)
+target_include_directories(stm32 PUBLIC ${PROJECT_SOURCE_DIR}/socs/${arch_l}/${vendor_l}/${family_l}/${mcu_l})
 enable_language(C CXX ASM)
 add_subdirectory(interface/hal/memory)
 

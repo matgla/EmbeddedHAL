@@ -1,12 +1,12 @@
 {
-    "parent": "stm32f1xx",
+    "parent": "stm32f4xx",
     "memory": {
         "sections": {
             "flash": {
-                "size": "64K"
+                "size": "512K"
             },
             "ram": {
-                "size": "20K"
+                "size": "128K"
             }
         },
         "stack": {
@@ -21,19 +21,19 @@
             "ports": {
                 "A": {
                     "pins": "0-15",
-                    "rcc": "RCC_APB2ENR_IOPAEN"
+                    "rcc": "RCC_AHB1ENR_GPIOAEN_Msk"
                 },
                 "B": {
                     "pins": "0-15",
-                    "rcc": "RCC_APB2ENR_IOPBEN"
+                    "rcc": "RCC_AHB1ENR_GPIOBEN_Msk"
                 },
                 "C": {
                     "pins": "13-15",
-                    "rcc": "RCC_APB2ENR_IOPCEN"
+                    "rcc": "RCC_AHB1ENR_GPIOCEN_Msk"
                 },
-                "D": {
+                "H": {
                     "pins": "0-1",
-                    "rcc": "RCC_APB2ENR_IOPDEN"
+                    "rcc": "RCC_AHB1ENR_GPIOHEN_Msk"
                 }
             }
         },
@@ -49,10 +49,6 @@
         "i2c": {
             "class": "",
             "devices": {
-                "1": {
-                    "scl": "PB6",
-                    "sda": "PB7"
-                }
             }
         }
     }

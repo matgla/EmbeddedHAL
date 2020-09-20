@@ -1,3 +1,18 @@
+// This file is part of Embedded HAL project.
+// Copyright (C) 2020 Mateusz Stadnik
+//
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #pragma once
 
@@ -6,7 +21,7 @@
 
 #include <gsl/span>
 
-// #include <stm32f4xx.h>
+#include <stm32f4xx.h>
 
 #include <eul/function.hpp>
 #include <eul/memory_ptr.hpp>
@@ -14,27 +29,13 @@
 #include "hal/interfaces/usart.hpp"
 #include "hal/clock/clock.hpp"
 #include "hal/gpio/digital_input_output_pin.hpp"
-
-inline void set_rx(const eul::function<void(uint8_t), sizeof(void*)>& callback)
-{
-    static_cast<void>(callback);
-}
+#include "arm/stm32/stm32f4xx/gpio/stm32f4xx_gpio.hpp"
+#include "arm/stm32/stm32f4xx/clock/stm32f4xx_clock.hpp"
 
 namespace hal
 {
-namespace stm32f4xx
-{
 namespace interfaces
 {
-
-struct UsartConfig
-{
-    const uint32_t tx_pin;
-    const uint32_t rx_pin;
-    const uint32_t cts_pin;
-    const uint32_t rts_pin;
-    const uint32_t ct_pin;
-};
 
 enum class Usart1Mapping
 {
@@ -53,107 +54,32 @@ enum class Usart3Mapping
     Alternate
 };
 
-template <typename Rx, typename Tx, typename Cts = void, typename Rts = void, typename Ct = void>
-struct Pinout
-{
-    using RxPin  = Rx;
-    using TxPin  = Tx;
-    using CtsPin = Cts;
-    using RtsPin = Rts;
-    using CtPin  = Ct;
-};
-
-class UsartCommon
+class Usart::Impl : public Usart
 {
 public:
-    using OnDataCallback = eul::function<void(const uint8_t), sizeof(void*)>;
-    using StreamType = gsl::span<const uint8_t>;
+    Impl(gpio::DigitalInputOutputPin& rx, gpio::DigitalInputOutputPin& tx, uint32_t usart_address);
 
-    UsartCommon(uint32_t usart_address)
-    {
-        static_cast<void>(usart_address);
-    }
+    void init(const uint32_t baudrate);
+    void set_baudrate(const uint32_t baudrate);
 
-    virtual void init(uint32_t baudrate) = 0;
+    void write(const StreamType& data);
+    void write(const std::string_view& data);
 
-    template <typename RxPin, typename TxPin>
-    constexpr void init(uint32_t bus_frequency, uint32_t baudrate)
-    {
-        static_cast<void>(bus_frequency);
-        static_cast<void>(baudrate);
-    }
+    void on_data(const OnDataCallback& callback);
+    void on_sent(const OnSentCallback& callback);
 
+private:
+    void write(const char byte);
+    void set_baudrate(const uint32_t bus_frequency, const uint32_t baudrate);
+    void init(const uint32_t bus_frequency, const uint32_t baudrate);
+    void wait_for_tx();
 
-
-    void set_baudrate(uint32_t bus_frequency, uint32_t baudrate)
-    {
-        static_cast<void>(bus_frequency);
-        static_cast<void>(baudrate);
-    }
-
-    void write(const char byte)
-    {
-        static_cast<void>(byte);
-        wait_for_tx();
-
-        if (!was_initialized)
-        {
-            return;
-        }
-        wait_for_tx();
-    }
-
-    void write(const gsl::span<const uint8_t>& data)
-    {
-        for (const auto byte : data)
-        {
-            write(byte);
-        }
-    }
-
-    void write(const std::string_view& data)
-    {
-        for (const auto byte : data)
-        {
-            write(byte);
-        }
-    }
-
-    void on_data(const OnDataCallback& callback)
-    {
-        set_rx(callback);
-    }
-
-protected:
-    void wait_for_tx()
-    {
-    }
-
-    bool was_initialized = false;
-    // eul::memory_ptr<USART_TypeDef> usart_;
+    eul::memory_ptr<USART_TypeDef> usart_;
+    hal::gpio::DigitalInputOutputPin& rx_;
+    hal::gpio::DigitalInputOutputPin& tx_;
+    Usart::OnDataCallback rx_callback_;
+    Usart::OnSentCallback tx_callback_;
 };
-
-template <typename Rx, typename Tx, Usart1Mapping mapping>
-class Usart1 : public UsartCommon
-{
-public:
-    using TxPin = Tx;
-    using RxPin = Rx;
-    Usart1() : UsartCommon(0)
-    {
-
-    }
-    void init(uint32_t baudrate) override
-    {
-
-    }
-
-    void set_baudrate(uint32_t baudrate)
-    {
-    }
-};
-
 
 } // namespace interfaces
-} // namespace stm32f4xx
 } // namespace hal

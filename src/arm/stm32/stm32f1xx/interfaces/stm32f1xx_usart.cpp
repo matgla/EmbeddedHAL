@@ -99,7 +99,7 @@ struct get_usart_number<UART4_BASE>
 template <>
 struct get_usart_number<UART5_BASE>
 {
-    constexpr static int number = 4;
+    constexpr static int number = 5;
 };
 
 template <uint32_t usart_address>
