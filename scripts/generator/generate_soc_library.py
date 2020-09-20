@@ -82,8 +82,6 @@ def generate_gpio(config):
         gpio_out.write(rendered)
 
 def generate_usart(config):
-    template = get_template(config["info"]["arch"].lower(), "usart")
-
     usarts_config = config["hal"]["usart"]["devices"]
 
     usarts = []
@@ -98,7 +96,7 @@ def generate_usart(config):
 
         usarts.append(usart_config)
 
-    rendered = template.render(
+    rendered = get_template(config["info"]["arch"].lower(), "usart.hpp").render(
         arch = config["info"]["arch"].lower(),
         vendor = config["info"]["vendor"].lower(),
         family = config["info"]["family"].lower(),
@@ -111,9 +109,18 @@ def generate_usart(config):
     with open(usart_file, "w") as usart_file:
         usart_file.write(rendered)
 
+    rendered = get_template(config["info"]["arch"].lower(), "usart.cpp").render(
+        arch = config["info"]["arch"].lower(),
+        vendor = config["info"]["vendor"].lower(),
+        family = config["info"]["family"].lower(),
+        usart_class = config["hal"]["usart"]["class"],
+        soc = config["info"]["mcu"].lower(),
+        usarts = usarts
+    )
+
     usart_file = args.output + "/" + config["info"]["mcu"] + "_usart.cpp"
     with open(usart_file, "w") as usart_file:
-        usart_file.write("")
+        usart_file.write(rendered)
 
 def generate_i2c(config):
     template = get_template(config["info"]["arch"].lower(), "i2c")

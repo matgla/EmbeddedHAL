@@ -1,29 +1,33 @@
-// #pragma once
+#pragma once
 
-// #include <cstdint>
-// #include <string_view>
+#include <cstdint>
+#include <string_view>
 
-// #include <gsl/span>
-// #include <eul/function.hpp>
+#include <gsl/span>
 
+#include <eul/function.hpp>
 
-// namespace hal
-// {
-// namespace interfaces
-// {
+namespace hal
+{
+namespace interfaces
+{
 
-// class Usart
-// {
-// public:
-//     using StreamType = gsl::span<const uint8_t>;
-//     using OnDataCallback = eul::function<void(const uint8_t), sizeof(void*)>;
+class Usart
+{
+public:
+    class Impl;
 
-//     virtual void init(uint32_t baudrate) = 0;
-//     virtual void set_baudrate(uint32_t baudrate) = 0;
-//     virtual void write(const StreamType& data) = 0;
-//     virtual void write(const std::string_view& str) = 0;
-//     virtual void on_data(const OnDataCallback& callback) = 0;
-// };
+    using StreamType = gsl::span<const uint8_t>;
+    using OnDataCallback = eul::function<void(const uint8_t), sizeof(void*)>;
+    using OnSentCallback = eul::function<void(), sizeof(void*)>;
 
-// } // namespace interfaces
-// } // namespace hal
+    void init(const uint32_t baudrate);
+    void set_baudrate(const uint32_t baudrate);
+    void write(const StreamType& data);
+    void write(const std::string_view& str);
+    void on_data(const OnDataCallback& callback);
+    void on_sent(const OnSentCallback& callback);
+};
+
+} // namespace interfaces
+} // namespace hal

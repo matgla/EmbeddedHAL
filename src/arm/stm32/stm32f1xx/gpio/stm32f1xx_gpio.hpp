@@ -38,20 +38,20 @@ enum class Function
 class DigitalInputOutputPin::Impl : public DigitalInputOutputPin
 {
 public:
-    Impl(uint32_t port, uint32_t pin, uint32_t rcc_mask);
+    Impl(uint32_t port_offset, uint8_t pin, uint8_t rcc_mask);
     void init(const hal::gpio::Input mode);
     void init(const hal::gpio::Output mode, const hal::gpio::Speed speed, Function function);
     void init(const hal::gpio::Output mode, const hal::gpio::Speed speed);
-    void setHigh();
-    void setLow();
+    void set_high();
+    void set_low();
     bool read() const;
 private:
-    void initClocks();
-    void configurePort(uint8_t mode, uint8_t speed);
+    void init_clocks();
+    void configure_port(uint8_t mode, uint8_t speed);
 
-    eul::memory_ptr<GPIO_TypeDef> port_;
-    const uint32_t pin_;
-    const uint32_t rcc_mask_;
+    const uint8_t pin_;
+    const uint8_t rcc_mask_;
+    const uint16_t port_offset_;
 };
 
 } // namespace gpio

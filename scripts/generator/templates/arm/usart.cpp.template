@@ -14,9 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
-
 #include "hal/interfaces/usart.hpp"
+
 #include "{{ arch }}/{{ vendor }}/{{ family }}/interfaces/{{ family }}_usart.hpp"
 #include "{{ soc }}_gpio.hpp"
 
@@ -24,21 +23,19 @@ namespace hal
 {
 namespace interfaces
 {
-    using Usart = hal::{{ family }}::interfaces::{{ usart_class }};
-}
-
-namespace devices
-{
-namespace interfaces
-{
 
 {%- for usart in usarts %}
-    static inline auto Usart{{ usart.number }} = hal::{{ family }}::interfaces::Usart{{ usart.number }}<
-        hal::{{ family }}::interfaces::Usart{{ usart.number }}Mapping::Standard
-    >(hal::gpio::{{ usart.rx_pin }}(), hal::gpio::{{ usart.tx_pin }}());
+Usart& USART_{{ usart.number }}()
+{
+    static hal::interfaces::Usart::Impl usart_impl(
+        hal::gpio::{{ usart.rx_pin }}(), hal::gpio::{{ usart.tx_pin }}(),
+        USART{{ usart.number }}_BASE
+    );
+
+    return usart_impl;
+}
 {% endfor %}
 
 } // namespace interfaces
-} // namespace devices
 } // namespace hal
 

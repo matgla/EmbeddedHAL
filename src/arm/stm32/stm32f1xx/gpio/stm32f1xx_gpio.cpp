@@ -124,26 +124,31 @@ constexpr uint8_t get_speed_mask(hal::gpio::Speed s)
     return 0x0;
 }
 
+constexpr eul::memory_ptr<GPIO_TypeDef> port(uint32_t port_offset)
+{
+    return eul::memory_ptr<GPIO_TypeDef>(APB2PERIPH_BASE | port_offset);
+}
+
 } // namespace
 
-DigitalInputOutputPin::Impl::Impl(uint32_t port, uint32_t pin, uint32_t rcc_mask)
+DigitalInputOutputPin::Impl::Impl(uint32_t port, uint8_t pin, uint8_t rcc_mask)
     : pin_(pin)
     , rcc_mask_(rcc_mask)
-    , port_(port)
+    , port_offset_(port & 0xFFFF)
 {
 }
 
 void DigitalInputOutputPin::Impl::init(const hal::gpio::Input mode)
 {
-    initClocks();
-    configurePort(get_mode_mask(mode), 0x0);
-    port_->BSRR = port_->BSRR | (1 << pin_);
+    init_clocks();
+    configure_port(get_mode_mask(mode), 0x0);
+    port(port_offset_)->BSRR = port(port_offset_)->BSRR | (1 << pin_);
 }
 
 void DigitalInputOutputPin::Impl::init(const hal::gpio::Output mode, const hal::gpio::Speed speed)
 {
-    initClocks();
-    configurePort(get_mode_mask(mode), get_speed_mask(speed));
+    init_clocks();
+    configure_port(get_mode_mask(mode), get_speed_mask(speed));
 }
 
 void DigitalInputOutputPin::Impl::init(const hal::gpio::Output mode, const hal::gpio::Speed speed, Function function)
@@ -154,40 +159,40 @@ void DigitalInputOutputPin::Impl::init(const hal::gpio::Output mode, const hal::
     }
     else if (function == Function::Alternate)
     {
-        initClocks();
-        configurePort(get_alternate_mode_mask(mode), get_speed_mask(speed));
+        init_clocks();
+        configure_port(get_alternate_mode_mask(mode), get_speed_mask(speed));
     }
 }
 
-void DigitalInputOutputPin::Impl::setHigh()
+void DigitalInputOutputPin::Impl::set_high()
 {
-    port_->BSRR = port_->BSRR | (1 << pin_);
+    port(port_offset_)->BSRR = port(port_offset_)->BSRR | (1 << pin_);
 }
 
-void DigitalInputOutputPin::Impl::setLow()
+void DigitalInputOutputPin::Impl::set_low()
 {
-    port_->BRR = port_->BRR | (1 << pin_);
+    port(port_offset_)->BRR = port(port_offset_)->BRR | (1 << pin_);
 }
 
 bool DigitalInputOutputPin::Impl::read() const
 {
-    return (port_->IDR & (1 << pin_)) !=0;
+    return (port(port_offset_)->IDR & (1 << pin_)) !=0;
 }
 
-void DigitalInputOutputPin::Impl::initClocks()
+void DigitalInputOutputPin::Impl::init_clocks()
 {
     RCC->APB2ENR = RCC->APB2ENR | rcc_mask_;
 }
 
-void DigitalInputOutputPin::Impl::configurePort(uint8_t mode, uint8_t speed)
+void DigitalInputOutputPin::Impl::configure_port(uint8_t mode, uint8_t speed)
 {
     if (pin_ <= 7)
     {
-        port_->CRL = get_port_state(port_->CRL, pin_, mode, speed);
+        port(port_offset_)->CRL = get_port_state(port(port_offset_)->CRL, pin_, mode, speed);
     }
     else
     {
-        port_->CRH = get_port_state(port_->CRH, pin_ - 8, mode, speed);
+        port(port_offset_)->CRH = get_port_state(port(port_offset_)->CRH, pin_ - 8, mode, speed);
     }
 }
 
