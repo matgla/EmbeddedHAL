@@ -31,8 +31,8 @@ public:
     void init(const Input mode, const PullUpPullDown pupd);
     void init(const Output mode, const Speed speed, const PullUpPullDown pupd);
     void init(const Alternate mode, const Speed speed, const PullUpPullDown pupd);
-    void setHigh();
-    void setLow();
+    void set_high();
+    void set_low();
     bool read() const;
 };
 

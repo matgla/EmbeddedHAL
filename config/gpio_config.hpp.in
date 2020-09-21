@@ -1,3 +1,0 @@
-#pragma once 
-
-#include "@path_to_specific_gpio_config@"

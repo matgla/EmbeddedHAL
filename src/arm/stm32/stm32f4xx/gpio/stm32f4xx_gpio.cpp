@@ -42,14 +42,14 @@ void DigitalInputOutputPin::init(const Alternate mode, const Speed speed, const 
     impl->init(mode, speed, pupd);
 }
 
-void DigitalInputOutputPin::setHigh()
+void DigitalInputOutputPin::set_high()
 {
-    impl->setHigh();
+    impl->set_high();
 }
 
-void DigitalInputOutputPin::setLow()
+void DigitalInputOutputPin::set_low()
 {
-    impl->setLow();
+    impl->set_low();
 }
 
 bool DigitalInputOutputPin::read() const

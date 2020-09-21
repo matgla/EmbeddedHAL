@@ -1,0 +1,133 @@
+{
+    "parent": "stm32f4xx",
+    "memory": {
+        "sections": {
+            "flash": {
+                "size": "2048K"
+            },
+            "ram": {
+                "size": "192K"
+            },
+            "ccm": {
+                "size": "64K"
+            }
+        },
+        "stack": {
+            "size": "5K"
+        },
+        "heap": {
+            "size": "8K"
+        }
+    },
+    "hal": {
+        "gpio": {
+            "ports": {
+                "A": {
+                    "pins": "0-15",
+                    "rcc": "RCC_AHB1ENR_GPIOAEN_Msk"
+                },
+                "B": {
+                    "pins": "0-15",
+                    "rcc": "RCC_AHB1ENR_GPIOBEN_Msk"
+                },
+                "C": {
+                    "pins": "0-15",
+                    "rcc": "RCC_AHB1ENR_GPIOCEN_Msk"
+                },
+                "D": {
+                    "pins": "0-15",
+                    "rcc": "RCC_AHB1ENR_GPIODEN_Msk"
+                },
+                "E": {
+                    "pins": "0-15",
+                    "rcc": "RCC_AHB1ENR_GPIOEEN_Msk"
+                },
+                "F": {
+                    "pins": "0-15",
+                    "rcc": "RCC_AHB1ENR_GPIOFEN_Msk"
+                },
+                "G": {
+                    "pins": "0-15",
+                    "rcc": "RCC_AHB1ENR_GPIOGEN_Msk"
+                },
+                "H": {
+                    "pins": "0-1",
+                    "rcc": "RCC_AHB1ENR_GPIOHEN_Msk"
+                }
+            }
+        },
+        "usart": {
+            "class": "UsartCommon",
+            "devices": {
+                "1": {
+                    "rx": "PA10",
+                    "tx": "PA9",
+                    "alternate": [
+                        {
+                            "rx": "PB7",
+                            "tx": "PB6"
+                        }
+                    ]
+                },
+                "2": {
+                    "rx": "PA3",
+                    "tx": "PA2",
+                    "alternate": [
+                        {
+                            "rx": "PD6",
+                            "tx": "PD5"
+                        }
+                    ]
+                },
+                "3": {
+                    "rx": "PB11",
+                    "tx": "PB10",
+                    "alternate": [{
+                        "rx": "PC11",
+                        "tx": "PC10"
+                    }, {
+                        "rx": "PD9",
+                        "tx": "PD8"
+                    }]
+                },
+                "4": {
+                    "rx": "PA1",
+                    "tx": "PA0",
+                    "alternate": [{
+                        "rx": "PC11",
+                        "tx": "PC10"
+                    }]
+                },
+                "5": {
+                    "rx": "PD2",
+                    "tx": "PC12"
+                },
+                "6": {
+                    "rx": "PC7",
+                    "tx": "PC6",
+                    "alternate": [{
+                        "rx": "PG9",
+                        "tx": "PG14"
+                    }]
+                },
+                "7": {
+                    "rx": "PE8",
+                    "tx": "PE7",
+                    "alternate": [{
+                        "rx": "PF6",
+                        "tx": "PF7"
+                    }]
+                },
+                "8": {
+                    "rx": "PE0",
+                    "tx": "PE1"
+                }
+            }
+        },
+        "i2c": {
+            "class": "",
+            "devices": {
+            }
+        }
+    }
+}
