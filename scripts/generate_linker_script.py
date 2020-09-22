@@ -80,6 +80,33 @@ def get_subsections(value, validator):
             raise RuntimeError("Subsections size higher that section (" + to_kilobytes(additional_size) + " > " + to_kilobytes(section_size) + ")")
     return subsections, additional_size
 
+
+def get_front_subsections(value, validator):
+    section_start_address = parse_size(value["address"])
+    section_size = parse_size(value["size"])
+    additional_size = 0
+    previous_address = section_start_address
+    previous_size = 0
+    subsections = []
+    for part_value in value["subsections_front"]:
+        validator.check(part_value, "name")
+        validator.check(part_value, "size")
+
+        subsection_size = parse_size(part_value["size"])
+        subsection_address = previous_address + previous_size
+        additional_size = additional_size + subsection_size
+        previous_address = subsection_address
+        previous_size = subsection_size
+        subsections.append({
+            "name": part_value["name"],
+            "access": value["access"],
+            "address": hex(subsection_address),
+            "length": to_kilobytes(subsection_size)
+        })
+        if additional_size > section_size:
+            raise RuntimeError("Subsections size higher that section (" + to_kilobytes(additional_size) + " > " + to_kilobytes(section_size) + ")")
+    return subsections, additional_size
+
 def get_sections(config, validator):
     sections = []
     for section_key in config["sections"]:
@@ -90,6 +117,14 @@ def get_sections(config, validator):
         # if parts exists then section is splitted
         subsections = []
         section_size = parse_size(value["size"])
+
+        front_subsection_size = 0
+        front_subsections = []
+        if "subsections_front" in value:
+            front_subsections, front_subsection_size = get_front_subsections(value, validator)
+            section_size = section_size - front_subsection_size
+
+
         if "subsections" in value:
             subsections, subsection_size = get_subsections(value, validator)
             section_size = section_size - subsection_size
@@ -97,11 +132,11 @@ def get_sections(config, validator):
         sections.append({
             "name": section_key,
             "access": value["access"],
-            "address": value["address"],
+            "address": hex(parse_size(value["address"]) + front_subsection_size),
             "length": to_kilobytes(section_size)
         })
 
-        sections = sections + subsections
+        sections = sections + subsections + front_subsections
     return sections
 
 def main():

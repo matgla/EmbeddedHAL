@@ -3,20 +3,28 @@
     "memory": {
         "sections": {
             "flash": {
-                "size": "2048K"
+                "size": "128K"
             },
             "ram": {
-                "size": "192K"
+                "size": "192K",
+                "subsections_front": [
+                    {
+                        "name": "kernel_ram",
+                        "size": "10K"
+                    }
+                ]
             },
             "ccm": {
-                "size": "64K"
+                "address": "0x10000000",
+                "size": "64K",
+                "access": "rwx"
             }
         },
         "stack": {
             "size": "5K"
         },
         "heap": {
-            "size": "8K"
+            "size": "120K"
         }
     },
     "hal": {
@@ -24,35 +32,35 @@
             "ports": {
                 "A": {
                     "pins": "0-15",
-                    "rcc": "RCC_AHB1ENR_GPIOAEN_Msk"
+                    "rcc": "RCC_AHB1ENR_GPIOAEN"
                 },
                 "B": {
                     "pins": "0-15",
-                    "rcc": "RCC_AHB1ENR_GPIOBEN_Msk"
+                    "rcc": "RCC_AHB1ENR_GPIOBEN"
                 },
                 "C": {
                     "pins": "0-15",
-                    "rcc": "RCC_AHB1ENR_GPIOCEN_Msk"
+                    "rcc": "RCC_AHB1ENR_GPIOCEN"
                 },
                 "D": {
                     "pins": "0-15",
-                    "rcc": "RCC_AHB1ENR_GPIODEN_Msk"
+                    "rcc": "RCC_AHB1ENR_GPIODEN"
                 },
                 "E": {
                     "pins": "0-15",
-                    "rcc": "RCC_AHB1ENR_GPIOEEN_Msk"
+                    "rcc": "RCC_AHB1ENR_GPIOEEN"
                 },
                 "F": {
                     "pins": "0-15",
-                    "rcc": "RCC_AHB1ENR_GPIOFEN_Msk"
+                    "rcc": "RCC_AHB1ENR_GPIOFEN"
                 },
                 "G": {
                     "pins": "0-15",
-                    "rcc": "RCC_AHB1ENR_GPIOGEN_Msk"
+                    "rcc": "RCC_AHB1ENR_GPIOGEN"
                 },
                 "H": {
                     "pins": "0-1",
-                    "rcc": "RCC_AHB1ENR_GPIOHEN_Msk"
+                    "rcc": "RCC_AHB1ENR_GPIOHEN"
                 }
             }
         },
@@ -60,6 +68,7 @@
             "class": "UsartCommon",
             "devices": {
                 "1": {
+                    "type": "USART",
                     "rx": "PA10",
                     "tx": "PA9",
                     "alternate": [
@@ -70,6 +79,7 @@
                     ]
                 },
                 "2": {
+                    "type": "USART",
                     "rx": "PA3",
                     "tx": "PA2",
                     "alternate": [
@@ -80,6 +90,7 @@
                     ]
                 },
                 "3": {
+                    "type": "USART",
                     "rx": "PB11",
                     "tx": "PB10",
                     "alternate": [{
@@ -91,6 +102,7 @@
                     }]
                 },
                 "4": {
+                    "type": "UART",
                     "rx": "PA1",
                     "tx": "PA0",
                     "alternate": [{
@@ -99,10 +111,12 @@
                     }]
                 },
                 "5": {
+                    "type": "UART",
                     "rx": "PD2",
                     "tx": "PC12"
                 },
                 "6": {
+                    "type": "USART",
                     "rx": "PC7",
                     "tx": "PC6",
                     "alternate": [{
@@ -111,6 +125,7 @@
                     }]
                 },
                 "7": {
+                    "type": "UART",
                     "rx": "PE8",
                     "tx": "PE7",
                     "alternate": [{
@@ -119,6 +134,7 @@
                     }]
                 },
                 "8": {
+                    "type": "UART",
                     "rx": "PE0",
                     "tx": "PE1"
                 }

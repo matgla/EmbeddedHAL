@@ -29,7 +29,7 @@ Usart& USART_{{ usart.number }}()
 {
     static hal::interfaces::Usart::Impl usart_impl(
         hal::gpio::{{ usart.rx_pin }}(), hal::gpio::{{ usart.tx_pin }}(),
-        USART{{ usart.number }}_BASE
+        {{ usart.type }}{{ usart.number }}_BASE
     );
 
     return usart_impl;

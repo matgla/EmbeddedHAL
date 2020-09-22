@@ -128,6 +128,7 @@ enable_language(CXX C ASM)
 set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS ${PROJECT_SOURCE_DIR}/scripts/generate_soc.py)
 
 include (${CMAKE_CURRENT_BINARY_DIR}/generated_soc/soc_config.cmake)
+include_directories(${CMAKE_CURRENT_BINARY_DIR}/generated_soc)
 
 if (${rc})
     message (FATAL_ERROR "SOC generation failed")

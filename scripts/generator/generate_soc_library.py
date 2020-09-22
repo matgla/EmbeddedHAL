@@ -91,7 +91,8 @@ def generate_usart(config):
         usart_config = {
             "number": usart,
             "tx_pin": usarts_config[usart]["tx"],
-            "rx_pin": usarts_config[usart]["rx"]
+            "rx_pin": usarts_config[usart]["rx"],
+            "type": usarts_config[usart]["type"]
         }
 
         usarts.append(usart_config)

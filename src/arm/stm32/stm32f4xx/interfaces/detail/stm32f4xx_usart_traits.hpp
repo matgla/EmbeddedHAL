@@ -165,71 +165,71 @@ constexpr uint32_t get_rcc_flag()
 {
     if constexpr (usart_number == 1)
     {
-        #if defined(RCC_APBENR_USART1EN_Msk)
-        return RCC_APBENR_USART1EN_Msk;
+        #if defined(RCC_APB2ENR_USART1EN)
+        return RCC_APB2ENR_USART1EN;
         #endif
     }
 
     if constexpr (usart_number == 2)
     {
-        #if defined(RCC_APB1ENR_USART2EN_Msk)
-        return RCC_APB1ENR_USART2EN_Msk;
+        #if defined(RCC_APB1ENR_USART2EN)
+        return RCC_APB1ENR_USART2EN;
         #endif
     }
 
     if constexpr (usart_number == 3)
     {
-        #if defined(RCC_APB1ENR_USART3EN_Msk)
-        return RCC_APB1ENR_USART3EN_Msk;
+        #if defined(RCC_APB1ENR_USART3EN)
+        return RCC_APB1ENR_USART3EN;
         #endif
     }
 
     if constexpr (usart_number == 4)
     {
-        #if defined(RCC_APB1ENR_UART4EN_Msk)
-        return RCC_APB1ENR_UART4EN_Msk;
+        #if defined(RCC_APB1ENR_UART4EN)
+        return RCC_APB1ENR_UART4EN;
         #endif
     }
 
     if constexpr (usart_number == 5)
     {
-        #if defined(RCC_APB1ENR_UART5EN_Msk)
-        return RCC_APB1ENR_UART5EN_Msk;
+        #if defined(RCC_APB1ENR_UART5EN)
+        return RCC_APB1ENR_UART5EN;
         #endif
     }
 
     if constexpr (usart_number == 6)
     {
-        #if defined(RCC_APB2ENR_USART6EN_Msk)
-        return RCC_APB2ENR_USART6EN_Msk;
+        #if defined(RCC_APB2ENR_USART6EN)
+        return RCC_APB2ENR_USART6EN;
         #endif
     }
 
     if constexpr (usart_number == 7)
     {
-        #if defined(RCC_APB1ENR_UART7EN_Msk)
-        return RCC_APB1ENR_UART7EN_Msk;
+        #if defined(RCC_APB1ENR_UART7EN)
+        return RCC_APB1ENR_UART7EN;
         #endif
     }
 
     if constexpr (usart_number == 8)
     {
-        #if defined(RCC_APB1ENR_UART8EN_Msk)
-        return RCC_APB1ENR_UART8EN_Msk;
+        #if defined(RCC_APB1ENR_UART8EN)
+        return RCC_APB1ENR_UART8EN;
         #endif
     }
 
     if constexpr (usart_number == 9)
     {
-        #if defined(RCC_APB2ENR_UART9EN_Msk)
-        return RCC_APB2ENR_UART9EN_Msk;
+        #if defined(RCC_APB2ENR_UART9EN)
+        return RCC_APB2ENR_UART9EN;
         #endif
     }
 
     if constexpr (usart_number == 10)
     {
-        #if defined(RCC_APB2ENR_UART10EN_Msk)
-        return RCC_APB2ENR_UART10EN_Msk;
+        #if defined(RCC_APB2ENR_UART10EN)
+        return RCC_APB2ENR_UART10EN;
         #endif
     }
 

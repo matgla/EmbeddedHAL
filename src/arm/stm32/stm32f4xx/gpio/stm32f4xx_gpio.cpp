@@ -184,6 +184,7 @@ void DigitalInputOutputPin::Impl::init(const Output mode, const Speed speed, con
 
 void DigitalInputOutputPin::Impl::init(const Alternate mode, const Speed speed, const PullUpPullDown pupd)
 {
+    init_clocks();
     configure_port(0x02, get_type(mode), get_pupdr(pupd), get_speed(speed));
 }
 
