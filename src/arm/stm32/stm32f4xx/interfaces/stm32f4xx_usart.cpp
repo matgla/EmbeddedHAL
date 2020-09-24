@@ -15,25 +15,24 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
+#include <eul/utils/unused.hpp>
 #include "arm/stm32/stm32f4xx/interfaces/stm32f4xx_usart.hpp"
 #include "hal/gpio/digital_input_output_pin.hpp"
 
-#include <eul/utils/unused.hpp>
 
 #include <stm32f4xx.h>
 #include <stm32f4xx_hal_gpio_ex.h>
 #include <stm32f4xx_hal_gpio.h>
-#include <stm32f4xx_hal_dma.h>
-#include <stm32f4xx_hal_uart.h>
 #include <stm32f4xx_hal_rcc.h>
+#include <stm32f4xx_hal_dma.h>
+#include <stm32f4xx_hal_usart.h>
+#include <stm32f4xx_hal_uart.h>
 
 #include <unistd.h>
 
 #include <experimental/type_traits>
 
 #include "arm/stm32/stm32f4xx/interfaces/detail/stm32f4xx_usart_traits.hpp"
-
-#include <stm32f429zit6_gpio.hpp>
 
 namespace
 {
@@ -181,15 +180,12 @@ void handle_usart()
     eul::memory_ptr<USART_TypeDef> usart(usart_address);
     if (usart->SR & USART_SR_RXNE)
     {
-        hal::gpio::PG13().set_low();
         get_rx<get_usart_number<usart_address>::number-1>()(usart->DR);
         usart->SR = ~(USART_SR_RXNE);
     }
 
     if (usart->SR & USART_SR_TXE)
     {
-        hal::gpio::PG14().set_low();
-
         get_tx<get_usart_number<usart_address>::number-1>()();
         usart->SR = ~(USART_SR_TXE);
     }
@@ -436,14 +432,14 @@ Usart::Impl::Impl(hal::gpio::DigitalInputOutputPin& rx, hal::gpio::DigitalInputO
     tx_callbacks_[get_index(usart_address)] = &tx_callback_;
 }
 
-void Usart::Impl::init(const uint32_t baudrate)
-{
-    init(HAL_RCC_GetPCLK2Freq(), baudrate);
-}
-
 void Usart::Impl::set_baudrate(const uint32_t baudrate)
 {
-    set_baudrate(hal::clock::Clock::get_core_clock(), baudrate);
+    set_baudrate(HAL_RCC_GetSysClockFreq(), baudrate);
+}
+
+void Usart::Impl::set_baudrate(const uint32_t bus_frequency, const uint32_t baudrate)
+{
+    usart_->BRR = bus_frequency / baudrate;
 }
 
 void Usart::Impl::write(const gsl::span<const uint8_t>& data)
@@ -478,10 +474,7 @@ void Usart::Impl::write(const char byte)
     usart_->DR = byte;
 }
 
-void Usart::Impl::set_baudrate(const uint32_t bus_frequency, const uint32_t baudrate)
-{
-    usart_->BRR = bus_frequency / baudrate;
-}
+
 
 uint32_t get_alternate_function(uint32_t usart_address)
 {
@@ -521,13 +514,13 @@ uint32_t get_alternate_function(uint32_t usart_address)
     return -1;
 }
 
-void Usart::Impl::init(const uint32_t bus_frequency, const uint32_t baudrate)
+void Usart::Impl::init(const uint32_t baudrate)
 {
     init_rcc(usart_.address());
 
     rx_.init(
         hal::gpio::Alternate::PushPull,
-        hal::gpio::Speed::Fast,
+        hal::gpio::Speed::High,
         hal::gpio::PullUpPullDown::None);
 
     static_cast<hal::gpio::DigitalInputOutputPin::Impl*>(&rx_)
@@ -535,18 +528,13 @@ void Usart::Impl::init(const uint32_t bus_frequency, const uint32_t baudrate)
 
     tx_.init(
         hal::gpio::Alternate::PushPull,
-        hal::gpio::Speed::Fast,
+        hal::gpio::Speed::High,
         hal::gpio::PullUpPullDown::None);
 
     static_cast<hal::gpio::DigitalInputOutputPin::Impl*>(&tx_)
         ->set_alternate_function(get_alternate_function(usart_.address()));
 
-
-    set_baudrate(bus_frequency, baudrate);
-
-    hal::gpio::PG14().init(hal::gpio::Output::PushPull, hal::gpio::Speed::Medium, hal::gpio::PullUpPullDown::Up);
-    hal::gpio::PG14().set_low();
-    hal::gpio::PG13().set_low();
+    set_baudrate(baudrate);
 
     usart_->CR1 = usart_->CR1 | USART_CR1_TE;
     /* enable rx */
@@ -557,7 +545,6 @@ void Usart::Impl::init(const uint32_t bus_frequency, const uint32_t baudrate)
     usart_->CR1 = usart_->CR1 | USART_CR1_RXNEIE;
 
     NVIC_EnableIRQ(get_irqn(usart_.address()));
-
 }
 
 void Usart::Impl::wait_for_tx()

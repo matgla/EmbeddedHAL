@@ -17,9 +17,9 @@
 
 #include "arm/stm32/stm32f4xx/clock/stm32f4xx_clock.hpp"
 
-#include <stm32f4xx.h>
 #include <eul/function.hpp>
 #include <eul/utils/unused.hpp>
+#include <stm32f4xx.h>
 
 namespace hal
 {

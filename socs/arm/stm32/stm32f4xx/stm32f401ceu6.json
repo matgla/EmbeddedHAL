@@ -1,0 +1,56 @@
+{
+    "parent": "stm32f4xx",
+    "memory": {
+        "sections": {
+            "flash": {
+                "size": "512K"
+            },
+            "ram": {
+                "size": "96K"
+            }
+        },
+        "stack": {
+            "size": "5K"
+        },
+        "heap": {
+            "size": "0K"
+        }
+    },
+    "hal": {
+        "gpio": {
+            "ports": {
+                "A": {
+                    "pins": "0-15",
+                    "rcc": "RCC_AHB1ENR_GPIOAEN"
+                },
+                "B": {
+                    "pins": "0-15",
+                    "rcc": "RCC_AHB1ENR_GPIOBEN"
+                },
+                "C": {
+                    "pins": "13-15",
+                    "rcc": "RCC_AHB1ENR_GPIOCEN"
+                },
+                "H": {
+                    "pins": "0-1",
+                    "rcc": "RCC_AHB1ENR_GPIOHEN"
+                }
+            }
+        },
+        "usart": {
+            "class": "UsartCommon",
+            "devices": {
+                "1": {
+                    "rx": "PA10",
+                    "tx": "PA9",
+                    "type": "USART"
+                }
+            }
+        },
+        "i2c": {
+            "class": "",
+            "devices": {
+            }
+        }
+    }
+}

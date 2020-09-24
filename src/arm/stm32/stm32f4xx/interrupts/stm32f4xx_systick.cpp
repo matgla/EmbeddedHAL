@@ -21,16 +21,23 @@
 
 #include "hal/interrupt/systick.hpp"
 
+#include <stm32f401ceu6_usart.hpp>
+#include <eul/utils/string.hpp>
+
+
 namespace hal
 {
 namespace interrupt
 {
 namespace
 {
+
 static std::chrono::milliseconds period(100);
 static std::chrono::milliseconds ticks(0);
 
 static SystickHandler callback = [](std::chrono::milliseconds){};
+
+static auto& usart = hal::interfaces::USART_1();
 }
 
 void reset_ticks_counter()
@@ -52,6 +59,12 @@ void set_systick_period(std::chrono::milliseconds time)
 {
     period = time;
     SysTick_Config(SystemCoreClock / (1000 / time.count()));
+
+    char data[100];
+    eul::utils::itoa(SystemCoreClock, data);
+    usart.write("Set systick period: ");
+    usart.write(data);
+    usart.write("\n");
 }
 
 void set_systick_priority(uint8_t priority)

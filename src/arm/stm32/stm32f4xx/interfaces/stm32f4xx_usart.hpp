@@ -71,7 +71,6 @@ public:
 private:
     void write(const char byte);
     void set_baudrate(const uint32_t bus_frequency, const uint32_t baudrate);
-    void init(const uint32_t bus_frequency, const uint32_t baudrate);
     void wait_for_tx();
 
     eul::memory_ptr<USART_TypeDef> usart_;
