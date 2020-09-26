@@ -14,15 +14,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <chrono>
-
-#include <stm32f4xx.h>
-#include <cstdio>
 
 #include "hal/interrupt/systick.hpp"
 
-#include <stm32f401ceu6_usart.hpp>
+#include <cstdio>
+#include <chrono>
+
 #include <eul/utils/string.hpp>
+
+#include <stm32f4xx.h>
+#include <stm32f401ceu6_usart.hpp>
 
 
 namespace hal

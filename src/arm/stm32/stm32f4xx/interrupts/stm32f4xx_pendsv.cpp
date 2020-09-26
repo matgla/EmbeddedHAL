@@ -14,11 +14,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "hal/interrupt/pendsv.hpp"
+
 #include <cstdio>
 
 #include <stm32f4xx.h>
-
-#include "hal/interrupt/pendsv.hpp"
 
 namespace hal
 {
