@@ -63,9 +63,9 @@ void set_systick_period(std::chrono::milliseconds time)
 
     char data[100];
     eul::utils::itoa(SystemCoreClock, data);
-    usart.write("Set systick period: ");
-    usart.write(data);
-    usart.write("\n");
+    // usart.write("Set systick period: ");
+    // usart.write(data);
+    // usart.write("\n");
 }
 
 void set_systick_priority(uint8_t priority)
