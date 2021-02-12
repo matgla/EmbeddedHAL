@@ -29,7 +29,7 @@ function (add_device_library)
     )
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/{{ arch }}/{{ vendor }}/{{ family }})
-    target_link_libraries(hal_{{ soc }} PUBLIC hal_{{ family }} hal_common)
+    target_link_libraries(hal_{{ soc }} PUBLIC hal_interface hal_{{ family }} hal_common)
     target_include_directories(hal_{{ soc }} PUBLIC ${PROJECT_SOURCE_DIR}/src)
     target_include_directories(hal_{{ soc }} PUBLIC ${PROJECT_SOURCE_DIR})
 endfunction()

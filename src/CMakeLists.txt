@@ -151,6 +151,7 @@ target_sources(hal_interface INTERFACE
     ${interface_sources_path}/core/backupRegisters.hpp
     ${interface_sources_path}/core/core.hpp
     ${interface_sources_path}/core/criticalSection.hpp
+	${interface_sources_path}/gpio/digital_input_output_pin.hpp
     ${interface_sources_path}/memory/eeprom.hpp
     ${interface_sources_path}/time/rtc.hpp
     ${interface_sources_path}/time/sleep.hpp

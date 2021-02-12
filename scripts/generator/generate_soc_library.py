@@ -45,8 +45,11 @@ def generate_gpio(config):
         port = ports[port]
         pin = {
             "port_name": port_name,
-            "rcc_base": port["rcc"]
         }
+
+
+        if "rcc" in port:
+            pin["rcc_base"] = port["rcc"]
 
         if isinstance(port["pins"], str):
             ranges = port["pins"].split('-')

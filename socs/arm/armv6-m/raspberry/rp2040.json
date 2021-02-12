@@ -1,6 +1,6 @@
 {
 	"info": {
-		"family": "raspberry",
+		"family": "raspberry_pico",
 		"arch": "ARM",
 		"vendor": "raspberry"
 	},
@@ -26,7 +26,9 @@
 	"hal": {
 		"gpio": {
 			"ports": {
-
+				"_": {
+					"pins": "0-25"
+				}
 			},
 			"class": ""
 		},
