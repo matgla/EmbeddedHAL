@@ -1,0 +1,42 @@
+{
+	"info": {
+		"family": "raspberry",
+		"arch": "ARM",
+		"vendor": "raspberry"
+	},
+	"memory": {
+		"sections": {
+			"flash": {
+				"address": "0x10000000",
+				"access": "rx"
+			},
+			"ram": {
+				"address": "0x20000000",
+				"access": "rwx",
+				"size": "256K"
+			}
+		},
+		"stack": {
+			"size": "20K"
+		},
+		"heap": {
+			"size": "20K"
+		}
+	},
+	"hal": {
+		"gpio": {
+			"ports": {
+
+			},
+			"class": ""
+		},
+		"usart": {
+			"devices": {},
+			"class": ""
+		},
+		"i2c": {
+			"devices": {},
+			"class": ""
+		}
+	}
+}
