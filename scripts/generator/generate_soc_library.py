@@ -36,6 +36,10 @@ parser.add_argument("-o", "--output", dest="output", action="store", help="Path 
 
 args, rest = parser.parse_known_args()
 
+has_gpio = False 
+has_usart = False 
+has_i2c = False
+
 def generate_gpio(config):
     ports = config["hal"]["gpio"]["ports"]
 
@@ -163,7 +167,15 @@ def generate_i2c(config):
 
 def generate_cmake(config):
     template = get_template(config["info"]["arch"].lower(), "cmake")
-    peripherals = ["gpio", "i2c", "usart"]
+
+    peripherals = [] 
+    if has_gpio:
+        peripherals.append("gpio") 
+    if has_usart: 
+        peripherals.append("usart") 
+    if has_i2c:
+        peripherals.append("i2c")
+    
     rendered = template.render(
         arch = config["info"]["arch"].lower(),
         vendor = config["info"]["vendor"].lower(),
@@ -192,17 +204,21 @@ def main():
         if not "class" in config["hal"]["gpio"]:
             set_as_none(config["hal"]["gpio"], "class")
         generate_gpio(config)
+        has_gpio = True
 
     if "usart" in config["hal"]:
         if not "class" in config["hal"]["usart"]:
             set_as_none(config["hal"]["usart"], "class")
         generate_usart(config)
-
+        has_usart = True 
+    
     if "i2c" in config["hal"]:
         if not "class" in config["hal"]["i2c"]:
             set_as_none(config["hal"]["i2c"], "class")
 
         generate_i2c(config)
+        has_i2c = True 
+
     generate_cmake(config)
 
 if __name__ == '__main__':
