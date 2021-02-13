@@ -14,3 +14,27 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#pragma once
+
+namespace hal 
+{
+namespace gpio 
+{
+
+class DigitalInputOutputPin::Impl : public DigitalInputOutputPin 
+{
+public: 
+    Impl(int pin);
+
+    void set_high();
+    void set_low(); 
+
+    bool read() const;
+
+private: 
+    const int pin_;
+};
+
+} // namespace gpio
+} // namespace hal
+

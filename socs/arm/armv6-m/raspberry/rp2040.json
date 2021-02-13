@@ -26,19 +26,18 @@
 	"hal": {
 		"gpio": {
 			"ports": {
-				"_": {
+				"": {
 					"pins": "0-25"
 				}
-			},
-			"class": ""
+			}
 		},
-		"usart": {
-			"devices": {},
-			"class": ""
-		},
-		"i2c": {
-			"devices": {},
-			"class": ""
-		}
+        "usart": {
+            "devices": {
+                "1": {
+                    "rx": "P1",
+                    "tx": "P0"
+                }
+            }
+        }
 	}
 }

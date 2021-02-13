@@ -14,11 +14,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_library(hal_raspberry_pico STATIC) 
 
-add_subdirectory(interfaces)
+add_library(hal_raspberry_pico_interfaces) 
 
-target_link_libraries(hal_raspberry_pico 
+target_sources(hal_raspberry_pico_interfaces
     PUBLIC 
-        hal_raspberry_pico_interfaces 
+        ${CMAKE_CURRENT_SOURCE_DIR}/raspberry_pico_usart.hpp
+    PRIVATE 
+        ${CMAKE_CURRENT_SOURCE_DIR}/raspberry_pico_usart.cpp 
 )
+

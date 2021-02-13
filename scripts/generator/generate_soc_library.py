@@ -77,6 +77,7 @@ def generate_gpio(config):
         vendor = config["info"]["vendor"].lower(),
         family = config["info"]["family"].lower(),
         pins = pins,
+        soc = config["info"]["mcu"].lower(),
         gpio_class = config["hal"]["gpio"]["class"]
     )
 
@@ -90,7 +91,8 @@ def generate_usart(config):
     usarts = []
 
     for usart in usarts_config:
-
+        if not "type" in usarts_config[usart]:
+            usarts_config[usart]["type"] = None
         usart_config = {
             "number": usart,
             "tx_pin": usarts_config[usart]["tx"],
@@ -175,6 +177,9 @@ def generate_cmake(config):
     with open(cmake_file, "w") as cmake_file:
         cmake_file.write(rendered)
 
+def set_as_none(obj, name):
+    obj[name] = None
+
 def main():
     with open(args.input) as config_file:
         config = json.loads(config_file.read())
@@ -182,9 +187,22 @@ def main():
     if not os.path.exists(args.output):
         os.makedirs(args.output)
 
-    generate_gpio(config)
-    generate_usart(config)
-    generate_i2c(config)
+
+    if "gpio" in config["hal"]:
+        if not "class" in config["hal"]["gpio"]:
+            set_as_none(config["hal"]["gpio"], "class")
+        generate_gpio(config)
+
+    if "usart" in config["hal"]:
+        if not "class" in config["hal"]["usart"]:
+            set_as_none(config["hal"]["usart"], "class")
+        generate_usart(config)
+
+    if "i2c" in config["hal"]:
+        if not "class" in config["hal"]["i2c"]:
+            set_as_none(config["hal"]["i2c"], "class")
+
+        generate_i2c(config)
     generate_cmake(config)
 
 if __name__ == '__main__':

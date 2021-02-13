@@ -14,6 +14,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "{{ soc }}_gpio.hpp"
+
 #include "arm/{{ vendor }}/{{ family }}/gpio/{{ family }}_gpio.hpp"
 
 namespace hal
@@ -26,7 +28,10 @@ namespace gpio
 
 DigitalInputOutputPin& P{{ pin.port_name }}{{ number }}()
 {
-    static hal::gpio::DigitalInputOutputPin::Impl P{{ pin.port_name }}{{ number }}_impl(GPIO{{ pin.port_name }}_BASE, {{ number }}, {{ pin.rcc_base }});
+    static hal::gpio::DigitalInputOutputPin::Impl P{% if pin.port_name != "" %}{{ 
+        pin.port_name }}{% endif 
+    %}{{ number }}_impl({% if pin.port_name %}GPIO{{ pin.port_name }}_BASE, {% endif 
+    %}{{ number }}{% if pin.rcc_base %}, {{ pin.rcc_base }}{% endif %});
     return P{{ pin.port_name }}{{ number }}_impl;
 }
 
