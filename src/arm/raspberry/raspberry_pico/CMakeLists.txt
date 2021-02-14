@@ -21,4 +21,5 @@ add_subdirectory(interfaces)
 target_link_libraries(hal_raspberry_pico 
     PUBLIC 
         hal_raspberry_pico_interfaces 
+        pico_stdlib
 )
