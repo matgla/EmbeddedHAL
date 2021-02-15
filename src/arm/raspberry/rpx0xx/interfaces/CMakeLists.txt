@@ -15,12 +15,12 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-add_library(hal_raspberry_pico_interfaces) 
+add_library(hal_rpx0xx_interfaces) 
 
-target_sources(hal_raspberry_pico_interfaces
+target_sources(hal_rpx0xx_interfaces
     PUBLIC 
-        ${CMAKE_CURRENT_SOURCE_DIR}/raspberry_pico_usart.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_usart.hpp
     PRIVATE 
-        ${CMAKE_CURRENT_SOURCE_DIR}/raspberry_pico_usart.cpp 
+        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_usart.cpp 
 )
 

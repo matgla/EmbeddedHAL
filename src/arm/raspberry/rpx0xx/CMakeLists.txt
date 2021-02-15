@@ -1,4 +1,4 @@
-# This file is part of msboot project.
+# This file is part of MSBOOT project.
 # Copyright (C) 2021 Mateusz Stadnik
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,16 +14,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_library(hal_raspberry_pico_time) 
+add_library(hal_rpx0xx STATIC) 
 
-target_sources(hal_raspberry_pico_time 
-    PRIVATE 
-        ${CMAKE_CURRENT_SOURCE_DIR}/raspberry_pico_sleep.cpp
-)
+add_subdirectory(gpio)
+add_subdirectory(interfaces)
+add_subdirectory(time) 
 
-target_link_libraries(hal_raspberry_pico_time 
-    PRIVATE 
-        hal_interface 
+target_link_libraries(hal_rpx0xx
+    PUBLIC 
+        hal_rpx0xx_gpio
+        hal_rpx0xx_interfaces
+        hal_rpx0xx_time
         pico_stdlib
 )
-

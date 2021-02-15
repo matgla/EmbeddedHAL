@@ -16,6 +16,8 @@
 
 #pragma once
 
+#include "hal/gpio/digital_input_output_pin.hpp"
+
 namespace hal 
 {
 namespace gpio 

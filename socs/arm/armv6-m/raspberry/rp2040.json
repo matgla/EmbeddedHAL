@@ -1,6 +1,6 @@
 {
 	"info": {
-		"family": "raspberry_pico",
+		"family": "rpx0xx",
 		"arch": "ARM",
 		"vendor": "raspberry"
 	},
