@@ -27,6 +27,12 @@ class DigitalInputOutputPin::Impl : public DigitalInputOutputPin
 {
 public: 
     Impl(int pin);
+   
+    void init(); 
+
+    void set_pull_up();
+    void set_pull_down();
+    void disable_pulls();
 
     void set_high();
     void set_low(); 

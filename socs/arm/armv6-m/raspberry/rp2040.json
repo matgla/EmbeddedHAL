@@ -14,7 +14,18 @@
 				"address": "0x20000000",
 				"access": "rwx",
 				"size": "256K"
-			}
+			},
+            "scratch_x": {
+                "address": "0x20040000",
+                "size": "4k",
+                "access": "rwx"
+            },
+            "scratch_x": {
+                "address": "0x20041000",
+                "size": "4k",
+                "access": "rwx"
+            }
+
 		},
 		"stack": {
 			"size": "20K"

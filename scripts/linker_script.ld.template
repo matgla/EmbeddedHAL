@@ -12,4 +12,4 @@ _{{ item.name.lower() }}_start = ORIGIN({{ item.name.upper() }});
 _{{ item.name.lower() }}_end = ORIGIN({{ item.name.upper() }}) + LENGTH({{ item.name.upper() }});
 {% endfor %}
 
-INCLUDE socs/arm/common.ld
+INCLUDE {{ common_script }}

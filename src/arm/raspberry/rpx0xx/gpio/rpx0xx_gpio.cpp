@@ -35,6 +35,27 @@ void DigitalInputOutputPin::set_low()
     impl->set_low();
 }
 
+void DigitalInputOutputPin::init(hal::gpio::Output mode, hal::gpio::Speed speed, hal::gpio::PullUpPullDown pupd)
+{
+    impl->init();
+
+    switch (pupd) 
+    {
+        case hal::gpio::PullUpPullDown::None:
+        {
+            impl->disable_pulls();
+        } break;
+        case hal::gpio::PullUpPullDown::Up:
+        {
+            impl->set_pull_up();
+        } break; 
+        case hal::gpio::PullUpPullDown::Down:
+        {
+            impl->set_pull_down();
+        } break;
+    }
+}
+
 DigitalInputOutputPin::Impl::Impl(int pin) 
     : pin_(pin) 
 {
@@ -48,6 +69,26 @@ void DigitalInputOutputPin::Impl::set_high()
 void DigitalInputOutputPin::Impl::set_low() 
 {
     gpio_put(pin_, 0);
+}
+
+void DigitalInputOutputPin::Impl::init()
+{
+    gpio_init(pin_);
+}
+
+void DigitalInputOutputPin::Impl::set_pull_up() 
+{
+    gpio_pull_up(pin_);
+}
+
+void DigitalInputOutputPin::Impl::set_pull_down()
+{
+    gpio_pull_down(pin_);
+}
+
+void DigitalInputOutputPin::Impl::disable_pulls()
+{
+    gpio_disable_pulls(pin_);
 }
 
 } // namespace gpio

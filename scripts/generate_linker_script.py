@@ -52,7 +52,6 @@ parser = argparse.ArgumentParser(description = "Linker script generator for HAL"
 parser.add_argument("-i", "--input", dest="input", action="store", help="Path to configuration file file", required=True)
 parser.add_argument("-o", "--output", dest="output", action="store", help="Path to output file", required=True)
 parser.add_argument("-s", "--sections", dest="options", action="store", help="Additional sections in format: <name>:<access(r/w/x)>:address:length, separated by comma (',')")
-
 args, rest = parser.parse_known_args()
 
 def get_subsections(value, validator):
@@ -156,10 +155,16 @@ def main():
     heap = hex(parse_size(config["memory"]["heap"]["size"]))
     stack = hex(parse_size(config["memory"]["stack"]["size"]))
 
+    base = "arm/common.ld"
+
+    if "linker_script" in config:
+        base = config["linker_script"]
+
     rendered = get_template().render(
         sections = sections,
         heap = heap,
-        stack = stack
+        stack = stack,
+        common_script = base 
     )
 
     make_dir(args.output)
