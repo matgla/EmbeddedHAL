@@ -20,7 +20,7 @@
                 "size": "4k",
                 "access": "rwx"
             },
-            "scratch_x": {
+            "scratch_y": {
                 "address": "0x20041000",
                 "size": "4k",
                 "access": "rwx"

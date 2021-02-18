@@ -24,3 +24,20 @@ target_sources(hal_rpx0xx_interfaces
         ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_usart.cpp 
 )
 
+target_include_directories(hal_rpx0xx_interfaces 
+    PRIVATE 
+        ${PROJECT_SOURCE_DIR}/src 
+)
+
+target_link_libraries(hal_rpx0xx_interfaces
+    PUBLIC 
+        hal_interface 
+    PRIVATE 
+        hal_rpx0xx_gpio
+        pico_binary_info
+        hardware_gpio
+        hardware_irq
+        hardware_clocks
+        hardware_resets
+        hardware_uart
+)

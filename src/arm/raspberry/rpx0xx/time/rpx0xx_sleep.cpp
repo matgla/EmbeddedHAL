@@ -16,7 +16,7 @@
 
 #include "hal/time/sleep.hpp"
 
-#include "pico/stdlib.h"
+#include "pico/time.h"
 
 namespace hal 
 {

@@ -184,7 +184,8 @@ def generate_cmake(config):
         family = config["info"]["family"].lower(),
         soc = config["info"]["mcu"].lower(),
         peripherals = peripherals,
-        source_path = args.output
+        source_path = args.output,
+        definitions = config["definitions"]
     )
 
     cmake_file = args.output + "/soc_library.cmake"

@@ -29,6 +29,8 @@ class Usart::Impl : public Usart
 {
 public: 
     Impl(gpio::DigitalInputOutputPin& rx, gpio::DigitalInputOutputPin& tx);
+
+    
 };
 
 } // namespace interfaces

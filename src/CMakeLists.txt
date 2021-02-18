@@ -174,7 +174,7 @@ target_include_directories(hal_interface INTERFACE
     ${PROJECT_SOURCE_DIR}
 )
 
-target_link_libraries(hal_interface INTERFACE GSL eul)
+target_link_libraries(hal_interface INTERFACE hal_flags GSL eul)
 
 add_subdirectory(common)
 

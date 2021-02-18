@@ -14,27 +14,14 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_library(hal_rpx0xx_gpio)
+add_library(hal_rpx0xx_syscalls)
 
-target_sources(hal_rpx0xx_gpio
+target_sources(hal_rpx0xx_syscalls 
     PUBLIC 
-        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_gpio.hpp 
-    PRIVATE 
-        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_gpio.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/stubs.cpp 
 )
 
-target_link_libraries(hal_rpx0xx_gpio 
+target_link_libraries(hal_rpx0xx_syscalls
     PUBLIC 
-        hal_interface
-    PRIVATE
-        pico_binary_info
-        hardware_irq 
-        hardware_gpio
-
+        hal_flags 
 )
-
-target_include_directories(hal_rpx0xx_gpio
-    PRIVATE 
-        ${PROJECT_SOURCE_DIR}/src
-)
-

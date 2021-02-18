@@ -18,12 +18,27 @@ add_library(hal_rpx0xx STATIC)
 
 add_subdirectory(gpio)
 add_subdirectory(interfaces)
+add_subdirectory(syscalls)
 add_subdirectory(time) 
 
 target_link_libraries(hal_rpx0xx
     PUBLIC 
+        pico_standard_link
         hal_rpx0xx_gpio
         hal_rpx0xx_interfaces
         hal_rpx0xx_time
-        pico_stdlib
+        #hal_rpx0xx_syscalls
+        hal_flags
 )
+
+if (HAL_INCLUDE_PICO_RUNTIME)
+
+target_link_libraries(hal_rpx0xx
+    PUBLIC 
+        pico_binary_info
+        hardware_irq
+        hardware_gpio
+        pico_runtime
+)
+
+endif ()

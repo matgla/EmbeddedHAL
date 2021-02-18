@@ -29,6 +29,7 @@ public:
     Impl(int pin);
    
     void init(); 
+    void set_output();
 
     void set_pull_up();
     void set_pull_down();

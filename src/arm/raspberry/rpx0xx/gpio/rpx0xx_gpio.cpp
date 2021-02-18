@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <pico/stdlib.h>
+#include <hardware/gpio.h>
 
 #include "arm/raspberry/rpx0xx/gpio/rpx0xx_gpio.hpp"
 
@@ -38,7 +38,7 @@ void DigitalInputOutputPin::set_low()
 void DigitalInputOutputPin::init(hal::gpio::Output mode, hal::gpio::Speed speed, hal::gpio::PullUpPullDown pupd)
 {
     impl->init();
-
+    impl->set_output();
     switch (pupd) 
     {
         case hal::gpio::PullUpPullDown::None:
@@ -74,6 +74,11 @@ void DigitalInputOutputPin::Impl::set_low()
 void DigitalInputOutputPin::Impl::init()
 {
     gpio_init(pin_);
+}
+
+void DigitalInputOutputPin::Impl::set_output()
+{
+    gpio_set_dir(pin_, GPIO_OUT);
 }
 
 void DigitalInputOutputPin::Impl::set_pull_up() 
