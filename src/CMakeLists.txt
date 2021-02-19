@@ -73,12 +73,10 @@ execute_process(
 
 find_package(EmbeddedCMake REQUIRED)
 
-message("mcu: ${mcu}")
-
 find_package (Python COMPONENTS Interpreter)
 
 string (TOLOWER ${BOARD} board_lowercased)
-message ("${user_boards_path} ${board_lowercased}")
+
 if (user_boards_path)
     message(STATUS "Searching board configuration: ${board_file_glob_expression}")
     search_inside(${user_boards_path} ${board_lowercased} board_configuration_file)
@@ -95,6 +93,9 @@ if (NOT board_configuration_file)
         message(FATAL_ERROR "Can't find configuration file: ${board_file_glob_expression}")
 endif ()
 
+get_filename_component(hal_board_configuration_path ${board_configuration_file} DIRECTORY CACHE INTERNAL "Path to board
+configuration" FORCE) 
+
 set (arguments
     --board=${board_configuration_file}
     --input=${PROJECT_SOURCE_DIR}/socs
@@ -110,8 +111,6 @@ endif ()
 if (hal_user_config_file)
     set (arguments ${arguments} --user_configs=${hal_user_config_file})
 endif ()
-
-message ("${arguments}")
 
 execute_process(
     COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generate_soc.py ${arguments}
