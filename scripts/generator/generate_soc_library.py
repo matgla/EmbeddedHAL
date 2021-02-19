@@ -97,11 +97,16 @@ def generate_usart(config):
     for usart in usarts_config:
         if not "type" in usarts_config[usart]:
             usarts_config[usart]["type"] = None
+
+        if not "instance" in usarts_config[usart]:
+            usarts_config[usart]["instance"] = None 
+
         usart_config = {
             "number": usart,
             "tx_pin": usarts_config[usart]["tx"],
             "rx_pin": usarts_config[usart]["rx"],
-            "type": usarts_config[usart]["type"]
+            "type": usarts_config[usart]["type"],
+            "instance": usarts_config[usart]["instance"]
         }
 
         usarts.append(usart_config)

@@ -27,6 +27,9 @@ public:
     void write(const std::string_view& str);
     void on_data(const OnDataCallback& callback);
     void on_sent(const OnSentCallback& callback);
+    void enable_rx_interrupt();
+    void enable_tx_interrupt();
+    uint8_t read() const;
 };
 
 } // namespace interfaces

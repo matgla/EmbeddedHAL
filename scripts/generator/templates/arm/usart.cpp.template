@@ -29,7 +29,8 @@ Usart& USART_{{ usart.number }}()
 {
     static hal::interfaces::Usart::Impl usart_impl(
         hal::gpio::{{ usart.rx_pin }}(), hal::gpio::{{ usart.tx_pin }}()
-        {% if usart.type %}, {{ usart.type }}{{ usart.number }}_BASE {% endif %}
+        {% if usart.type %}, {{ usart.type }}{{ usart.number }}_BASE {% endif %} {% if usart.instance %}, {{
+            usart.instance }} {% endif %}
     );
 
     return usart_impl;

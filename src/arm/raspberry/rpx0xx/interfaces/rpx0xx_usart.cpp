@@ -17,7 +17,11 @@
 #include "arm/raspberry/rpx0xx/interfaces/rpx0xx_usart.hpp"
 
 //#include <pico/stdlib.h>
+#include <hardware/gpio.h>
 #include <hardware/uart.h>
+
+#include "arm/raspberry/rpx0xx/gpio/rpx0xx_gpio.hpp"
+
 
 namespace hal 
 {
@@ -29,25 +33,38 @@ namespace interfaces
 
 void Usart::init(uint32_t baudrate)
 {
-    
+    uart_init(impl->instance, baudrate);    
 }
 
 void Usart::write(const StreamType& data)
 {
-
+    uart_write_blocking(impl->instance, data.data(), data.size());
 }
 
 void Usart::write(const std::string_view& str)
 {
-
+    uart_puts(impl->instance, str.data());
 }
 
-Usart::Impl::Impl(gpio::DigitalInputOutputPin& rx, gpio::DigitalInputOutputPin& tx)
+void Usart::on_data(const OnDataCallback& callback)
 {
-
+    impl->on_data = callback; 
 }
 
+uint8_t Usart::read() const 
+{
+    return uart_getc(const_impl->instance);
+}
 
+Usart::Impl::Impl(gpio::DigitalInputOutputPin& rx, gpio::DigitalInputOutputPin& tx, uart_inst_t* inst)
+{
+    instance = inst;
+    const auto* rx_impl = static_cast<hal::gpio::DigitalInputOutputPin::Impl*>(&rx);
+    const auto* tx_impl = static_cast<hal::gpio::DigitalInputOutputPin::Impl*>(&tx);
+    
+    gpio_set_function(rx_impl->pin, GPIO_FUNC_UART);
+    gpio_set_function(tx_impl->pin, GPIO_FUNC_UART);
+}
 
 } // namespace interfaces
 } // namespace hal

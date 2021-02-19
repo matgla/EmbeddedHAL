@@ -40,8 +40,7 @@ public:
 
     bool read() const;
 
-private: 
-    const int pin_;
+    const int pin;
 };
 
 } // namespace gpio

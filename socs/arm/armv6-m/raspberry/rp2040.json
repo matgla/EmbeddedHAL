@@ -46,7 +46,8 @@
             "devices": {
                 "1": {
                     "rx": "P1",
-                    "tx": "P0"
+                    "tx": "P0",
+                    "instance": "uart0"
                 }
             }
         }
