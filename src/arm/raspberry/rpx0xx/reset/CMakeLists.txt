@@ -1,4 +1,4 @@
-# This file is part of MSBOOT project.
+# This file is part of EmbeddedHAL project.
 # Copyright (C) 2021 Mateusz Stadnik
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,33 +14,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_library(hal_rpx0xx STATIC) 
 
-add_subdirectory(gpio)
-add_subdirectory(interfaces)
-add_subdirectory(syscalls)
-add_subdirectory(time) 
-add_subdirectory(reset)
+add_library(hal_rpx0xx_reset) 
 
-target_link_libraries(hal_rpx0xx
-    PUBLIC 
-        pico_standard_link
-        hal_rpx0xx_gpio
-        hal_rpx0xx_interfaces
-        hal_rpx0xx_time
-        hal_rpx0xx_reset
-        #hal_rpx0xx_syscalls
-        hal_flags
+target_sources(hal_rpx0xx_reset
+    PRIVATE 
+        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_reset.cpp 
 )
 
-if (HAL_INCLUDE_PICO_RUNTIME)
-
-target_link_libraries(hal_rpx0xx
-    PUBLIC 
-        pico_binary_info
-        hardware_irq
-        hardware_gpio
-        pico_runtime
+target_include_directories(hal_rpx0xx_reset 
+    PRIVATE 
+        ${PROJECT_SOURCE_DIR}/src 
 )
 
-endif ()
+target_link_libraries(hal_rpx0xx_reset
+    PUBLIC 
+        hal_interface 
+    PRIVATE 
+        pico_bootrom 
+)

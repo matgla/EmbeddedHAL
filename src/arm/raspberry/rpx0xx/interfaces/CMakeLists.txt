@@ -1,4 +1,4 @@
-# This file is part of MSBOOT project.
+# This file is part of EmbeddedHAL project.
 # Copyright (C) 2021 Mateusz Stadnik
 #
 # This program is free software: you can redistribute it and/or modify
