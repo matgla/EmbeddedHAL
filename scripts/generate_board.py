@@ -51,6 +51,11 @@ def main():
     if not os.path.exists(args.output_directory):
         os.makedirs(args.output_directory)
 
+    if not "libraries" in config: 
+        config["libraries"] = {} 
+    if not "public" in config["libraries"]:
+        config["libraries"]["public"] = [] 
+
     board_path = Path(args.input)
     template = get_template()
     rendered = template.render(
@@ -59,7 +64,8 @@ def main():
         board_path = board_path.parent,
         arch = config["info"]["arch"].lower(),
         soc = config["info"]["mcu"].lower(),
-        user_board_config_path = args.user_config
+        user_board_config_path = args.user_config,
+        public_dependencies = config["libraries"]["public"]
     )
     with open(args.output_directory + "/board.cmake", "w") as cmake:
         cmake.write (rendered)

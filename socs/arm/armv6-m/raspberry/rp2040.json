@@ -51,5 +51,8 @@
                 }
             }
         }
-	}
+	},
+    "libraries": {
+        "public": ["hal_external_public"]
+    }
 }

@@ -30,6 +30,10 @@ target_include_directories(board PUBLIC {{user_board_config_path}})
 target_link_libraries(board
     PUBLIC
         hal_interface
+        {% for lib in public_dependencies -%}
+        {{ lib }} 
+        {% endfor -%}
+    PRIVATE
         hal_{{ soc }}
 )
 

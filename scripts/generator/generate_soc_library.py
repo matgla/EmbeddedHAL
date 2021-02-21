@@ -181,6 +181,11 @@ def generate_cmake(config):
         peripherals.append("usart") 
     if has_i2c:
         peripherals.append("i2c")
+
+    if not "libraries" in config:
+        config["libraries"] = {}
+    if not "public" in config["libraries"]:
+        config["libraries"]["public"] = []
    
     print ("Peripherals to generate: ", peripherals)
     rendered = template.render(
@@ -190,7 +195,8 @@ def generate_cmake(config):
         soc = config["info"]["mcu"].lower(),
         peripherals = peripherals,
         source_path = args.output,
-        definitions = config["definitions"]
+        definitions = config["definitions"],
+        public_dependencies = config["libraries"]["public"]
     )
 
     cmake_file = args.output + "/soc_library.cmake"

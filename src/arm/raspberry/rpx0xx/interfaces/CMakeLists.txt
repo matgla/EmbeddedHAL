@@ -33,11 +33,6 @@ target_link_libraries(hal_rpx0xx_interfaces
     PUBLIC 
         hal_interface 
     PRIVATE 
-        hal_rpx0xx_gpio
-        pico_binary_info
-        hardware_gpio
-        hardware_irq
-        hardware_clocks
-        hardware_resets
-        hardware_uart
+        hal_external_gpio
+        hal_external_interfaces
 )

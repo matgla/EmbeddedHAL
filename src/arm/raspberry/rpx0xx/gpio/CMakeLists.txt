@@ -27,10 +27,7 @@ target_link_libraries(hal_rpx0xx_gpio
     PUBLIC 
         hal_interface
     PRIVATE
-        pico_binary_info
-        hardware_irq 
-        hardware_gpio
-
+        hal_external_gpio
 )
 
 target_include_directories(hal_rpx0xx_gpio
