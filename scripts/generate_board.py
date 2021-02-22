@@ -55,6 +55,10 @@ def main():
         config["libraries"] = {} 
     if not "public" in config["libraries"]:
         config["libraries"]["public"] = [] 
+    if not "private" in config["libraries"]:
+        config["libraries"]["private"] = [] 
+    if not "interface" in config["libraries"]:
+        config["libraries"]["interface"] = []
 
     board_path = Path(args.input)
     template = get_template()
@@ -65,7 +69,9 @@ def main():
         arch = config["info"]["arch"].lower(),
         soc = config["info"]["mcu"].lower(),
         user_board_config_path = args.user_config,
-        public_dependencies = config["libraries"]["public"]
+        public_dependencies = config["libraries"]["public"],
+        private_dependencies = config["libraries"]["private"],
+        interface_libraries = config["libraries"]["interface"]
     )
     with open(args.output_directory + "/board.cmake", "w") as cmake:
         cmake.write (rendered)

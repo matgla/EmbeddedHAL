@@ -36,9 +36,6 @@ function (add_device_library)
     target_link_libraries(hal_{{ soc }} 
         PUBLIC 
             hal_interface 
-            {% for lib in public_dependencies -%}
-            {{ lib }} 
-            {% endfor -%}
         PRIVATE
             hal_{{ family }} 
             hal_common

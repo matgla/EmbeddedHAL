@@ -16,36 +16,39 @@
 
 add_library(hal_binary_info INTERFACE) 
 
-target_link_libraries(hal_binary_info
+target_include_directories(hal_binary_info
     INTERFACE 
-        pico_binary_info 
+        $<TARGET_PROPERTY:pico_binary_info,INTERFACE_INCLUDE_DIRECTORIES> 
 
 )
 
-add_library(hal_external_irq STATIC)
+add_library(hal_external_irq INTERFACE)
 
-target_link_libraries(hal_external_irq 
-    PUBLIC 
-        pico_binary_info
-        hardware_irq 
-        hal_external_gpio
+target_include_directories(hal_external_irq 
+    INTERFACE 
+        $<TARGET_PROPERTY:hardware_irq,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_library(hal_external_gpio STATIC)
 
-target_link_libraries(hal_external_gpio 
-    PUBLIC
-        hal_external_irq
-        hardware_gpio
+add_library(hal_external_gpio INTERFACE)
+
+target_include_directories(hal_external_gpio 
+    INTERFACE
+        $<TARGET_PROPERTY:hardware_gpio,INTERFACE_INCLUDE_DIRECTORIES>
 )
 
-add_library(hal_external_public STATIC)
+add_library(hal_external_public INTERFACE)
 
 target_link_libraries(hal_external_public 
-    PUBLIC
+    INTERFACE
+        pico_runtime
         hal_external_gpio
-        pico_runtime 
-        pico_standard_link 
+        pico_binary_info
+        hardware_irq 
+        hardware_gpio
+        pico_printf
+        pico_base_headers
+        hardware_structs 
 )
 
 add_library(hal_external_resets INTERFACE) 
@@ -55,33 +58,34 @@ target_link_libraries(hal_external_resets
         hardware_resets
 )
 
-add_library(hal_external_clocks STATIC) 
+add_library(hal_external_clocks INTERFACE) 
 
 target_link_libraries(hal_external_clocks
-    PUBLIC 
-        hardware_clocks
-    PRIVATE 
-        hal_external_irq
+    INTERFACE 
+        hal_external_gpio 
 )
 
-add_library(hal_external_timer STATIC)
+target_include_directories(hal_external_clocks
+    INTERFACE 
+        $<TARGET_PROPERTY:hardware_clocks,INTERFACE_INCLUDE_DIRECTORIES>
+)
+
+add_library(hal_external_timer INTERFACE)
 
 target_link_libraries(hal_external_timer 
-    PUBLIC 
-        hardware_timer 
-    PRIVATE 
-        hal_external_irq
+    INTERFACE 
+        hal_external_irq 
 )
 
-add_library(hal_external_interfaces STATIC) 
-
-target_link_libraries(hal_external_interfaces
-    PUBLIC 
-        hardware_uart
-        hal_external_resets 
-        hal_external_clocks 
-    PRIVATE 
-        hal_external_gpio
-        hal_external_irq
-        hal_external_timer 
+target_include_directories(hal_external_timer 
+    INTERFACE 
+        $<TARGET_PROPERTY:hardware_timer,INTERFACE_INCLUDE_DIRECTORIES>  
 )
+
+add_library(hal_external_interfaces INTERFACE) 
+
+target_include_directories(hal_external_interfaces
+    INTERFACE 
+        $<TARGET_PROPERTY:hardware_uart,INTERFACE_INCLUDE_DIRECTORIES>
+)
+

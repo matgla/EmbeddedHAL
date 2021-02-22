@@ -34,16 +34,3 @@ target_link_libraries(hal_rpx0xx
         hal_flags
 )
 
-if (HAL_INCLUDE_PICO_RUNTIME)
-
-target_link_libraries(hal_rpx0xx
-    PUBLIC 
-        pico_standard_link
-        pico_runtime      
-    PRIVATE 
-        pico_binary_info
-        hardware_irq
-        hardware_gpio
-)
-
-endif ()

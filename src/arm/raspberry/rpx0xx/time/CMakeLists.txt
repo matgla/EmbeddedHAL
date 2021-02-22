@@ -24,9 +24,7 @@ target_sources(hal_rpx0xx_time
 target_link_libraries(hal_rpx0xx_time
     PRIVATE 
         hal_interface
-        pico_binary_info
-        hardware_irq
-        hardware_gpio
-        pico_time 
+        hal_external_timer
+        hal_external_gpio
 )
 

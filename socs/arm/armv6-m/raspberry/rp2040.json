@@ -53,6 +53,6 @@
         }
 	},
     "libraries": {
-        "public": ["hal_external_public"]
+        "interface": ["hal_external_public"]
     }
 }

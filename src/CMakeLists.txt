@@ -217,5 +217,10 @@ add_library(hal INTERFACE)
 
 target_include_directories(board PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/generated_soc)
 
-target_link_libraries(hal INTERFACE hal_interface board hal_flags)
+target_link_libraries(hal 
+    INTERFACE 
+        hal_interface 
+        board 
+        hal_flags
+)
 
