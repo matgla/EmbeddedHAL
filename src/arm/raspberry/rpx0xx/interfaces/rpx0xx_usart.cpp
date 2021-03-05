@@ -36,6 +36,11 @@ void Usart::init(uint32_t baudrate)
     uart_init(impl->instance, baudrate);    
 }
 
+void Usart::deinit() 
+{
+    uart_deinit(impl->instance);
+}
+
 void Usart::write(const StreamType& data)
 {
     uart_write_blocking(impl->instance, data.data(), data.size());

@@ -51,11 +51,26 @@ target_link_libraries(hal_external_public
         hardware_structs 
 )
 
+add_library(hal_external_flash INTERFACE)
+
+target_link_libraries(hal_external_flash 
+    INTERFACE 
+        hardware_structs
+        hardware_flash
+)
+
 add_library(hal_external_resets INTERFACE) 
 
 target_link_libraries(hal_external_resets 
     INTERFACE 
         hardware_resets
+)
+
+add_library(hal_external_sync INTERFACE) 
+
+target_link_libraries(hal_external_sync 
+    INTERFACE 
+        hardware_sync
 )
 
 add_library(hal_external_clocks INTERFACE) 

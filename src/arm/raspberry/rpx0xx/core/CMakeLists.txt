@@ -1,4 +1,4 @@
-# This file is part of MSBOOT project.
+# This file is part of EmbeddedHAL project.
 # Copyright (C) 2021 Mateusz Stadnik
 #
 # This program is free software: you can redistribute it and/or modify
@@ -14,25 +14,21 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_library(hal_rpx0xx STATIC) 
 
-include (${CMAKE_CURRENT_SOURCE_DIR}/external_targets.cmake)
+add_library(hal_rpx0xx_core) 
 
-add_subdirectory(gpio)
-add_subdirectory(interfaces)
-add_subdirectory(memory)
-add_subdirectory(syscalls)
-add_subdirectory(time) 
-add_subdirectory(reset)
-
-target_link_libraries(hal_rpx0xx
-    PUBLIC 
-        hal_rpx0xx_gpio
-        hal_rpx0xx_interfaces
-        hal_rpx0xx_time
-        hal_rpx0xx_reset
-        hal_rpx0xx_memory
-        #hal_rpx0xx_syscalls
-        hal_flags
+target_sources(hal_rpx0xx_core
+    PRIVATE 
+        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_critical_section.cpp 
 )
 
+target_include_directories(hal_rpx0xx_memory
+    PRIVATE 
+        ${PROJECT_SOURCE_DIR}/src 
+)
+
+target_link_libraries(hal_rpx0xx_memory
+    PUBLIC 
+        hal_interface
+        hal_external_sync
+)

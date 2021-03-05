@@ -22,6 +22,7 @@ public:
     using OnSentCallback = eul::function<void(), sizeof(void*)>;
 
     void init(const uint32_t baudrate);
+    void deinit();
     void set_baudrate(const uint32_t baudrate);
     void write(const StreamType& data);
     void write(const std::string_view& str);
