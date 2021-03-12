@@ -2,6 +2,7 @@
 	"info": {
 		"family": "rpx0xx",
 		"arch": "ARM",
+        "arch_version": "armv6-m",
 		"vendor": "raspberry"
 	},
 	"memory": {
