@@ -16,12 +16,19 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include "hal/gpio/digital_input_output_pin.hpp"
 
 namespace hal 
 {
 namespace gpio 
 {
+
+enum class Function : uint32_t 
+{
+
+};
 
 class DigitalInputOutputPin::Impl : public DigitalInputOutputPin 
 {

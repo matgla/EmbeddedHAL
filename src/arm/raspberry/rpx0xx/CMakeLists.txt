@@ -16,23 +16,21 @@
 
 add_library(hal_rpx0xx STATIC) 
 
-include (${CMAKE_CURRENT_SOURCE_DIR}/external_targets.cmake)
-
 add_subdirectory(gpio)
-add_subdirectory(interfaces)
-add_subdirectory(memory)
-add_subdirectory(syscalls)
-add_subdirectory(time) 
-add_subdirectory(reset)
+#add_subdirectory(interfaces)
+#add_subdirectory(memory)
+#add_subdirectory(syscalls)
+#add_subdirectory(time) 
+#add_subdirectory(reset)
 
 target_link_libraries(hal_rpx0xx
-    PUBLIC 
+    PRIVATE 
         hal_rpx0xx_gpio
-        hal_rpx0xx_interfaces
-        hal_rpx0xx_time
-        hal_rpx0xx_reset
-        hal_rpx0xx_memory
-        #hal_rpx0xx_syscalls
+      # hal_rpx0xx_interfaces
+      # hal_rpx0xx_time
+      # hal_rpx0xx_reset
+      # hal_rpx0xx_memory
+      # hal_rpx0xx_syscalls
         hal_flags
 )
 

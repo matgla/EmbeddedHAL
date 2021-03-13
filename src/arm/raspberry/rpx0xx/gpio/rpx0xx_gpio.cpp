@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <hardware/gpio.h>
+#include <hardware/structs/sio.h>
 
 #include "arm/raspberry/rpx0xx/gpio/rpx0xx_gpio.hpp"
 
@@ -22,6 +22,8 @@ namespace hal
 {
 namespace gpio 
 {
+
+enum class 
 
 #define impl static_cast<DigitalInputOutputPin::Impl*>(this)
 
@@ -63,37 +65,39 @@ DigitalInputOutputPin::Impl::Impl(int pin)
 
 void DigitalInputOutputPin::Impl::set_high() 
 {
-    gpio_put(pin, 1);
+ //   gpio_put(pin, 1);
 }
 
 void DigitalInputOutputPin::Impl::set_low() 
 {
-    gpio_put(pin, 0);
+ //   gpio_put(pin, 0);
 }
 
 void DigitalInputOutputPin::Impl::init()
 {
-    gpio_init(pin);
+    sio_hw->gpio_oe_clr = 1ul << pin;
+    sio_hw->gpio_clr = 1 << pin;
+    
 }
 
 void DigitalInputOutputPin::Impl::set_output()
 {
-    gpio_set_dir(pin, GPIO_OUT);
+//    gpio_set_dir(pin, GPIO_OUT);
 }
 
 void DigitalInputOutputPin::Impl::set_pull_up() 
 {
-    gpio_pull_up(pin);
+//    gpio_pull_up(pin);
 }
 
 void DigitalInputOutputPin::Impl::set_pull_down()
 {
-    gpio_pull_down(pin);
+ //   gpio_pull_down(pin);
 }
 
 void DigitalInputOutputPin::Impl::disable_pulls()
 {
-    gpio_disable_pulls(pin);
+  //  gpio_disable_pulls(pin);
 }
 
 } // namespace gpio

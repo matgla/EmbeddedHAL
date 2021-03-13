@@ -48,12 +48,11 @@
                 "1": {
                     "rx": "P1",
                     "tx": "P0",
-                    "instance": "uart0"
+                    "instance": "0"
                 }
             }
         }
 	},
     "libraries": {
-        "interface": ["hal_external_public"]
     }
 }

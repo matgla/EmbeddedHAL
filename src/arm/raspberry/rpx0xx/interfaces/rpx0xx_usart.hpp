@@ -20,8 +20,6 @@
 
 #include "hal/gpio/digital_input_output_pin.hpp"
 
-#include <hardware/uart.h>
-
 namespace hal 
 {
 namespace interfaces 
@@ -30,9 +28,9 @@ namespace interfaces
 class Usart::Impl : public Usart
 {
 public: 
-    Impl(gpio::DigitalInputOutputPin& rx, gpio::DigitalInputOutputPin& tx, uart_inst_t* inst);
+    Impl(gpio::DigitalInputOutputPin& rx, gpio::DigitalInputOutputPin& tx, uint8_t uart_number);
 
-    uart_inst_t* instance;  
+    uint8_t uart_number;
     OnDataCallback on_data;
 };
 
