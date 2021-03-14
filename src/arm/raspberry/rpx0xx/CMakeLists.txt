@@ -16,6 +16,8 @@
 
 add_library(hal_rpx0xx STATIC) 
 
+add_subdirectory(init)
+add_subdirectory(core)
 add_subdirectory(gpio)
 #add_subdirectory(interfaces)
 #add_subdirectory(memory)
@@ -25,6 +27,7 @@ add_subdirectory(gpio)
 
 target_link_libraries(hal_rpx0xx
     PRIVATE 
+        hal_rpx0xx_init
         hal_rpx0xx_gpio
       # hal_rpx0xx_interfaces
       # hal_rpx0xx_time

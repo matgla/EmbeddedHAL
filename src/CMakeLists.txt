@@ -147,6 +147,7 @@ set(interface_sources_path "${PROJECT_SOURCE_DIR}/interface/hal")
 
 add_library(hal_interface INTERFACE)
 target_sources(hal_interface INTERFACE
+    ${interface_sources_path}/core/clock_units.hpp
     ${interface_sources_path}/core/backupRegisters.hpp
     ${interface_sources_path}/core/core.hpp
     ${interface_sources_path}/core/criticalSection.hpp

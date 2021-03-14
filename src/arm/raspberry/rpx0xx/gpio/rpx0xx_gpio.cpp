@@ -14,16 +14,18 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include <hardware/structs/sio.h>
-
 #include "arm/raspberry/rpx0xx/gpio/rpx0xx_gpio.hpp"
+
+#include <hardware/structs/sio.h>
+#include <hardware/structs/padsbank0.h>
+#include <hardware/structs/iobank0.h>
+
+#include "arm/raspberry/rpx0xx/core/rpx0xx_register_manipulator.hpp"
 
 namespace hal 
 {
 namespace gpio 
 {
-
-enum class 
 
 #define impl static_cast<DigitalInputOutputPin::Impl*>(this)
 
@@ -65,39 +67,52 @@ DigitalInputOutputPin::Impl::Impl(int pin)
 
 void DigitalInputOutputPin::Impl::set_high() 
 {
- //   gpio_put(pin, 1);
+    sio_hw->gpio_set = 1 << pin;
 }
 
 void DigitalInputOutputPin::Impl::set_low() 
 {
- //   gpio_put(pin, 0);
+    sio_hw->gpio_clr = 1 << pin;
 }
 
 void DigitalInputOutputPin::Impl::init()
 {
     sio_hw->gpio_oe_clr = 1ul << pin;
     sio_hw->gpio_clr = 1 << pin;
-    
+
+    set_function(Function::sio); 
 }
 
 void DigitalInputOutputPin::Impl::set_output()
 {
-//    gpio_set_dir(pin, GPIO_OUT);
+    sio_hw->gpio_oe_set = 1 << pin;
 }
 
 void DigitalInputOutputPin::Impl::set_pull_up() 
 {
-//    gpio_pull_up(pin);
+    core::AtomicRegister padsbank0(&padsbank0_hw->io[pin]);
+    padsbank0.write_masked(1u << PADS_BANK0_GPIO0_PUE_LSB, PADS_BANK0_GPIO0_PUE_BITS);
 }
 
 void DigitalInputOutputPin::Impl::set_pull_down()
 {
- //   gpio_pull_down(pin);
+    core::AtomicRegister padsbank0(&padsbank0_hw->io[pin]);
+    padsbank0.write_masked(1u << PADS_BANK0_GPIO0_PDE_LSB, PADS_BANK0_GPIO0_PDE_BITS);
 }
 
 void DigitalInputOutputPin::Impl::disable_pulls()
 {
-  //  gpio_disable_pulls(pin);
+    core::AtomicRegister padsbank0(&padsbank0_hw->io[pin]);
+    padsbank0.clear_bits(PADS_BANK0_GPIO0_PUE_BITS | PADS_BANK0_GPIO0_PDE_BITS);
+}
+
+void DigitalInputOutputPin::Impl::set_function(const Function function)
+{
+    core::AtomicRegister padsbank0(&padsbank0_hw->io[pin]);
+    constexpr uint32_t mask = PADS_BANK0_GPIO0_IE_BITS | PADS_BANK0_GPIO0_OD_BITS;
+    padsbank0.write_masked(PADS_BANK0_GPIO0_IE_BITS, mask);
+
+    iobank0_hw->io[pin].ctrl = static_cast<uint32_t>(function) << IO_BANK0_GPIO0_CTRL_FUNCSEL_LSB;
 }
 
 } // namespace gpio

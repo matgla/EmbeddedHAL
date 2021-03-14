@@ -26,6 +26,10 @@ target_sources(hal_rpx0xx_gpio
 target_link_libraries(hal_rpx0xx_gpio 
     PUBLIC 
         hal_interface
+    PRIVATE
+        hal_rpx0xx_core
+        hardware_structs
+        hardware_regs
 )
 
 target_include_directories(hal_rpx0xx_gpio

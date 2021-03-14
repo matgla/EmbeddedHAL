@@ -1,4 +1,4 @@
-// This file is part of EmbeddedHAL project.
+// This file is part of embeddedHAL project.
 // Copyright (C) 2021 Mateusz Stadnik
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,53 +14,35 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
+#include "arm/raspberry/rpx0xx/core/rpx0xx_reset.hpp"
 
-#include <cstdint>
+#include <hardware/structs/resets.h>
 
-#include "hal/gpio/digital_input_output_pin.hpp"
+#include "arm/raspberry/rpx0xx/core/rpx0xx_register_manipulator.hpp"
 
 namespace hal 
 {
-namespace gpio 
+namespace core 
 {
 
-enum class Function : uint32_t 
+void reset_on(uint32_t mask)
 {
-    xip  = 0, 
-    spi  = 1,
-    uart = 2,
-    i2c  = 3,
-    pwm  = 4,
-    sio  = 5,
-    pio0 = 6,
-    pio1 = 7,
-    gpck = 8,
-    usb  = 9,
-    none = 0x0f
-};
+    AtomicRegister resets(&resets_hw->reset);
+    resets.set_bits(mask);
+}
 
-class DigitalInputOutputPin::Impl : public DigitalInputOutputPin 
+void reset_off(uint32_t mask)
 {
-public: 
-    Impl(int pin);
-   
-    void init(); 
-    void set_output();
+    AtomicRegister resets(&resets_hw->reset);
+    resets.clear_bits(mask);
+}
 
-    void set_pull_up();
-    void set_pull_down();
-    void disable_pulls();
+void reset_off_and_wait(uint32_t mask)
+{
+    reset_off(mask);
+    while (~(resets_hw->reset_done & mask));
+}
 
-    void set_high();
-    void set_low(); 
-
-    bool read() const;
-    
-    void set_function(const Function function);
-    const int pin;
-};
-
-} // namespace gpio
+} // namespace core
 } // namespace hal
 

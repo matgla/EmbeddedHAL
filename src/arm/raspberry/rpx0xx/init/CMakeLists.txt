@@ -15,26 +15,23 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-add_library(hal_rpx0xx_core) 
+add_library(hal_rpx0xx_init) 
 
-target_sources(hal_rpx0xx_core
-    PUBLIC 
-        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_register_manipulator.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_reset.hpp
+target_sources(hal_rpx0xx_init
+#    PUBLIC 
+#        ${CMAKE_CURRENT_SOURCE_DIR}/h.hpp
     PRIVATE 
-        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_critical_section.cpp 
-        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_core.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/rpx0xx_reset.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/vector_table.S
 )
 
-target_include_directories(hal_rpx0xx_core
+target_include_directories(hal_rpx0xx_init
     PRIVATE 
         ${PROJECT_SOURCE_DIR}/src 
 )
 
-target_link_libraries(hal_rpx0xx_core
+target_link_libraries(hal_rpx0xx_init
+    PRIVATE 
+        hardware_regs
     PUBLIC 
         hal_interface
-    PRIVATE
-        hardware_structs
 )

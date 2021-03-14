@@ -1,4 +1,4 @@
-// This file is part of EmbeddedHAL project.
+// This file is part of embeddedHAL project.
 // Copyright (C) 2021 Mateusz Stadnik
 //
 // This program is free software: you can redistribute it and/or modify
@@ -14,53 +14,34 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#pragma once
+#pragma once 
 
-#include <cstdint>
-
-#include "hal/gpio/digital_input_output_pin.hpp"
+#include <hardware/structs/pll.h>
 
 namespace hal 
 {
-namespace gpio 
+namespace core 
 {
 
-enum class Function : uint32_t 
+class Pll
 {
-    xip  = 0, 
-    spi  = 1,
-    uart = 2,
-    i2c  = 3,
-    pwm  = 4,
-    sio  = 5,
-    pio0 = 6,
-    pio1 = 7,
-    gpck = 8,
-    usb  = 9,
-    none = 0x0f
+public:
+    Pll(pll_hw_t* pll);
+
+    Pll& refdiv(uint32_t div);
+    Pll& vcofreq(uint32_t freq);
+    Pll& postdiv1(uint32_t div);
+    Pll& postdiv2(uint32_t div);
+
+    void init();
+private:
+    pll_hw_t* pll_;
+    uint32_t refdiv_;
+    uint32_t freq_;
+    uint32_t post_div_1_;
+    uint32_t post_div_2_;
 };
 
-class DigitalInputOutputPin::Impl : public DigitalInputOutputPin 
-{
-public: 
-    Impl(int pin);
-   
-    void init(); 
-    void set_output();
-
-    void set_pull_up();
-    void set_pull_down();
-    void disable_pulls();
-
-    void set_high();
-    void set_low(); 
-
-    bool read() const;
-    
-    void set_function(const Function function);
-    const int pin;
-};
-
-} // namespace gpio
+} // namespace core
 } // namespace hal
 
