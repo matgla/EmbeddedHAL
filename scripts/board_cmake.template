@@ -37,6 +37,7 @@ target_link_libraries(board
 
     PUBLIC
         hal_interface
+        hal_interfaces_interfaces
         {% for lib in public_dependencies -%}
         {{ lib }} 
         {% endfor -%}
