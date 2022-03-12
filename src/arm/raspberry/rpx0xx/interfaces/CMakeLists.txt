@@ -33,6 +33,7 @@ target_link_libraries(hal_rpx0xx_interfaces
     PUBLIC 
         hal_interface
         hal_external_interfaces 
+        hal_interfaces_interfaces
     PRIVATE 
         hal_external_gpio
         hal_external_interfaces

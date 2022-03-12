@@ -38,3 +38,8 @@ target_link_libraries(hal_rpx0xx_core
     PRIVATE
         hardware_structs
 )
+
+target_compile_options(hal_rpx0xx_core
+    PUBLIC
+        $<$<COMPILE_LANGUAGE:CXX>:-std=c++2a>
+)

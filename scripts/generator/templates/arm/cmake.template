@@ -35,6 +35,7 @@ function (add_device_library)
     add_subdirectory(${PROJECT_SOURCE_DIR}/src/{{ arch }}/{{ vendor }}/{{ family }})
     target_link_libraries(hal_{{ soc }} 
         PUBLIC 
+            hal_interfaces_interfaces
             hal_interface 
         PRIVATE
             hal_{{ family }} 

@@ -5,7 +5,7 @@
 
 #include <gsl/span>
 
-#include <eul/function.hpp>
+#include <eul/functional/function.hpp>
 
 namespace hal
 {
