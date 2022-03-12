@@ -64,6 +64,7 @@ if (sysconfig_file)
         PRIVATE
             msos_kernel_process
             msos_arch
+            hal_interfaces_interfaces
             hal_interface
     )
 endif ()
