@@ -28,7 +28,9 @@ namespace interfaces
 class Usart::Impl : public Usart
 {
 public: 
-    Impl(gpio::DigitalInputOutputPin& rx, gpio::DigitalInputOutputPin& tx, uint8_t uart_number);
+    Impl(gpio::DigitalInputOutputPin& rx, 
+        gpio::DigitalInputOutputPin& tx, 
+        uint8_t uart_number);
 
     uint8_t uart_number;
     OnDataCallback on_data;

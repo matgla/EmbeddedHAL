@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string_view>
 
-#include <gsl/span>
+#include <span>
 
 #include <eul/functional/function.hpp>
 
@@ -17,7 +17,7 @@ class Usart
 public:
     class Impl;
 
-    using StreamType = gsl::span<const uint8_t>;
+    using StreamType = std::span<const uint8_t>;
     using OnDataCallback = eul::function<void(const uint8_t), sizeof(void*)>;
     using OnSentCallback = eul::function<void(), sizeof(void*)>;
 

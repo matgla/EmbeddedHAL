@@ -10,3 +10,8 @@ target_link_libraries(hal_interfaces_interfaces
     INTERFACE 
         eul_functional
 )
+
+target_include_directories(hal_interfaces_interfaces
+    INTERFACE 
+        ${PROJECT_SOURCE_DIR}/interface
+)

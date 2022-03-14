@@ -28,12 +28,12 @@ target_link_libraries(hal_rpx0xx_gpio
         hal_interface
     PRIVATE
         hal_rpx0xx_core
-        hardware_structs
-        hardware_regs
 )
 
 target_include_directories(hal_rpx0xx_gpio
     PRIVATE 
         ${PROJECT_SOURCE_DIR}/src
+    PUBLIC 
+        $<TARGET_PROPERTY:hardware_gpio,INTERFACE_INCLUDE_DIRECTORIES>
 )
 

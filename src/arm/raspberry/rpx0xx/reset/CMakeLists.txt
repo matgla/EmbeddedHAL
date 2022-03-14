@@ -30,6 +30,6 @@ target_include_directories(hal_rpx0xx_reset
 target_link_libraries(hal_rpx0xx_reset
     PUBLIC 
         hal_interface 
-    PRIVATE 
-        pico_bootrom 
+    # PRIVATE 
+    #     # pico_bootrom 
 )

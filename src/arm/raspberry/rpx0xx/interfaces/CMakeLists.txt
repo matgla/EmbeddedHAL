@@ -26,15 +26,15 @@ target_sources(hal_rpx0xx_interfaces
 
 target_include_directories(hal_rpx0xx_interfaces 
     PRIVATE 
+        $<TARGET_PROPERTY:hardware_uart,INTERFACE_INCLUDE_DIRECTORIES>
         ${PROJECT_SOURCE_DIR}/src 
 )
 
 target_link_libraries(hal_rpx0xx_interfaces
     PUBLIC 
-        hal_interface
-        hal_external_interfaces 
         hal_interfaces_interfaces
-    PRIVATE 
-        hal_external_gpio
-        hal_external_interfaces
+    PRIVATE
+        hal_rpx0xx_gpio
 )
+
+
