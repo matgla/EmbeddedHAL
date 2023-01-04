@@ -18,10 +18,13 @@ function (add_linker_script)
     if (NOT ${arch} STREQUAL "ARM")
         return ()
     endif ()
-    find_package (Python COMPONENTS Interpreter)
+
+    include (VirtualEnv)
+
+    setup_virtualenv(linker_generator ${PROJECT_SOURCE_DIR}/scripts/requirements.txt ${CMAKE_CURRENT_BINARY_DIR}/venv)
 
     execute_process(
-        COMMAND ${Python_EXECUTABLE} ${PROJECT_SOURCE_DIR}/scripts/generate_linker_script.py
+        COMMAND ${linker_generator_python_executable} ${PROJECT_SOURCE_DIR}/scripts/generate_linker_script.py
         --input=${soc_config_path}
         --output=${CMAKE_CURRENT_BINARY_DIR}
         RESULT_VARIABLE rc
